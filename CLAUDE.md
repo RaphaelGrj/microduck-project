@@ -80,6 +80,29 @@ fin ou à l'échec d'une impression.
   `options = "metadata"` sous `[automount]` dans `/etc/wsl.conf` (sudo requis) puis
   `wsl --shutdown`.
 
+## État d'avancement (2026-09-30)
+- Premier entraînement local validé de bout en bout : `Mjlab-Velocity-Flat-MicroDuck`,
+  4096 environnements, logger `tensorboard` (pas `wandb`, compte jugé "pro" par l'utilisateur).
+  **Mis en pause à l'itération 2000** (checkpoint `model_2000.pt` sauvegardé), pour reprendre
+  plus tard avec :
+  ```
+  cd ~/microduck_rl
+  uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096 --agent.logger tensorboard \
+      --agent.resume True --agent.load-run 2026-09-30_19-08-35_velocity
+  ```
+- Visualisation : `uv run play <TASK> --checkpoint-file <path> --viewer viser` ouvre un viewer
+  web (http://localhost:8080, forward WSL→Windows automatique). Script `watch_viewer.sh`
+  (dans `microduck_rl`, notre fork) surveille le dossier de logs et relance automatiquement
+  le viewer sur chaque nouveau checkpoint (`save-interval` par défaut = 250 itérations).
+- Repos GitHub créés : fork `RaphaelGrj/microduck_rl` (remote `origin`, `upstream` = officiel)
+  et `RaphaelGrj/microduck-project` (ce dossier, contient ce CLAUDE.md).
+- Setup multi-machine en cours : une session Claude Code tourne aussi sur un laptop Linux
+  (clone de ces deux repos dans `/mnt/mmc-SN128_0x5c36c07b-part1/microduck/`), pensée pour
+  soumettre des trainings via `--hf-jobs` (pas de GPU sur ce laptop). Cette session Linux a
+  généré `pc-windows_ssh.ps1` (à la racine de ce repo) pour ouvrir un accès SSH entrant sur
+  ce PC Windows (RTX 5070 Ti) depuis le laptop — **script non exécuté pour l'instant**, en
+  attente de décision. Il ne contient qu'une clé publique, rien de sensible.
+
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (prusa mk3s),
 Blender, développement web. Déjà familier avec ESP32/Python/Rust à un
