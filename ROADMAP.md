@@ -84,8 +84,10 @@ robot se code ici dès maintenant.
 - [x] Installer Rust dans WSL, cloner `microduck` à côté de `microduck_rl`
 - [ ] `scripts/duck-sim` : status, drive, monitor, ctl
 - [ ] Scène `apartment` (6 pièces, 7×6 m) + caméra : `DUCK_SIM_SCENE=apartment DUCK_SIM_CAMERAS=a`
-- [ ] Inventaire des commandes `robotctl` / IPC utiles au cerveau (regard,
-      vitesse, déclencher une politique, sons, état) → noter dans CLAUDE.md
+- [x] **Inventaire IPC `robotd` fait** (regard, vitesse, déclencher une
+      politique via `robot.do`, sons, état) → voir section dédiée dans
+      CLAUDE.md. Fait depuis la doc officielle, pas encore vérifié contre
+      `duck-sim` qui tourne réellement (build en cours).
 - [ ] Premier script Python externe qui pilote le canard simulé via la
       socket `robotd`
 
