@@ -1,0 +1,222 @@
+# Roadmap Microduck — apprentissage des compétences
+
+> Objectif : faire de Microduck un membre actif et autonome du foyer (présence,
+> personnalité, jeu avec moi et avec le chat), pas un gadget de démo.
+> Dernière mise à jour : 2026-10-01.
+
+## Principes directeurs
+
+1. **Ne pas réentraîner ce que Pollen livre déjà.** Le dépôt officiel
+   [`pollen-robotics/microduck-policies`](https://huggingface.co/pollen-robotics/microduck-policies)
+   fournit : `alpha_walking`, `alpha_stand`, `velstand`, `alpha_sitstand`,
+   `alpha_ground_pick`, `ball_kick_left`, `ball_kick_right`, `roulade`,
+   `roller`, `roller_crouch`. Réentraîner une marche sert à *apprendre le
+   pipeline*, pas à gagner une capacité.
+2. **La vision et l'intelligence vivent au-dessus des politiques RL.**
+   Contrat d'observation commun à toutes les politiques : 61 dims =
+   48 proprioception + `twist(3)` + `head_pose(4)` + `body_pose(6)`.
+   **Aucune politique ne voit la caméra.** La perception pilote donc les
+   commandes (vitesse, regard) et déclenche des politiques épisodiques.
+   C'est l'architecture de `laya-vision-microduck-kick` (le modèle voit la
+   caméra et choisit FORWARD / LEFT / RIGHT / KICK au-dessus de la marche
+   officielle).
+3. **Toujours entraîner les variantes `-Backlash`** (±1° de jeu par servo)
+   pour préparer le sim2real.
+4. **Ce qui rend le robot vivant, c'est surtout la couche comportement**
+   (orchestrateur + vocabulaire de gestes + sons), pas le nombre de
+   politiques.
+5. **S'aligner sur le futur cerveau officiel (jalon M9 de Pollen)** plutôt
+   que d'inventer une architecture concurrente. M9 = machine à 16 états
+   (Chill, LookAround, Wander, TurnInPlace, Zoomies, Startle, Stretch,
+   Ruffle, Preen, Sneeze, Dance, GroundPick, Nap, BallPlay, Petted, Held)
+   sur un modèle énergie/humeur. Non porté dans le daemon actuel, placé
+   « plus tard, délibérément » dans leur roadmap → contribution possible.
+   Réf. : `pollen-robotics/microduck` → `docs/ideas/autonomous_behavior.md`
+   et `docs/project/roadmap.md`.
+
+## Ce que le robot perçoit (vérifié dans le runtime officiel)
+
+| Sens | Matériel / composant | Usage foyer |
+|---|---|---|
+| Vue | Caméra IMX219 (~62° HFOV) + NPU 0,8 TOPS (RK3566), `duck-detect` (YOLO, en cours) | Chat, ballon, personne en local |
+| Profondeur | ToF 8×8 dans la tête (VL53L8CX, `tofd`) | Obstacles, distance de la main |
+| Toucher | Micro sur la tête + `pet-detect` | Caresse détectée → roucoule |
+| Ouïe | Même micro | Bruit / voix, réactions sonores |
+| Équilibre | IMU + odométrie par contact des pieds | Position, chute, soulevé |
+| Social | BLE + RSSI | Distance approximative (téléphones, autres canards) |
+| Voix | Synthé embarqué (`sounds`) | Langage canard expressif |
+
+## Phase 0 — Maîtriser le pipeline (en cours)
+
+- [x] Environnement WSL2 + CUDA + `microduck_rl` (fork) opérationnel
+- [x] Premier entraînement `Mjlab-Velocity-Flat-MicroDuck` (pause it. 2000)
+- [ ] Terminer l'entraînement Velocity-Flat, exporter en ONNX
+- [ ] Comparer en sim notre marche à `alpha_walking.onnx`
+- [ ] Faire un `publish --dry-run` pour valider la chaîne de publication
+- [ ] **`VelStand-Rough-Backlash` « résistant au chat »** : poussées plus
+      fortes et plus fréquentes que le défaut (±0,3 m/s toutes les 3–6 s),
+      y compris au niveau de la tête. Mesurer : nb de chutes, % de relevés
+      réussis. Rough = tapis, seuils de porte.
+
+**Pourquoi c'est prioritaire :** un robot qui tombe et ne se relève pas
+n'est pas autonome — et le chat va le bousculer.
+
+## Phase 0 bis — Prendre en main `duck-sim` (le robot avant le robot)
+
+`pollen-robotics/microduck` → `scripts/duck-sim` fait tourner **les vrais
+daemons** (`robotd`, `tofd`, `mediad`…) contre un Microduck MuJoCo
+(`duck-body`, fourni par `microduck_rl`). Tout ce qui se code contre le
+robot se code ici dès maintenant.
+
+- [ ] Installer Rust dans WSL, cloner `microduck` à côté de `microduck_rl`
+- [ ] `scripts/duck-sim` : status, drive, monitor, ctl
+- [ ] Scène `apartment` (6 pièces, 7×6 m) + caméra : `DUCK_SIM_SCENE=apartment DUCK_SIM_CAMERAS=a`
+- [ ] Inventaire des commandes `robotctl` / IPC utiles au cerveau (regard,
+      vitesse, déclencher une politique, sons, état) → noter dans CLAUDE.md
+- [ ] Premier script Python externe qui pilote le canard simulé via la
+      socket `robotd`
+
+## Phase 1 — Vocabulaire expressif (meilleur ratio vivant/effort)
+
+Gestes courts *episodic* (modèle : `Mjlab-PoliteBow-Flat-MicroDuck`),
+publiables via `uv run publish --kind episodic --duration-s <s>` :
+
+- [ ] « Non » (secouer la tête) — premier geste, pour parcourir tout le
+      cycle récompense → entraînement → export → publish
+- [ ] « Oui » (hochement)
+- [ ] Curieux (penché + tête inclinée)
+- [ ] Content (trémoussement)
+- [ ] Surpris (sursaut, petit recul)
+- [ ] Fatigué (bâillement / étirement avant de s'asseoir)
+
+Sans entraînement : **le regard** (`head_pose` est déjà une commande de la
+marche) → suivre une personne ou le chat des yeux est du logiciel.
+
+Ces gestes + les sons natifs du Microduck = briques du futur système
+d'émotions (esprit Lumi, sans écran, pas d'anthropomorphisme visuel).
+
+## Phase 2 — Perception et jeu de balle avec vision
+
+- [ ] Détecteur sur le flux caméra : ballon **et chat** (classe `cat` de
+      COCO, pré-entraînée — aucun entraînement nécessaire). Commencer
+      classique (couleur / petit YOLO) avant un modèle vision-langage.
+- [ ] Contrôleur d'approche : détection → `twist` (approche) + `head_pose`
+      (suivi) → déclenche `ball_kick_left` ou `ball_kick_right` selon le
+      côté du ballon.
+- [ ] Kick plus tolérant au placement : élargir la DR de position du
+      ballon (±2 cm aujourd'hui dans `microduck_ball_kick_env_cfg.py`).
+- [ ] **Kick doux « passe »** : réentraîner avec un `BALL_TARGET_SPEED`
+      bas (1,0 m/s actuellement ; ~0,25 m/s = tape douce) pour passer la
+      balle au chat ou à moi.
+- [ ] Étudier [laya-vision](https://github.com/r33drichards/laya-vision)
+      et quackd pour la structure (⚠ licence CC-BY-NC-SA : OK usage perso).
+
+## Phase 3 — Le cerveau du foyer (cœur du projet, sans RL)
+
+Service hors robot (PC/serveur), parle à `robotd` via le réseau, développé
+d'abord contre `duck-sim`. **Calqué sur M9** (mêmes états, même modèle
+énergie/humeur) pour pouvoir contribuer en amont ou se brancher dessus.
+
+- [ ] Squelette : états M9 + modèle énergie/humeur + transitions
+- [ ] Les gestes de la phase 1 = vocabulaire des états (Stretch, Ruffle,
+      Preen, Sneeze, Startle…)
+- [ ] **Mémoire relationnelle** : familiarité par habitant (humains, chat)
+      qui rend l'accueil plus chaleureux avec le temps ; habitudes apprises
+      (heure de retour, heure de coucher)
+- [ ] **Initiative rare et surprenante** (principe Pollen : « un duo
+      surprise est un plaisir, un juke-box non »)
+- [ ] Home Assistant : partir de `quacksat` (Wyoming), puis exposer
+      batterie, humeur, état, pièce comme entités HA
+- [ ] Premier cas concret : notifications d'impression 3D (Prusa MK3S →
+      MK4S via Prusa Connect, Elegoo Saturn 4 Ultra) — le robot vient te
+      voir et réagit (son + geste) à la fin ou à l'échec d'une impression
+
+## Interactions par habitant
+
+### Humains
+
+| Interaction | Entrées | Sorties |
+|---|---|---|
+| Accueil au retour (plus joyeux après une longue absence) | Présence HA (téléphone) | Marche vers l'entrée, son + geste |
+| Caresse | `pet-detect` | Roucoulement (natif), état Petted, geste content |
+| Main tendue | ToF (suivi de main) | Regard, approche, « picore » |
+| Commandes vocales | quacksat / Wyoming | Réponse en sons de canard (oui / non / hésitation), pas de voix humaine |
+| Messager physique (impression, lave-linge, sonnette) | HA | Vient te voir là où tu es |
+| Routines (étirement du matin, sieste du soir, heures calmes) | Heure, HA | États Stretch / Nap |
+| Jeux : balle, 1-2-3 soleil, cache-cache au son | Caméra, micro | Phase 2 + états |
+
+Identification des humains : **présence HA plutôt que reconnaissance
+faciale** (plus fiable, plus respectueux).
+
+### Le robot dans la maison (HA)
+
+- **Capteur** : chat vu au salon, objet au sol, bruit inhabituel
+- **Interface** : geste ou caresse qui déclenche une scène
+- **État** : batterie, humeur, pièce, activité en entités HA
+
+### Règles de vie (non négociables)
+
+- **Vie privée** : image et son traités en local, aucun flux caméra
+  sortant par défaut ; tout ce qui est social est opt-in.
+- **Interrupteur « calme »** dans HA : veille, silence, sieste forcée.
+- **Ne jamais insister** : une interaction ignorée diminue l'envie, elle
+  n'augmente pas la sollicitation (humains comme chat).
+
+## Le chat 🐈
+
+### Interactions prévues
+
+| Interaction | Mise en œuvre | RL ? |
+|---|---|---|
+| Le suivre du regard | `head_pose` piloté par la détection | Non |
+| Réagir à son arrivée (son + geste) | Gestes de la phase 1 | Déjà fait en phase 1 |
+| Reculer s'il approche vite | Marche arrière (`lin_vel_x` ∈ [-0,4 ; 0,4] m/s) | Non |
+| Le suivre à distance | Suivi de cible via `twist` | Non |
+| **Lui passer la balle** | Kick doux (phase 2) | Oui (config) |
+| Cache-cache / 1-2-3 soleil | États de l'orchestrateur | Non |
+| « Chat vu au salon » dans HA | Entité / événement HA | Non |
+
+Jeu phare : **ballon partagé** — le robot repère la balle et le chat, puis
+pousse doucement la balle vers lui.
+
+### Garde-fous (non négociables)
+
+- Le chat peut **toujours partir** : jamais de poursuite s'il s'éloigne,
+  jamais le coincer, abandon après quelques secondes.
+- **Sons modérés** à proximité ; première rencontre progressive (robot
+  immobile, regard seulement).
+- **Pas de geste rapide** sous un seuil de distance (risque de pincer une
+  patte ou la queue dans les articulations).
+- **Mode « chat agacé »** : renversé plusieurs fois de suite → s'assoit
+  et passe en veille plutôt que de recommencer.
+
+## Phase 4 — Plus tard
+
+- `GroundPick` : objets / tags NFC au bec
+- Localisation UWB (DWM1001-DEV, ancre origine 0,0,0) → navigation vers
+  des points nommés
+- Sac à dos ESP32 (BLE), orchestré par le serveur
+- Rollers, roulade : spectacle
+- À surveiller : branche amont `soft_carpet` (état inconnu, pertinente
+  pour les tapis)
+
+## Tableau de synthèse
+
+| Compétence | Officielle ? | Apport vivant / autonome | Effort |
+|---|---|---|---|
+| Marche + relevé (VelStand Backlash renforcé) | Oui | Socle de l'autonomie | Moyen |
+| Gestes expressifs | Non | ★★★ personnalité | Faible |
+| Regard / suivi de tête | Commande existante | ★★★ présence | Logiciel |
+| Cerveau du foyer (aligné M9) | Non (M9 non porté) | ★★★ autonomie | Élevé |
+| Détection ballon + chat | — | ★★★ perception | Moyen |
+| Balle avec vision + passe douce | Kick oui, vision non | ★★★ jeu (moi + chat) | Élevé |
+| Assis / repos | Oui | ★★ rythme de vie | Nul |
+| Ramassage au sol | Oui | ★★ objets | Faible–moyen |
+| Roulade, rollers | Oui | ★ spectacle | Nul |
+
+## Prochaines actions
+
+1. Relancer l'entraînement Velocity-Flat en arrière-plan (GPU).
+2. Installer et lancer `duck-sim` (scène apartment + caméra).
+3. Inventaire de l'API `robotd` utile au cerveau.
+4. Puis : `VelStand-Rough-Backlash` renforcé, premier geste (« non »).
