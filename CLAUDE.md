@@ -104,5 +104,54 @@ fin ou à l'échec d'une impression.
   ce PC Windows (RTX 5070 Ti) depuis le laptop — **script non exécuté pour l'instant**, en
   attente de décision. Il ne contient qu'une clé publique, rien de sensible.
 
+## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
+
+Transport : socket Unix, JSON-RPC 2.0 / NDJSON (`/run/robotd.sock` sur un vrai
+robot ; `~/.cache/duck-sim/duck-a.sock` sous `duck-sim`). Aussi joignable à
+distance via `mediad` (WebRTC) et `btd` (BLE, sous-ensemble) — donc le même
+cerveau pourra parler à un robot réel, simulé, ou distant sans changer de code.
+
+**Intents continus** (notifications, sans réponse, dernier écrit gagne) :
+- `robot.move {vx, vy, vyaw}` — vitesse
+- `robot.head {neck_pitch, head_pitch, head_yaw, head_roll}` — regard/tête
+  (équivalent réseau de notre `head_offset` scripté)
+
+**Intents discrets** (requêtes, réponse attendue) :
+- `robot.stop`
+- `robot.enable {on}` — bring-up (Limp → Homing → Ready)
+- `robot.init` / `robot.relax` — lever / relâcher (namespace maintenance)
+- `robot.do {name}` — déclenche une politique publiée par son nom (ex. le
+  nôtre : `uv run publish --name velocity-test ...` → `robot.do
+  {"name":"velocity-test"}`). Une seule requête, pas du teleop — pas besoin
+  de lien de contrôle actif.
+- `robot.skills` — liste les skills chargés ; `robot.setSkill` — lie un skill
+  à un slot
+- `robot.sound` — jouer un son (la voix du canard)
+- Gestion du catalogue : `robot.policies`, `policy.check`, `policy.search`,
+  `policy.fetch`, `policy.install`, `robot.loadPolicy`, `robot.reloadPolicies`
+  — équivalent RPC de `robotctl policy *`
+
+**État** (flux `robot.subscribe`, décimé par abonné côté serveur) :
+- `robot.state` : `{t, t_ns, move:{requested,applied,limited_by}, policy
+  (nom du réseau actif ce tick), safety:{fallen,limp}, loop:{hz,missed},
+  battery:{volts,percent}, odom:{position,yaw}}`
+- `robot.health` — santé de la boucle + batterie/température/bus/IMU
+- `robot.model` — géométrie statique (hauteur tronc, ordre des joints,
+  directions ToF)
+
+**CLI équivalente** (pour scripter/tester sans écrire de client) :
+`robotctl policy list/check/load/update/reset/search`, `robotctl monitor`
+(état + carte d'odométrie), `robotctl health`.
+
+**À retenir pour l'architecture du futur cerveau :**
+- `init`/calibration/écriture joint brute = namespace **maintenance séparé**,
+  jamais exposé sur BLE/WebRTC (sécurité) — seuls `robot.do`, `policies.*`
+  et le teleop le sont.
+- `look` (regard dédié, au-delà de `head_pose`) est **différé**, pas encore
+  implémenté côté officiel.
+- `robot.do` est exactement le point d'entrée pour nos futurs gestes
+  scriptés/entraînés une fois publiés sur le Hub — pas besoin de
+  réimplémenter le déclenchement, juste publier avec le bon `--name`.
+
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.

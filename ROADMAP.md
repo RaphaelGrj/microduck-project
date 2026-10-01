@@ -54,8 +54,12 @@
       pipeline atteint, inutile de consommer du GPU sur une marche déjà
       fournie par `alpha_walking`/`velstand`. Checkpoint gardé si besoin de
       comparer un jour.
+- [x] **Export ONNX** du checkpoint it. 2000 → `policies/own/velocity_flat_it2000.onnx`
+      (fork `microduck_rl`, pas commité — fichier binaire local)
 - [ ] Comparer en sim notre marche (it. 2000) à `alpha_walking.onnx`
-- [ ] Faire un `publish --dry-run` pour valider la chaîne de publication
+- [x] **`publish --dry-run` validé** : 61→14 ok, smoke run fini/non-constant,
+      bundle (policy.onnx + manifest.json + README.md) généré dans
+      `publish-velocity-test/`. Chaîne de publication opérationnelle.
 - [x] **Simulateur officiel trouvé** : `pollen-robotics/microduck-simulator`
       (HF Space, 100% navigateur, WASM) — à utiliser pour tester les
       compétences OFFICIELLES (marche, sitstand, roulade, kicks, rollers),
