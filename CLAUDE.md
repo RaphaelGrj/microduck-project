@@ -120,10 +120,10 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
 - `robot.stop`
 - `robot.enable {on}` — bring-up (Limp → Homing → Ready)
 - `robot.init` / `robot.relax` — lever / relâcher (namespace maintenance)
-- `robot.do {name}` — déclenche une politique publiée par son nom (ex. le
-  nôtre : `uv run publish --name velocity-test ...` → `robot.do
-  {"name":"velocity-test"}`). Une seule requête, pas du teleop — pas besoin
-  de lien de contrôle actif.
+- `robot.do {"skill": "<name>"}` — déclenche une politique par son nom
+  (champ **`skill`**, pas `name` — vérifié par test réel contre `duck-sim`,
+  2026-10-01 ; la doc suggérait `name`, le câblage réel dit `skill`). Une
+  seule requête, pas du teleop. Testé avec succès : `{"skill":"roulade"}`.
 - `robot.skills` — liste les skills chargés ; `robot.setSkill` — lie un skill
   à un slot
 - `robot.sound` — jouer un son (la voix du canard)

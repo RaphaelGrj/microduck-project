@@ -102,10 +102,15 @@ robot se code ici dès maintenant.
       depuis les sources (`gst-plugins-rs` @ 0.14.5, `cargo cinstall`) —
       pas fait, pas bloquant pour l'instant (rien côté Phase 0bis n'a besoin
       de la caméra). À faire quand on attaque vraiment la Phase 2 (vision).
-- [x] **Inventaire IPC `robotd` fait** (regard, vitesse, déclencher une
-      politique via `robot.do`, sons, état) → voir section dédiée dans
-      CLAUDE.md. Fait depuis la doc officielle, pas encore vérifié contre
-      `duck-sim` qui tourne réellement (build en cours).
+- [x] **Inventaire IPC `robotd` fait et vérifié contre `duck-sim` réel**
+      (2026-10-01). Un écart doc/réel trouvé et corrigé : `robot.do` attend
+      le champ **`skill`**, pas `name` comme la doc le suggérait.
+- [x] **Premier script Python externe** : `poc_robotd_client.py`, nouveau
+      repo [`RaphaelGrj/microduck-brain`](https://github.com/RaphaelGrj/microduck-brain)
+      (Phase 3 — le futur cerveau vit hors du repo d'entraînement). Parle en
+      direct au socket JSON-RPC/NDJSON (pas via `robotctl`) : `subscribe`,
+      lecture de trames `robot.state`, `robot.move`, `robot.stop`, `robot.do`
+      — tout validé contre `duck-sim`.
 - [ ] Premier script Python externe qui pilote le canard simulé via la
       socket `robotd`
 
