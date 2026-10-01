@@ -30,7 +30,7 @@ aller au-delà du simple vocal pour remonter des états du robot
 (batterie, position) comme entités Home Assistant, via l'API réseau
 exposée par `robotd`.
 Idée de départ concrète : notifications d'impression 3D (j'ai deux
-Ender 3 V2 sous Klipper/Moonraker) — le robot réagit vocalement à la
+Prusa MK3S qui sera upgrade en MK4S donc Prusa connect + Elegoo Saturn 4 Ultra) — le robot réagit vocalement à la
 fin ou à l'échec d'une impression.
 
 ## Idées explorées, à garder en tête pour plus tard
@@ -48,6 +48,7 @@ fin ou à l'échec d'une impression.
   (ESP32 + Gemini + écran expressif), mais sans écran pour rester
   fidèle à l'identité sonore du Microduck (pas d'anthropomorphisme
   visuel).
+- Microduck doit à terme, être un membre actif et autonome du foyer.  
 
 ## Repères techniques déjà connus
 - Stack officielle 100% ouverte (Apache-2.0) : `pollen-robotics/microduck`
@@ -104,6 +105,4 @@ fin ou à l'échec d'une impression.
   attente de décision. Il ne contient qu'une clé publique, rien de sensible.
 
 ## Mon niveau
-CNC (Haas TM-2P, filetage NPT), impression 3D (prusa mk3s),
-Blender, développement web. Déjà familier avec ESP32/Python/Rust à un
-niveau hobbyiste (projets Lumi et rover).
+CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.
