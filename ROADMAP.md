@@ -50,9 +50,18 @@
 
 - [x] Environnement WSL2 + CUDA + `microduck_rl` (fork) opérationnel
 - [x] Premier entraînement `Mjlab-Velocity-Flat-MicroDuck` (pause it. 2000)
-- [ ] Terminer l'entraînement Velocity-Flat, exporter en ONNX
-- [ ] Comparer en sim notre marche à `alpha_walking.onnx`
+- [x] **Entraînement Velocity-Flat arrêté délibérément** (2026-10-01) : objectif
+      pipeline atteint, inutile de consommer du GPU sur une marche déjà
+      fournie par `alpha_walking`/`velstand`. Checkpoint gardé si besoin de
+      comparer un jour.
+- [ ] Comparer en sim notre marche (it. 2000) à `alpha_walking.onnx`
 - [ ] Faire un `publish --dry-run` pour valider la chaîne de publication
+- [x] **Simulateur officiel trouvé** : `pollen-robotics/microduck-simulator`
+      (HF Space, 100% navigateur, WASM) — à utiliser pour tester les
+      compétences OFFICIELLES (marche, sitstand, roulade, kicks, rollers),
+      accessible même depuis un téléphone. Pour nos propres checkpoints :
+      `uv run play --viewer viser` (lecture) ou `scripts/infer_policy.py`
+      (interactif, WSLg) — pas d'équivalent officiel pour du custom.
 - [ ] **`VelStand-Rough-Backlash` « résistant au chat »** : poussées plus
       fortes et plus fréquentes que le défaut (±0,3 m/s toutes les 3–6 s),
       y compris au niveau de la tête. Mesurer : nb de chutes, % de relevés
@@ -68,7 +77,7 @@ daemons** (`robotd`, `tofd`, `mediad`…) contre un Microduck MuJoCo
 (`duck-body`, fourni par `microduck_rl`). Tout ce qui se code contre le
 robot se code ici dès maintenant.
 
-- [ ] Installer Rust dans WSL, cloner `microduck` à côté de `microduck_rl`
+- [x] Installer Rust dans WSL, cloner `microduck` à côté de `microduck_rl`
 - [ ] `scripts/duck-sim` : status, drive, monitor, ctl
 - [ ] Scène `apartment` (6 pièces, 7×6 m) + caméra : `DUCK_SIM_SCENE=apartment DUCK_SIM_CAMERAS=a`
 - [ ] Inventaire des commandes `robotctl` / IPC utiles au cerveau (regard,
@@ -78,16 +87,34 @@ robot se code ici dès maintenant.
 
 ## Phase 1 — Vocabulaire expressif (meilleur ratio vivant/effort)
 
-Gestes courts *episodic* (modèle : `Mjlab-PoliteBow-Flat-MicroDuck`),
-publiables via `uv run publish --kind episodic --duration-s <s>` :
+**Révision (2026-10-01) :** `Mjlab-PoliteBow-Flat-MicroDuck` n'existe pas —
+c'est un nom d'exemple dans la doc de `publish`, pas une tâche réelle.
+Plus important : le premier geste (« Non ») s'est avéré **ne demander
+aucun entraînement RL**. `head_offset` est déjà une commande acceptée par
+la politique debout (`alpha_stand`) — un script qui fait osciller
+`head_offset[2]` (yaw) dans le temps suffit. Implémenté directement dans
+`microduck_rl` (fork) → `scripts/infer_policy.py` : touche **N**, 3
+oscillations sur 1,8s, testé et fonctionnel (voir `trigger_gesture` /
+`update_gesture` dans `PolicyInference`). **Donc avant d'entraîner quoi
+que ce soit pour les gestes suivants, essayer le scripting d'abord** —
+RL seulement si le scripting est insuffisant :
 
-- [ ] « Non » (secouer la tête) — premier geste, pour parcourir tout le
-      cycle récompense → entraînement → export → publish
-- [ ] « Oui » (hochement)
-- [ ] Curieux (penché + tête inclinée)
-- [ ] Content (trémoussement)
-- [ ] Surpris (sursaut, petit recul)
-- [ ] Fatigué (bâillement / étirement avant de s'asseoir)
+- [x] « Non » (secouer la tête) — scripté, pas d'entraînement, touche N
+- [ ] « Oui » (hochement) — probablement scriptable pareil (head_offset[1],
+      pitch)
+- [ ] Curieux (penché + tête inclinée) — probablement scriptable (head_offset
+      pitch+roll statique)
+- [ ] Surpris (sursaut, petit recul) — peut-être scriptable via body_pose /
+      vel_cmd ponctuel, à essayer avant RL
+- [ ] Content (trémoussement) — mouvement de tout le corps, probablement
+      HORS de portée du scripting command-level → candidat RL réel
+- [ ] Fatigué (bâillement / étirement avant de s'asseoir) — combinaison
+      head_offset (affaissement) + déclenchement sitstand, à tenter scripté
+      d'abord
+
+Gestes qui *nécessitent* vraiment du RL (mouvement hors de l'espace de
+commande existant), publiables via `uv run publish --kind episodic
+--duration-s <s>` une fois entraînés.
 
 Sans entraînement : **le regard** (`head_pose` est déjà une commande de la
 marche) → suivre une personne ou le chat des yeux est du logiciel.
