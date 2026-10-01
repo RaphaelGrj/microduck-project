@@ -66,10 +66,16 @@
       accessible même depuis un téléphone. Pour nos propres checkpoints :
       `uv run play --viewer viser` (lecture) ou `scripts/infer_policy.py`
       (interactif, WSLg) — pas d'équivalent officiel pour du custom.
-- [ ] **`VelStand-Rough-Backlash` « résistant au chat »** : poussées plus
-      fortes et plus fréquentes que le défaut (±0,3 m/s toutes les 3–6 s),
-      y compris au niveau de la tête. Mesurer : nb de chutes, % de relevés
-      réussis. Rough = tapis, seuils de porte.
+- [x] **`VelStand-Rough-Backlash` abandonné** : utilise de la distillation
+      (`PpoWithExpertBc`) depuis un checkpoint **privé** Pollen sur wandb
+      (`pollen-robotics/mjlab_microduck/69u48n8l`) — 403 Forbidden même avec
+      un compte perso. Ce n'est pas spécifique à Rough-Backlash : **toutes**
+      les variantes VelStand (Flat/Rough × Backlash) en dépendent.
+- [x] **`StandUp-Rough-Backlash` lancé à la place** (2026-10-01, en cours) :
+      du PPO pur (pas de distillation), c'est le cœur du "se relever après
+      être tombé" que VelStand aurait ajouté à la marche. 4096 env,
+      `logs/rsl_rl/microduck_stand/`. Durcir les paramètres de poussée
+      reste à faire une fois qu'on a un résultat de base.
 
 **Pourquoi c'est prioritaire :** un robot qui tombe et ne se relève pas
 n'est pas autonome — et le chat va le bousculer.
@@ -82,8 +88,20 @@ daemons** (`robotd`, `tofd`, `mediad`…) contre un Microduck MuJoCo
 robot se code ici dès maintenant.
 
 - [x] Installer Rust dans WSL, cloner `microduck` à côté de `microduck_rl`
-- [ ] `scripts/duck-sim` : status, drive, monitor, ctl
-- [ ] Scène `apartment` (6 pièces, 7×6 m) + caméra : `DUCK_SIM_SCENE=apartment DUCK_SIM_CAMERAS=a`
+- [x] **`scripts/duck-sim` opérationnel** (2026-10-01) : vrais daemons
+      (`robotd`/`tofd`/`configd`/`updaterd`) contre le canard MuJoCo, 50/50 Hz,
+      healthy. Validé en conditions réelles : `robot.do roulade` (déclenche
+      une politique, queued → exécutée → redebout) et `drive` (`robot.move`,
+      marche 8s puis arrêt automatique par le deadman).
+- [x] Scène `apartment` (6 pièces, 7×6 m) : `DUCK_SIM_SCENE=apartment` — en service.
+- [ ] **Caméra (`DUCK_SIM_CAMERAS=a`) bloquée** : `webrtcsink` vient de
+      `gst-plugins-rs`, packagé dans aucune distro Debian/Ubuntu. Le script
+      officiel (`setup-gstreamer.sh`) télécharge des binaires précompilés,
+      mais **uniquement pour aarch64** (le vrai robot) — rien pour notre
+      WSL x86_64. Contournement possible : compiler `gst-plugin-webrtc`
+      depuis les sources (`gst-plugins-rs` @ 0.14.5, `cargo cinstall`) —
+      pas fait, pas bloquant pour l'instant (rien côté Phase 0bis n'a besoin
+      de la caméra). À faire quand on attaque vraiment la Phase 2 (vision).
 - [x] **Inventaire IPC `robotd` fait** (regard, vitesse, déclencher une
       politique via `robot.do`, sons, état) → voir section dédiée dans
       CLAUDE.md. Fait depuis la doc officielle, pas encore vérifié contre
