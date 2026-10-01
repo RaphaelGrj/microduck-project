@@ -104,6 +104,28 @@ fin ou à l'échec d'une impression.
   ce PC Windows (RTX 5070 Ti) depuis le laptop — **script non exécuté pour l'instant**, en
   attente de décision. Il ne contient qu'une clé publique, rien de sensible.
 
+## État d'avancement (2026-10-01)
+- `VelStand-Rough-Backlash` abandonné (distillation depuis un checkpoint privé Pollen sur
+  wandb, 403 Forbidden). Remplacé par `Mjlab-StandUp-Rough-Backlash-MicroDuck` (PPO pur,
+  pas de distillation) : c'est le cœur du "se relever après être tombé" visé.
+  **Mis en pause à l'itération 2000** (`model_2000.pt`, 21:38). Reprise :
+  ```
+  cd ~/microduck_rl
+  uv run train Mjlab-StandUp-Rough-Backlash-MicroDuck --env.scene.num-envs 4096 \
+      --agent.logger tensorboard --agent.resume True \
+      --agent.load-run 2026-10-01_18-53-15_microduck_stand
+  ```
+- `duck-sim` opérationnel (vrais daemons contre un MuJoCo duck), validé via `robot.do` et
+  `robot.move`. Caméra bloquée (binaire `webrtcsink` absent pour x86_64, build source possible
+  plus tard). Voir section IPC ci-dessous.
+- Repo [`RaphaelGrj/microduck-brain`](https://github.com/RaphaelGrj/microduck-brain) créé
+  (Phase 3, futur cerveau) — premier script `poc_robotd_client.py` validé contre `duck-sim`.
+- Gestes scriptés sans entraînement ajoutés à `infer_policy.py` (notre fork) : **N** = Non
+  (yaw), **M** = Oui (pitch), **C** = Curieux (pitch+roll tenu) — `head_offset` piloté dans
+  le temps, aucune politique RL nécessaire.
+- Patch 6 ajouté à `mdp.py` (notre fork) : corrige un crash du viewer `viser` sur toute tâche
+  à commande de vitesse quasi nulle (StandUp, Roulade, SitStand...).
+
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
 Transport : socket Unix, JSON-RPC 2.0 / NDJSON (`/run/robotd.sock` sur un vrai

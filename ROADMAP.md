@@ -71,11 +71,23 @@
       (`pollen-robotics/mjlab_microduck/69u48n8l`) — 403 Forbidden même avec
       un compte perso. Ce n'est pas spécifique à Rough-Backlash : **toutes**
       les variantes VelStand (Flat/Rough × Backlash) en dépendent.
-- [x] **`StandUp-Rough-Backlash` lancé à la place** (2026-10-01, en cours) :
-      du PPO pur (pas de distillation), c'est le cœur du "se relever après
-      être tombé" que VelStand aurait ajouté à la marche. 4096 env,
-      `logs/rsl_rl/microduck_stand/`. Durcir les paramètres de poussée
-      reste à faire une fois qu'on a un résultat de base.
+- [x] **`StandUp-Rough-Backlash` lancé à la place** : du PPO pur (pas de
+      distillation), c'est le cœur du "se relever après être tombé" que
+      VelStand aurait ajouté à la marche. 4096 env, `logs/rsl_rl/microduck_stand/`.
+      **Mis en pause à l'itération 2000** (2026-10-01 21:38, checkpoint
+      `model_2000.pt` sain — arrêt propre via SIGTERM après que SIGINT n'a
+      pas suffi cette fois). Métriques à cet arrêt : hauteur et verticalité
+      déjà quasi au maximum (`height_stand` ~0.97, `upright_sharp` ~0.98),
+      poussées actives (`push_magnitude` 0.3 m/s et ça grimpe), aucun crash.
+      **Reprise rapide** :
+      ```
+      cd ~/microduck_rl
+      uv run train Mjlab-StandUp-Rough-Backlash-MicroDuck --env.scene.num-envs 4096 \
+          --agent.logger tensorboard --agent.resume True \
+          --agent.load-run 2026-10-01_18-53-15_microduck_stand
+      ```
+      Durcir les paramètres de poussée reste à faire une fois qu'on a un
+      résultat plus complet.
 
 **Pourquoi c'est prioritaire :** un robot qui tombe et ne se relève pas
 n'est pas autonome — et le chat va le bousculer.
