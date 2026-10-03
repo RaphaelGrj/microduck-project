@@ -374,3 +374,16 @@ pousse doucement la balle vers lui.
   l'état du canard est publié en `sensor.microduck_*`. **Pas encore testé sur ta vraie instance** : il faut l'URL,
   un jeton d'accès longue durée (à coller toi-même dans `~/.config/microduck/ha_token`) et les vrais noms
   d'entités/états des imprimantes (`ha.exemple.toml`).
+
+### Fin de journée 2026-10-03 — état et reprise
+- **Chat dans la simulation (validé)** : `make_cat_scene.py` pose une affiche de la photo du chat dans l'arène
+  (`bash ~/run-scene.sh arena_chat`) ; `test_chat_affiche.py` : YOLO détecte l'affiche (**score 0,90, 47 ms**) et
+  `geometry.point_au_sol` la place à **2 cm** de sa vraie position (estimé 1,18 ; −0,05 m, vrai 1,2 ; 0). Pièges :
+  une texture de 1080×1440 fait tomber la capture caméra (503 sur `/frame`) → ≤ 512 px ; une `box` étire la texture
+  (stries) → utiliser un `plane` vertical. Photo et scène générée restent locales (ignorées par git).
+- **À faire ensuite, dans l'ordre** : (1) veille du chat dans le cerveau (`chat.py` : détection à ~2 Hz, événement
+  « chat » avec délai de grâce, suivi du regard, mémoire de la dernière vue) ; (2) évaluation du jeu de balle en appartement
+  avec placement de balle validé ; (3) mémoire relationnelle / personnalité (Phase 3) ; (4) MQTT quand Mosquitto sera
+  installé ; (5) Home Assistant sur la vraie instance dès que `ha.toml` est rempli (`--verifier`).
+- **Entraînement StandUp** : arrêté à 18 h (≈ itération 7 000, point de reprise conservé) ; objectif de reprise : 10 000
+  itérations puis évaluation de la politique ; commande dans `~/standup_reprise.txt` (WSL). Le GPU est libre.

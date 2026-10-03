@@ -128,6 +128,18 @@ fin ou à l'échec d'une impression.
 - Patch 6 ajouté à `mdp.py` (notre fork) : corrige un crash du viewer `viser` sur toute tâche
   à commande de vitesse quasi nulle (StandUp, Roulade, SitStand...).
 
+## État d'avancement (2026-10-03, soir)
+- **Phase 2 faite** (voir ROADMAP) : approche + tir validés en arène (19/20), visée de la direction du tir (11/12 dans ±35°),
+  détecteur de chat YOLOv8n validé sur 4 photos réelles et sur une affiche dans la simulation (`arena_chat`).
+  Limite connue : fenêtre de tir étroite (kick à réentraîner avec DR large, GPU) ; appartement non concluant (balle posée
+  dans un mur par le banc d'essai ; camouflage de la balle orange sur le tapis rouge du salon).
+- **Home Assistant** : pont `pont_ha.py` + faux HA + tests (`microduck-brain`), config locale `ha.toml` (ignorée par git, jeton
+  dedans, **jamais sur GitHub**). HA OS tourne sur un **Raspberry Pi 3B+** ; seuls des Pi 3B+ en stock : pont + cerveau
+  mesurés à 29 Mo / < 1 % CPU, donc OK sur un Pi 3B+ (installation **non faite**, `deploy/pi/` préparé non testé).
+  YOLO/vision ne tournent pas sur un Pi 3B+ (le robot a un NPU : à étudier à sa livraison).
+- **Entraînement StandUp** arrêté à 18 h (≈ it. 7 000) ; reprise : `~/standup_reprise.txt` (WSL). Objectif : 10 000 puis évaluer.
+- Photos du chat dans `microduck-brain/photos_chat/` et modèle dans `modeles/` : **ignorés par git** (dépôt public).
+
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
 Transport : socket Unix, JSON-RPC 2.0 / NDJSON (`/run/robotd.sock` sur un vrai

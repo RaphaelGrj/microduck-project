@@ -33,7 +33,8 @@
 **Compétence visée : se relever tout seul après une chute**, sur sol irrégulier, en résistant
 aux bousculades (pensé pour un chat qui le pousserait).
 
-- Tourne en arrière-plan : itération 4 700 sur 17 000 (le 2026-10-03), ~17 h restantes.
+- **Arrêté à 18 h le 2026-10-03** à ≈ l'itération 7 000 (sur 17 000 prévues) ; la récompense stagne depuis l'itération 4 500
+  (≈ 47) et le canard ne tombe plus dans les situations testées. Reprise prévue jusqu'à 10 000 puis évaluation (GPU libre d'ici là).
 - Déjà acquis : il se redresse et tient debout de façon fiable.
 
 ## À faire
@@ -45,5 +46,6 @@ aux bousculades (pensé pour un chat qui le pousserait).
 - Jeu de balle : viser une cible (le tir part à ±20° de l'axe), balle dans le dos, pièce
   encombrée, **chat** (détection par réseau pré-entraîné, la couleur ne suffira pas).
 - Gestes plus riches (content) — probablement entraînement RL nécessaire.
+- **Chat** : l'affiche de ton chat est détectée dans la simulation (0,90, position à 2 cm) ; reste la veille dans le cerveau.
 - **Home Assistant** : brancher sur ta vraie instance (URL, jeton, noms d'entités), puis MQTT et scènes déclenchées par le robot.
 - Le cerveau comportemental complet — personnalité, humeur, mémoire.
