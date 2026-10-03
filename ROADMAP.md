@@ -335,3 +335,26 @@ pousse doucement la balle vers lui.
 2. Installer et lancer `duck-sim` (scène apartment + caméra).
 3. Inventaire de l'API `robotd` utile au cerveau.
 4. Puis : `VelStand-Rough-Backlash` renforcé, premier geste (« non »).
+
+### Phase 2 — état de clôture (2026-10-03, fin de session)
+- **Visée** (`approach.py`, `cap_vise`) : le canard se place derrière la balle sur la ligne de tir voulue
+  (à l'odométrie), s'oriente, puis approche en ligne droite et tire du pied gauche. Mesuré en arène :
+  **11 essais sur 12 dans les ±35° de la direction voulue**, écarts typiques 5–25°, cibles jusqu'à ±120°
+  de la ligne canard–balle. Tir étendu vers l'avant (balle jusqu'à 10,5 cm) et jamais déclenché sur une
+  position issue de l'odométrie seule.
+- **Balle dans le dos / sur les côtés** : retrouvée en arène (relevements +105° et −71° réussis).
+- **laya-vision** étudié : VLM SmolVLM-256M qui choisit FORWARD/LEFT/RIGHT/KICK, 86 % de réussite en sim
+  (95 % pour son expert scripté), ~0,6 s par décision, poids CC-BY-NC-SA. Notre contrôleur géométrique
+  fait mieux sans GPU : pas de VLM nécessaire.
+- **Détecteur de chat** : `animaux.py` (YOLO ONNX via `cv2.dnn`) prêt, décodage validé sur tenseur
+  synthétique ; **modèle non téléchargé** (YOLOv8n ≈ 12 Mo, en attente de ton accord) et jamais testé sur
+  une vraie image de chat.
+- **Reste à faire** : évaluation dans l'appartement (⚠ il contient ses propres balles orange : `ball_0`…
+  à ranger avant chaque essai, sinon le canard vise la mauvaise), distances > 1 m, et les deux items qui
+  demandent le GPU (kick à DR large, kick doux) — **reportés, GPU laissé tranquille**.
+- **Home Assistant** (prochaine étape) : `quacksat` (andreagenovese/quacksat, Apache-2.0) tourne SUR le
+  robot et en fait un satellite vocal Assist (Wyoming) ; il ne publie aucune entité. HA sait déjà lire les
+  imprimantes (intégration PrusaLink ; Elegoo Saturn 4 Ultra via HACS `elegoo-homeassistant`, SDCP). Notre
+  « cerveau » devra donc (1) lire ces états dans HA (WebSocket ou MQTT) pour réagir, (2) publier l'état du
+  robot (batterie, chute, position) en entités MQTT. Attention : quacksat et le cerveau sont deux clients de
+  `robotd` (dernier écrit gagne) → prévoir un arbitrage.
