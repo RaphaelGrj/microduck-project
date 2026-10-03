@@ -183,13 +183,43 @@ d'émotions (esprit Lumi, sans écran, pas d'anthropomorphisme visuel).
       oscillations divergentes, à cause du retard image 0,15–0,25 s + inertie de la
       tête). **Erreur finale < 2 px en ~4 s** (de 116/226 px au départ), vérifié sur
       image (balle pile au centre). Première boucle perception → action.
-- [ ] Contrôleur d'approche : détection → `twist` (approche) + `head_pose`
-      (suivi) → déclenche `ball_kick_left` ou `ball_kick_right` selon le
-      côté du ballon. **Contrainte découverte (voir `microduck-brain/ZONE_MORTE.md`)** :
-      la marche a une zone morte (vx ≥ 0,3 m/s avant, ≤ −0,4 arrière, |vyaw| ≥ 1,2) —
-      pas de pilotage fin par le corps : aligner avec la tête, corps par à-coups.
-- [ ] Kick plus tolérant au placement : élargir la DR de position du
-      ballon (±2 cm aujourd'hui dans `microduck_ball_kick_env_cfg.py`).
+- [x] **Contrôleur d'approche bout en bout** (2026-10-03) —
+      `microduck-brain/approach.py` + banc d'évaluation `approach_eval.py` (arène
+      ouverte, vérité terrain). Boucle « arrêt – regard – rafale » : localise la balle
+      dans le repère du tronc (`geometry.py` : pose caméra de `robotd` + intersection
+      avec le sol, **0,5–2 cm d'erreur de 11 cm à 1 m**), marche/tourne par rafales,
+      s'ajuste dans la fenêtre de tir, ramène la tête au neutre, déclenche
+      `kick_left`/`kick_right`. **Résultat (arène vide, balle posée au hasard à 0,5–1 m) :
+      10/10 essais réussis à ±30° de relevement, puis 9/10 à ±60° (graines 7 et 8) ;
+      14 à 61 s par essai, médiane ~30 s ; les deux pieds servent.** Le seul échec : la
+      balle poussée trop fort au dernier pas, qui roule à 3 m (voir « limite structurelle »
+      ci-dessous). Avant d'élargir la fenêtre de 1,2 à 1,7 cm : 7/10. Ce que les mesures ont
+      imposé (détails : `ZONE_MORTE.md`) :
+      * la zone morte de la marche (vx ≥ 0,3, ≤ −0,4, |vyaw| ≥ 1,2) → pas de pilotage
+        fin, rafales dont la **durée** dose l'amplitude (table `bursts.py`) ;
+      * **tête baissée (≥ 1,0) : la rotation du corps est morte** → tête à ≤ 0,4 pendant
+        les rafales, baissée seulement à l'arrêt pour regarder ;
+      * **le tir exige la tête au neutre** (0 m/s sinon, 1,2 m/s au neutre) ;
+      * **la balle EST visible dans la fenêtre de tir** avec la tête baissée à fond
+        (correction de ce qui était écrit plus haut : « invisible au pied ») ;
+      * faux positif : les pieds orange du canard au bord bas de l'image, tête baissée
+        à fond → rejeté par une zone d'exclusion (aucune balle sous le canard).
+- [ ] **Limite structurelle restante : la fenêtre de tir est trop étroite.** Mesurée
+      (`kick_sweep.py`) : profondeur ≈ 3–4 cm utiles (balle à x ≈ 5,5–8,8 cm devant le
+      tronc, 2 cm plus près que le point d'entraînement 9 cm), latéral ± 3 cm autour de
+      ±4,2 cm. Or cette zone est dans la **zone de balancement des pieds** : au dernier
+      pas, le pied qui avance **pousse la balle** (la balle repart à 15–20 cm, il faut la
+      reprendre) → c'est la cause des échecs restants et du temps perdu. **Remède
+      structurel : réentraîner un kick avec une DR de position bien plus large**
+      (`BALL_POS_NOISE_XY` ±1,5 cm aujourd'hui dans `microduck_ball_kick_env_cfg.py`,
+      et `BALL_OFFSET_X` 9 cm → balle jusqu'à ~20 cm devant, hors de la zone de pas),
+      politique toujours aveugle (contrat 61 entrées conservé, donc déclenchable par
+      `robot.do`). **Décision GPU / HF Jobs à prendre** (le GPU est déjà pris par
+      StandUp, ETA ~17 h).
+- [ ] Le tir part à ±15–25° de l'axe, vers l'extérieur (pied gauche +15…+22°, pied droit
+      −10…−27°) : pour VISER une cible, compenser le cap avant de tirer.
+- [ ] Cas non couverts par l'évaluation : balle dans le dos (CHERCHER), canard qui
+      tombe, pièce encombrée (l'évaluation est en arène vide), distance > 1 m.
 - [ ] **Kick doux « passe »** : réentraîner avec un `BALL_TARGET_SPEED`
       bas (1,0 m/s actuellement ; ~0,25 m/s = tape douce) pour passer la
       balle au chat ou à moi.

@@ -193,10 +193,28 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   aucune démarche sous ~0,25 m/s avant / ~0,35 arrière / ~1,0 rad/s de rotation, même si
   `policy=walk` et commande appliquée. Utiliser `vx ≥ 0,3`, `|vyaw| ≥ 1,2` ; aligner finement
   avec la **tête**, pas avec le corps. `scripts/duck-sim drive` (0,15 m/s) ne fait donc pas marcher.
-- **Perception** (`microduck-brain/vision.py`, `track.py`) : image caméra = `GET
+- **Perception** (`microduck-brain/vision.py`, `track.py`, `geometry.py`) : image caméra = `GET
   http://127.0.0.1:8080/frame` (PNG portrait 360×640, champ horizontal ~45°, focale ~435 px) ;
   détection de balle par couleur HSV ; suivi du regard calibré automatiquement (< 2 px d'erreur).
+  **Position 3D de la balle** : pose de la caméra dans le repère du tronc =
+  `robot.state.frames.camera` (pos + quat w,x,y,z, convention caméra x droite / y bas / z devant,
+  tronc x avant / y gauche / z haut) ; intersection du rayon pixel avec le sol (z = 3,5 cm −
+  hauteur du tronc `odom.position[2]`) ou profondeur par le rayon apparent (R = 3,5 cm) :
+  **0,5–2 cm d'erreur de 11 cm à 1 m** (`vis_range.py`, `vis_near.py`). Piège : les pieds orange
+  du canard apparaissent au bord bas de l'image quand la tête est baissée à fond (faux positif).
   Environnement : `uv` dans `microduck-brain` (`bash ~/run-brain.sh <script.py>`).
+- **Outils de test du simulateur (fork uniquement, sans équivalent sur le vrai robot)** :
+  `DUCK_SIM_GROUNDTRUTH` (poses réelles canard + balle dans `~/.cache/duck-sim/groundtruth.json`,
+  toutes les 0,1 s) et `DUCK_SIM_CONTROL` (téléporter la balle ou le canard : `truth.py`
+  `teleport`, `teleport_duck`) — pour MESURER, jamais pour décider. Scène **`arena`**
+  (`bash ~/run-scene.sh arena` : sol plan sans murs + balle d'entraînement exacte) : l'appartement
+  est inutilisable pour évaluer une approche (le couloir de naissance fait 40 cm).
+- **Contrôleur d'approche + tir** (`microduck-brain/approach.py`, banc `approach_eval.py`) :
+  boucle arrêt–regard–rafale (voir ROADMAP Phase 2). Contraintes mesurées (`ZONE_MORTE.md`) :
+  rotation du corps morte tête baissée (≥ 1,0) → tête ≤ 0,4 pendant les rafales ; tir
+  seulement tête au neutre ; fenêtre de tir ≈ 3–4 cm en profondeur (balle à x ≈ 5,5–8,8 cm),
+  ±3 cm en latéral — étroite et dans la zone de balancement des pieds (le pied pousse la
+  balle au dernier pas). Remède structurel prévu : kick réentraîné avec DR de position large.
 - `robot.do` est exactement le point d'entrée pour nos futurs gestes
   scriptés/entraînés une fois publiés sur le Hub — pas besoin de
   réimplémenter le déclenchement, juste publier avec le bon `--name`.

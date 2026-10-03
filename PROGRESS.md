@@ -1,7 +1,7 @@
 # Progression — Projet Microduck
 
 > Vue d'ensemble rapide. Détails complets : `ROADMAP.md`. Contexte technique : `CLAUDE.md`.
-> Dernière mise à jour : 2026-10-01.
+> Dernière mise à jour : 2026-10-03.
 
 ## Fait
 
@@ -9,33 +9,38 @@
   un laptop Linux (soumission de jobs sur GPU Hugging Face) et avec le robot lui-même à terme.
 - **Pipeline d'entraînement RL maîtrisé** : entraîner, visualiser, exporter en ONNX, publier —
   le cycle complet a été fait et validé.
-- **`duck-sim` opérationnel** : les vrais logiciels qui tourneront sur le robot (contrôle,
-  capteurs, mise à jour) tournent dès maintenant contre un canard simulé — pas besoin d'attendre
-  la livraison pour développer dessus.
-- **Première brique du « cerveau »** : un script qui pilote le canard simulé à distance via
-  son API réseau, indépendamment du code d'entraînement (futur repo dédié).
-- **Gestes simples ajoutés** (non, oui, curieux) — sans aucun entraînement, juste du pilotage
-  direct de la tête.
-- **Simulateur officiel en ligne découvert** : permet de tester les compétences déjà fournies
-  par le fabricant (marche, assis/debout, tirs...) depuis n'importe quel navigateur, y compris
-  un téléphone — inutile de réentraîner ce qui existe déjà.
+- **`duck-sim` opérationnel, caméra comprise** : les vrais logiciels qui tourneront sur le
+  robot (contrôle, capteurs, caméra, mise à jour) tournent dès maintenant contre un canard
+  simulé, en temps réel. Pas besoin d'attendre la livraison pour développer dessus.
+- **Le « cerveau » commence** (repo `microduck-brain`) : pilote le canard simulé à distance via
+  son API réseau, indépendamment du code d'entraînement.
+- **Gestes expressifs sans entraînement** : non, oui, curieux, surpris, fatigué.
+- **Vision et jeu de balle (Phase 2)** :
+  - détection de la balle par la caméra, position 3D à 0,5–2 cm près de 11 cm à 1 m ;
+  - suivi du regard ;
+  - **contrôleur d'approche complet** : le canard voit une balle posée au hasard à 0,5–1 m,
+    s'en approche, se place et la tire — **10 essais sur 10 réussis** sur une 1re série en
+    simulation (arène vide, vérité terrain), ~25 s par essai (2e série à relevements plus
+    larges : voir `ROADMAP.md`).
+- **Simulateur officiel en ligne découvert** (essai des compétences du fabricant depuis un
+  navigateur).
 
 ## En cours — l'apprentissage
 
 **Compétence visée : se relever tout seul après une chute**, sur sol irrégulier, en résistant
 aux bousculades (pensé pour un chat qui le pousserait).
 
-- Avancement : **itération 2000 sur 15000**, mis en pause ce soir.
-- Déjà acquis à ce stade : il se redresse et tient debout correctement de façon fiable.
-- Reste à voir : tenue face à des bousculades plus fortes (le curriculum monte en intensité).
-- Reprise prête — une seule commande à relancer quand on veut continuer.
+- Tourne en arrière-plan : itération 4 700 sur 17 000 (le 2026-10-03), ~17 h restantes.
+- Déjà acquis : il se redresse et tient debout de façon fiable.
 
 ## À faire
 
-- Reprendre/terminer l'entraînement du relevé, puis durcir l'épreuve des bousculades.
-- Caméra sur `duck-sim` (actuellement bloquée côté technique, pas urgent).
-- Gestes plus riches (content, surpris, fatigué) — probablement entraînement RL nécessaire.
-- **Le vrai projet « jeu de balle »** : détection de la balle par la caméra + logique
-  d'approche/tir (le gros morceau restant).
+- **Décision à prendre : réentraîner le tir avec une position de balle beaucoup plus tolérante**
+  (aujourd'hui ±3 cm : le canard doit se placer au centimètre et son propre pied pousse la
+  balle). Demande du GPU (ou Hugging Face Jobs) ; le GPU est déjà occupé par le relevé.
+- Terminer / durcir l'apprentissage du relevé.
+- Jeu de balle : viser une cible (le tir part à ±20° de l'axe), balle dans le dos, pièce
+  encombrée, **chat** (détection par réseau pré-entraîné, la couleur ne suffira pas).
+- Gestes plus riches (content) — probablement entraînement RL nécessaire.
 - Intégration Home Assistant (notifications, scènes déclenchées par le robot).
-- Le cerveau comportemental complet (au-delà du script actuel) — personnalité, humeur, mémoire.
+- Le cerveau comportemental complet — personnalité, humeur, mémoire.
