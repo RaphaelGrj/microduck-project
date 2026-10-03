@@ -381,8 +381,10 @@ pousse doucement la balle vers lui.
   `geometry.point_au_sol` la place à **2 cm** de sa vraie position (estimé 1,18 ; −0,05 m, vrai 1,2 ; 0). Pièges :
   une texture de 1080×1440 fait tomber la capture caméra (503 sur `/frame`) → ≤ 512 px ; une `box` étire la texture
   (stries) → utiliser un `plane` vertical. Photo et scène générée restent locales (ignorées par git).
-- **À faire ensuite, dans l'ordre** : (1) veille du chat dans le cerveau (`chat.py` : détection à ~2 Hz, événement
-  « chat » avec délai de grâce, suivi du regard, mémoire de la dernière vue) ; (2) évaluation du jeu de balle en appartement
+- **Veille du chat — logique faite et démontrée** (`chat.py`, `test_chat.py`, `demo_chat.py`) : confirmation sur 2 images,
+  événement « chat » à chaque nouvelle apparition seulement, délai de grâce 120 s, mémoire du nombre d'apparitions ; dans la
+  simulation (affiche) le cerveau passe en `curious` en 0,7 s. **Reste** : suivi du regard sur le chat, mémoire persistante.
+- **À faire ensuite, dans l'ordre** : (1) finir la veille du chat (suivi du regard, mémoire persistante) ; (2) évaluation du jeu de balle en appartement
   avec placement de balle validé ; (3) mémoire relationnelle / personnalité (Phase 3) ; (4) MQTT quand Mosquitto sera
   installé ; (5) Home Assistant sur la vraie instance dès que `ha.toml` est rempli (`--verifier`).
 - **Entraînement StandUp** : arrêté à 18 h (≈ itération 7 000, point de reprise conservé) ; objectif de reprise : 10 000
