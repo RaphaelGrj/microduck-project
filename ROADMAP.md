@@ -346,9 +346,12 @@ pousse doucement la balle vers lui.
 - **laya-vision** étudié : VLM SmolVLM-256M qui choisit FORWARD/LEFT/RIGHT/KICK, 86 % de réussite en sim
   (95 % pour son expert scripté), ~0,6 s par décision, poids CC-BY-NC-SA. Notre contrôleur géométrique
   fait mieux sans GPU : pas de VLM nécessaire.
-- **Détecteur de chat** : `animaux.py` (YOLO ONNX via `cv2.dnn`) prêt, décodage validé sur tenseur
-  synthétique ; **modèle non téléchargé** (YOLOv8n ≈ 12 Mo, en attente de ton accord) et jamais testé sur
-  une vraie image de chat.
+- **Détecteur de chat** : `animaux.py` (YOLOv8n ONNX via `cv2.dnn`, aucune dépendance en plus) — **validé sur 4 photos
+  réelles de ton chat (scores 0,86–0,91, boîte correcte, un seul chat à chaque fois) et 0 faux positif sur 5 images
+  du simulateur** (2026-10-03). Modèle : `unity/inference-engine-yolo` (HF, `yolov8n.onnx`, 6,4 Mo, GPL-3.0),
+  placé dans `microduck-brain/modeles/` (ignoré par git, comme les photos). **Pas encore testé depuis la caméra du
+  canard** (pas de chat dans la simulation) : champ de vision, hauteur de caméra et flou de marche à valider sur
+  le vrai robot. `geometry.point_au_sol` donne la position au sol d'après le bas de la boîte.
 - **Reste à faire** : évaluation dans l'appartement (⚠ il contient ses propres balles orange : `ball_0`…
   à ranger avant chaque essai, sinon le canard vise la mauvaise), distances > 1 m, et les deux items qui
   demandent le GPU (kick à DR large, kick doux) — **reportés, GPU laissé tranquille**.
