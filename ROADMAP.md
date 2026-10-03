@@ -106,14 +106,20 @@ robot se code ici dès maintenant.
       une politique, queued → exécutée → redebout) et `drive` (`robot.move`,
       marche 8s puis arrêt automatique par le deadman).
 - [x] Scène `apartment` (6 pièces, 7×6 m) : `DUCK_SIM_SCENE=apartment` — en service.
-- [ ] **Caméra (`DUCK_SIM_CAMERAS=a`) bloquée** : `webrtcsink` vient de
-      `gst-plugins-rs`, packagé dans aucune distro Debian/Ubuntu. Le script
-      officiel (`setup-gstreamer.sh`) télécharge des binaires précompilés,
-      mais **uniquement pour aarch64** (le vrai robot) — rien pour notre
-      WSL x86_64. Contournement possible : compiler `gst-plugin-webrtc`
-      depuis les sources (`gst-plugins-rs` @ 0.14.5, `cargo cinstall`) —
-      pas fait, pas bloquant pour l'instant (rien côté Phase 0bis n'a besoin
-      de la caméra). À faire quand on attaque vraiment la Phase 2 (vision).
+- [x] **Caméra opérationnelle** (2026-10-03) : vidéo en direct dans la console
+      officielle (`http://127.0.0.1:8080`, bouton *connect*), 30 FPS, 714 kbit/s,
+      0 % de perte, image en portrait (caméra montée d'un quart de tour, comme
+      le vrai robot). Ce qui bloquait, et la solution :
+      1. `webrtcsink` (`gst-plugins-rs`) n'est packagé nulle part et Pollen ne
+         publie que de l'aarch64 → **compilé depuis les sources** ;
+      2. la **0.14.5 échoue** (`failed to set sps/pps`) avec le GStreamer 1.28
+         d'Ubuntu 26.04 → **la 0.15.4 marche** ;
+      3. `webrtcsink` choisit l'encodeur par rang et prenait `nvh264enc` (NVENC,
+         rang 257) dont le flux échoue → déclassé via
+         `GST_PLUGIN_FEATURE_RANK=nvh264enc:0,nvautogpuh264enc:0`, repli sur `x264enc`
+         (Pollen ne fait ce déclassement que pour macOS).
+      Scripts reproductibles + pièges : `microduck-brain/scripts-wsl/`.
+      **Débloque la Phase 2** (détecteur de balle / chat sur le flux caméra).
 - [x] **Inventaire IPC `robotd` fait et vérifié contre `duck-sim` réel**
       (2026-10-01). Un écart doc/réel trouvé et corrigé : `robot.do` attend
       le champ **`skill`**, pas `name` comme la doc le suggérait.

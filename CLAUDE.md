@@ -116,8 +116,10 @@ fin ou à l'échec d'une impression.
       --agent.load-run 2026-10-01_18-53-15_microduck_stand
   ```
 - `duck-sim` opérationnel (vrais daemons contre un MuJoCo duck), validé via `robot.do` et
-  `robot.move`. Caméra bloquée (binaire `webrtcsink` absent pour x86_64, build source possible
-  plus tard). Voir section IPC ci-dessous.
+  `robot.move`. **Caméra opérationnelle (2026-10-03)** : `webrtcsink` compilé depuis les sources
+  (`gst-plugins-rs` **0.15.4**, la 0.14.5 échoue avec GStreamer 1.28), encodeur NVENC déclassé ;
+  vidéo 30 FPS dans la console `http://127.0.0.1:8080`. Lancement et pièges :
+  `microduck-brain/scripts-wsl/README.md`. Voir section IPC ci-dessous.
 - Repo [`RaphaelGrj/microduck-brain`](https://github.com/RaphaelGrj/microduck-brain) créé
   (Phase 3, futur cerveau) — premier script `poc_robotd_client.py` validé contre `duck-sim`.
 - Gestes scriptés sans entraînement ajoutés à `infer_policy.py` (notre fork) : **N** = Non
