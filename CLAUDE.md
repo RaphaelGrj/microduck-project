@@ -169,8 +169,20 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
 - `init`/calibration/écriture joint brute = namespace **maintenance séparé**,
   jamais exposé sur BLE/WebRTC (sécurité) — seuls `robot.do`, `policies.*`
   et le teleop le sont.
-- `look` (regard dédié, au-delà de `head_pose`) est **différé**, pas encore
-  implémenté côté officiel.
+- **Correction (2026-10-03)** : `look` N'EST PAS différé — `robotctl robot look
+  <X> <Y> <Z>` existe (pointe la caméra vers un point du repère tronc, en m :
+  X avant, Y gauche, Z haut ; le daemon fait la cinématique inverse). C'est la
+  brique pour suivre le chat / la balle des yeux (Phase 2). Skills acceptés par
+  `robot do` : `roulade`, `kick_left`, `ground_pick`, **`sit_toggle`**
+  (s'asseoir / se relever, vérifié : `policy=sit`, tronc à 0.06 m, puis `stand`).
+- **`robot.head` = décalages** (0 = neutre), pas des angles absolus ; la tête suit
+  (0.6 demandé → joint à 0.57). Les trames d'état arrivent à 50 Hz : un client doit
+  se **cadencer sur ce flux** (lire une trame, puis envoyer) sinon il lit des trames
+  périmées en attente dans la socket. L'état contient `head`, `joints` (15, tête =
+  indices 5..8), `frames.camera/tof/head_imu`, `odom`, `safety`.
+- Lancer `duck-sim` : `scripts/duck-sim down` appelle `sudo systemctl` et se bloque
+  sans mot de passe en cache → utiliser `~/start-duck.sh` (shim `sudo -n`,
+  headless via `DUCK_SIM_VIEWER=0`).
 - `robot.do` est exactement le point d'entrée pour nos futurs gestes
   scriptés/entraînés une fois publiés sur le Hub — pas besoin de
   réimplémenter le déclenchement, juste publier avec le bon `--name`.

@@ -141,17 +141,16 @@ que ce soit pour les gestes suivants, essayer le scripting d'abord** —
 RL seulement si le scripting est insuffisant :
 
 - [x] « Non » (secouer la tête) — scripté, pas d'entraînement, touche N
-- [ ] « Oui » (hochement) — probablement scriptable pareil (head_offset[1],
-      pitch)
-- [ ] Curieux (penché + tête inclinée) — probablement scriptable (head_offset
-      pitch+roll statique)
-- [ ] Surpris (sursaut, petit recul) — peut-être scriptable via body_pose /
-      vel_cmd ponctuel, à essayer avant RL
+- [x] « Oui », Curieux, Surpris (tête relevée + petit recul), Fatigué
+      (affaissement de tête, puis `sit_toggle` assis, puis relevé) — **tous
+      scriptés, sans RL**, et cette fois joués **via `robotd` depuis le
+      cerveau** (`microduck-brain/gestures.py`, `robot.head` + `robot.move`
+      + `robot.do`). Vérifiés contre `duck-sim` par la mesure des joints de
+      tête (amplitudes réelles loguées). `python3 gestures.py <non|oui|
+      curieux|surpris|fatigue|fatigue_complet|tous>`.
 - [ ] Content (trémoussement) — mouvement de tout le corps, probablement
-      HORS de portée du scripting command-level → candidat RL réel
-- [ ] Fatigué (bâillement / étirement avant de s'asseoir) — combinaison
-      head_offset (affaissement) + déclenchement sitstand, à tenter scripté
-      d'abord
+      HORS de portée du scripting command-level → **seul vrai candidat RL
+      de la Phase 1**, à traiter plus tard.
 
 Gestes qui *nécessitent* vraiment du RL (mouvement hors de l'espace de
 commande existant), publiables via `uv run publish --kind episodic
