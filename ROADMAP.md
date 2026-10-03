@@ -170,12 +170,24 @@ d'émotions (esprit Lumi, sans écran, pas d'anthropomorphisme visuel).
 
 ## Phase 2 — Perception et jeu de balle avec vision
 
-- [ ] Détecteur sur le flux caméra : ballon **et chat** (classe `cat` de
-      COCO, pré-entraînée — aucun entraînement nécessaire). Commencer
-      classique (couleur / petit YOLO) avant un modèle vision-langage.
+- [x] **Détecteur de balle par couleur (classique, sans entraînement)** —
+      `microduck-brain/vision.py` (2026-10-03) : images via `GET /frame` de `mediad`
+      (PNG 360×640, ~0,13 s), seuillage HSV + filtre de rondeur (non appliqué aux
+      objets coupés par le bord de l'image). Testé sur la caméra simulée : balle
+      orange et cube cyan repérés, **aucune fausse alerte** sur le sol, le bois et
+      les murs. Il reste le **chat** (classe COCO `cat`, petit YOLO pré-entraîné —
+      la couleur ne suffira pas) et un test hors simulation (éclairage réel).
+- [x] **Suivi du regard** — `microduck-brain/track.py` : le canard tourne la tête
+      (`robot.head`) pour centrer la cible ; sens et gains **calibrés
+      automatiquement** ; asservissement avec attente de stabilisation (sans elle :
+      oscillations divergentes, à cause du retard image 0,15–0,25 s + inertie de la
+      tête). **Erreur finale < 2 px en ~4 s** (de 116/226 px au départ), vérifié sur
+      image (balle pile au centre). Première boucle perception → action.
 - [ ] Contrôleur d'approche : détection → `twist` (approche) + `head_pose`
       (suivi) → déclenche `ball_kick_left` ou `ball_kick_right` selon le
-      côté du ballon.
+      côté du ballon. **Contrainte découverte (voir `microduck-brain/ZONE_MORTE.md`)** :
+      la marche a une zone morte (vx ≥ 0,3 m/s avant, ≤ −0,4 arrière, |vyaw| ≥ 1,2) —
+      pas de pilotage fin par le corps : aligner avec la tête, corps par à-coups.
 - [ ] Kick plus tolérant au placement : élargir la DR de position du
       ballon (±2 cm aujourd'hui dans `microduck_ball_kick_env_cfg.py`).
 - [ ] **Kick doux « passe »** : réentraîner avec un `BALL_TARGET_SPEED`

@@ -184,7 +184,19 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   indices 5..8), `frames.camera/tof/head_imu`, `odom`, `safety`.
 - Lancer `duck-sim` : `scripts/duck-sim down` appelle `sudo systemctl` et se bloque
   sans mot de passe en cache → utiliser `~/start-duck.sh` (shim `sudo -n`,
-  headless via `DUCK_SIM_VIEWER=0`).
+  headless via `DUCK_SIM_VIEWER=0`). Détails et pièges : `microduck-brain/scripts-wsl/README.md`.
+  Par défaut : scène appartement + **balle orange de test à 40 cm** (`scene_apartment_testball.xml`,
+  fork), caméra à 10 images/s en rendu simplifié (sinon la sim tombe à 0,36× le temps réel :
+  rendu OpenGL logiciel sous WSL2, 142 ms/image avec ombres ; options `DUCK_SIM_CAMERA_FLAT`,
+  `DUCK_SIM_CAMERA_FPS` dans le fork). Vérifier `scripts/duck-sim realtime` ≥ 1,00×.
+- **Zone morte de la marche** (`microduck-brain/ZONE_MORTE.md`) : `alpha_walking` ne fait
+  aucune démarche sous ~0,25 m/s avant / ~0,35 arrière / ~1,0 rad/s de rotation, même si
+  `policy=walk` et commande appliquée. Utiliser `vx ≥ 0,3`, `|vyaw| ≥ 1,2` ; aligner finement
+  avec la **tête**, pas avec le corps. `scripts/duck-sim drive` (0,15 m/s) ne fait donc pas marcher.
+- **Perception** (`microduck-brain/vision.py`, `track.py`) : image caméra = `GET
+  http://127.0.0.1:8080/frame` (PNG portrait 360×640, champ horizontal ~45°, focale ~435 px) ;
+  détection de balle par couleur HSV ; suivi du regard calibré automatiquement (< 2 px d'erreur).
+  Environnement : `uv` dans `microduck-brain` (`bash ~/run-brain.sh <script.py>`).
 - `robot.do` est exactement le point d'entrée pour nos futurs gestes
   scriptés/entraînés une fois publiés sur le Hub — pas besoin de
   réimplémenter le déclenchement, juste publier avec le bon `--name`.
