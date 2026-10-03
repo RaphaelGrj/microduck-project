@@ -49,3 +49,10 @@ aux bousculades (pensé pour un chat qui le pousserait).
 - **Chat** : l'affiche de ton chat est détectée dans la simulation (0,90, position à 2 cm) ; reste la veille dans le cerveau.
 - **Home Assistant** : brancher sur ta vraie instance (URL, jeton, noms d'entités), puis MQTT et scènes déclenchées par le robot.
 - Le cerveau comportemental complet — personnalité, humeur, mémoire.
+
+## Pour reprendre demain (tout est arrêté ce soir)
+- **Simulateur** (WSL) : `bash ~/run-scene.sh arena_chat` (≈ 1,5 min ; autres scènes : `arena`, `testball`, `apartment`).
+- **Tests sans simulateur** : `bash ~/run-brain.sh test_ha.py` (pont Home Assistant), `test_chat.py` (veille du chat).
+- **Démos dans le simulateur** : `demo_chat.py` (le canard réagit à l'affiche du chat), `demo_ha.py`, `approach_eval.py` (balle).
+- **Entraînement StandUp** : consignes de reprise dans `~/standup_reprise.txt` (WSL) ; objectif 10 000 itérations puis évaluation.
+- **Home Assistant** : remplir `ha.toml` (IP du Pi, jeton), puis `bash ~/run-brain.sh pont_ha.py ha.toml --verifier`.
