@@ -1,7 +1,7 @@
 # Progression — Projet Microduck
 
 > Vue d'ensemble rapide. Détails complets : `ROADMAP.md`. Contexte technique : `CLAUDE.md`.
-> Dernière mise à jour : 2026-10-03.
+> Dernière mise à jour : 2026-10-03 (soir).
 
 ## Fait
 
@@ -22,6 +22,9 @@
     s'en approche, se place et la tire — **10 essais sur 10 réussis** sur une 1re série en
     simulation (arène vide, vérité terrain), ~25 s par essai (2e série à relevements plus
     larges : voir `ROADMAP.md`).
+- **Pont Home Assistant écrit** (réactions du canard aux fins/échecs d'impression + publication de son état) ; validé
+  contre un faux Home Assistant et contre le simulateur, **pas encore contre ta vraie installation**.
+  Visée du tir (direction voulue) : 11 essais sur 12 dans les ±35°.
 - **Simulateur officiel en ligne découvert** (essai des compétences du fabricant depuis un
   navigateur).
 
@@ -42,5 +45,5 @@ aux bousculades (pensé pour un chat qui le pousserait).
 - Jeu de balle : viser une cible (le tir part à ±20° de l'axe), balle dans le dos, pièce
   encombrée, **chat** (détection par réseau pré-entraîné, la couleur ne suffira pas).
 - Gestes plus riches (content) — probablement entraînement RL nécessaire.
-- Intégration Home Assistant (notifications, scènes déclenchées par le robot).
+- **Home Assistant** : brancher sur ta vraie instance (URL, jeton, noms d'entités), puis MQTT et scènes déclenchées par le robot.
 - Le cerveau comportemental complet — personnalité, humeur, mémoire.
