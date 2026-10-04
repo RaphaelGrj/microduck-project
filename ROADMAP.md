@@ -232,12 +232,18 @@ Service hors robot (PC/serveur), parle à `robotd` via le réseau, développé
 d'abord contre `duck-sim`. **Calqué sur M9** (mêmes états, même modèle
 énergie/humeur) pour pouvoir contribuer en amont ou se brancher dessus.
 
-- [ ] Squelette : états M9 + modèle énergie/humeur + transitions
-- [ ] Les gestes de la phase 1 = vocabulaire des états (Stretch, Ruffle,
-      Preen, Sneeze, Startle…)
+- [x] Squelette : états M9 + modèle énergie/humeur + transitions (`brain.py`) — **promenade sûre** (2026-10-04) :
+      ToF 8×8 → distances libres (`tof.py`, étalonné : mur à 0,84 m mesuré 0,83 m), marche à 0,4 m/s hors zone
+      morte, arrêt à 45 cm, rotation du côté dégagé ; 2 × 3 min dans l'appartement : 0 contact, 0 chute
+      (plus près : 23 cm d'un tabouret). Pas encore : mémoire d'exploration (« novelty grid » du M9 officiel).
+- [x] Les gestes de la phase 1 = vocabulaire des états (Stretch, Ruffle,
+      Preen, Sneeze, Startle…) — étirement, ébouriffe, lissage, éternuement scriptés (tête seule, amplitudes
+      mesurées), joués en **initiatives rares** (~6/h, jamais le même en moins de 5 min ; étirement au réveil).
 - [ ] **Mémoire relationnelle** : familiarité par habitant (humains, chat)
       qui rend l'accueil plus chaleureux avec le temps ; habitudes apprises
-      (heure de retour, heure de coucher)
+      (heure de retour, heure de coucher) — **commencé** : `memoire.py` (rencontres, heure habituelle,
+      familiarité qui monte et s'oublie, demi-vie 14 j), alimentée par la veille du chat ; reste à faire varier
+      l'accueil selon la familiarité, et les humains (présence HA).
 - [ ] **Initiative rare et surprenante** (principe Pollen : « un duo
       surprise est un plaisir, un juke-box non »)
 - [ ] Home Assistant : partir de `quacksat` (Wyoming), puis exposer
@@ -389,3 +395,14 @@ pousse doucement la balle vers lui.
   installé ; (5) Home Assistant sur la vraie instance dès que `ha.toml` est rempli (`--verifier`).
 - **Entraînement StandUp** : arrêté à 18 h (≈ itération 7 000, point de reprise conservé) ; objectif de reprise : 10 000
   itérations puis évaluation de la politique ; commande dans `~/standup_reprise.txt` (WSL). Le GPU est libre.
+
+### 2026-10-04 — jeu de balle en appartement, chat, promenade
+- **Bug du simulateur trouvé** : le plan de coupe proche de la caméra vaut 1 % de l'étendue du modèle → **14 cm dans
+  l'appartement** (0,5 cm en arène) : la balle disparaissait dès qu'elle arrivait au pied. Corrigé dans nos scènes
+  (`<visual><map znear="0.0004"/>`, fork) ; à signaler en amont.
+- **Jeu de balle en appartement, placement vérifié** (`obstacles.py` : jamais dans un meuble ni masquée) :
+  8/20 → 13/20 (plan proche) → **15/20** (micro-pas de 0,25 s qui ne poussent jamais la balle — `diag_pousse.py` —
+  et fenêtre du pied gauche ramenée à 9,6 cm). Cuisine 6/10, salon 9/10. Restent : balle perdue de vue puis non
+  retrouvée (3), tirs bien placés partis de travers (2).
+- **Veille du chat complète** : regard qui suit le chat (`robot.look`), mémoire persistante des rencontres.
+- **StandUp** relancé le matin, arrêt automatique au point de reprise 10 000 (récompense stable ~47).

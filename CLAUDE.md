@@ -227,6 +227,10 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   seulement tête au neutre ; fenêtre de tir ≈ 3–4 cm en profondeur (balle à x ≈ 5,5–8,8 cm),
   ±3 cm en latéral — étroite et dans la zone de balancement des pieds (le pied pousse la
   balle au dernier pas). Remède structurel prévu : kick réentraîné avec DR de position large.
+- **Piège du simulateur (2026-10-04)** : MuJoCo coupe le rendu à `znear` × étendue du modèle — 14 cm dans l'appartement :
+  tout objet plus proche de la caméra est invisible. Nos scènes du fork fixent `znear=0.0004` ; toute nouvelle grande
+  scène doit faire de même. **ToF** : `tofd` (socket `duck-a-tof.sock`, `tof.stream` → `tof.frame` 8×8) +
+  `robot.model.tof_beams` + `frames.tof` → obstacles dans le repère du tronc (`microduck-brain/tof.py`, étalonné à 1 cm).
 - `robot.do` est exactement le point d'entrée pour nos futurs gestes
   scriptés/entraînés une fois publiés sur le Hub — pas besoin de
   réimplémenter le déclenchement, juste publier avec le bon `--name`.
