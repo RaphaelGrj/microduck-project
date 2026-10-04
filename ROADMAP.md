@@ -406,3 +406,11 @@ pousse doucement la balle vers lui.
   retrouvée (3), tirs bien placés partis de travers (2).
 - **Veille du chat complète** : regard qui suit le chat (`robot.look`), mémoire persistante des rencontres.
 - **StandUp** relancé le matin, arrêt automatique au point de reprise 10 000 (récompense stable ~47).
+
+### StandUp (se relever) — remis en question (2026-10-04)
+- **`robotd` sait déjà se relever** : sa séquence `limp_fall` (code de `robotd`) prédit la chute, rend le canard mou
+  pour amortir, ramène les jambes en posture debout puis relance la politique `stand`. En simulation (`diag_chute3.py`) :
+  après une vraie chute (canard relâché, tronc à 4 cm), debout en **0,5 à 1 s** couché sur le ventre, le dos ou le côté.
+- Notre entraînement StandUp (≈ 7 000 → 10 000 itérations, plusieurs heures de GPU) n'apporte donc quelque chose que
+  s'il fait **mieux** sur sol irrégulier, sous les poussées, ou dans des poses que la séquence officielle rate. À
+  comparer à 10 000 avant de lui consacrer plus de GPU ; sinon, réserver le GPU au kick tolérant.
