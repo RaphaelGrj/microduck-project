@@ -401,7 +401,7 @@ pousse doucement la balle vers lui.
   l'appartement** (0,5 cm en arène) : la balle disparaissait dès qu'elle arrivait au pied. Corrigé dans nos scènes
   (`<visual><map znear="0.0004"/>`, fork) ; à signaler en amont.
 - **Jeu de balle en appartement, placement vérifié** (`obstacles.py` : jamais dans un meuble ni masquée) :
-  8/20 → 13/20 (plan proche) → **15/20** (micro-pas de 0,25 s qui ne poussent jamais la balle — `diag_pousse.py` —
+  8/20 → 13/20 (plan proche) → 15/20 → cuisine **9/10** après la fenêtre fine du pied droit (6,3–8,3 cm) (micro-pas de 0,25 s qui ne poussent jamais la balle — `diag_pousse.py` —
   et fenêtre du pied gauche ramenée à 9,6 cm). Cuisine 6/10, salon 9/10. Restent : balle perdue de vue puis non
   retrouvée (3), tirs bien placés partis de travers (2).
 - **Veille du chat complète** : regard qui suit le chat (`robot.look`), mémoire persistante des rencontres.
