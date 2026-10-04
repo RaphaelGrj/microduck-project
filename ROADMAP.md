@@ -214,8 +214,10 @@ d'émotions (esprit Lumi, sans écran, pas d'anthropomorphisme visuel).
       (`BALL_POS_NOISE_XY` ±1,5 cm aujourd'hui dans `microduck_ball_kick_env_cfg.py`,
       et `BALL_OFFSET_X` 9 cm → balle jusqu'à ~20 cm devant, hors de la zone de pas),
       politique toujours aveugle (contrat 61 entrées conservé, donc déclenchable par
-      `robot.do`). **Décision GPU / HF Jobs à prendre** (le GPU est déjà pris par
-      StandUp, ETA ~17 h).
+      `robot.do`). **Entraînement lancé le 2026-10-04 à 16 h 25** (fork : tâches
+      `Mjlab-BallKickTolerant-Flat-Backlash-MicroDuck-Right/Left`, balle de 8 à 15 cm devant et ±2,5 cm latéral,
+      3 000 itérations par pied, ~2 h 30 chacune, pied droit puis gauche enchaînés). Évaluation prévue dans duck-sim :
+      `~/kick_tol_eval.sh` (export ONNX → `robot.loadPolicy` → balayage x = 7…15 cm → retour à l'officielle).
 - [ ] Le tir part à ±15–25° de l'axe, vers l'extérieur (pied gauche +15…+22°, pied droit
       −10…−27°) : pour VISER une cible, compenser le cap avant de tirer.
 - [ ] Cas non couverts par l'évaluation : balle dans le dos (CHERCHER), canard qui
@@ -239,15 +241,21 @@ d'abord contre `duck-sim`. **Calqué sur M9** (mêmes états, même modèle
 - [x] Les gestes de la phase 1 = vocabulaire des états (Stretch, Ruffle,
       Preen, Sneeze, Startle…) — étirement, ébouriffe, lissage, éternuement scriptés (tête seule, amplitudes
       mesurées), joués en **initiatives rares** (~6/h, jamais le même en moins de 5 min ; étirement au réveil).
-- [ ] **Mémoire relationnelle** : familiarité par habitant (humains, chat)
+- [x] **Mémoire relationnelle** : familiarité par habitant (humains, chat)
       qui rend l'accueil plus chaleureux avec le temps ; habitudes apprises
-      (heure de retour, heure de coucher) — **commencé** : `memoire.py` (rencontres, heure habituelle,
-      familiarité qui monte et s'oublie, demi-vie 14 j), alimentée par la veille du chat ; reste à faire varier
-      l'accueil selon la familiarité, et les humains (présence HA).
+      (heure de retour, heure de coucher) — `memoire.py` (rencontres, heure habituelle, familiarité qui monte et
+      s'oublie, demi-vie 14 j). **Chat** : accueil méfiant → chaleureux (inquire → greet → coo). **Humains (2026-10-04)** :
+      présence HA (`person.*`, section `[[habitant]]`) → état `accueil` : réservé au début, chaleureux ensuite,
+      **petit signe s'il n'est sorti que 5 min, joie (ébouriffe + « wheee ») après 4 h d'absence** (durée tirée de
+      `last_changed` de HA) ; rien en mode calme ; la sieste n'est interrompue que par un retour après une longue absence.
+      Testé contre le faux HA. Reste : marcher vers l'entrée (position fiable nécessaire : balises UWB).
 - [ ] **Initiative rare et surprenante** (principe Pollen : « un duo
       surprise est un plaisir, un juke-box non »)
 - [ ] Home Assistant : partir de `quacksat` (Wyoming), puis exposer
-      batterie, humeur, état, pièce comme entités HA
+      batterie, humeur, état, pièce comme entités HA — **entités faites** (REST, et **MQTT discovery** le 2026-10-04 :
+      appareil « Microduck » créé automatiquement, entités éditables et persistantes, « indisponible » si le cerveau
+      s'arrête, interrupteur `switch.microduck_calme` fourni ; testé contre un faux broker `mock_mqtt.py`). Restent :
+      la vraie instance (`ha.toml`, `--verifier` teste maintenant aussi les identifiants MQTT), le vocal (quacksat).
 - [ ] Premier cas concret : notifications d'impression 3D (Prusa MK3S →
       MK4S via Prusa Connect, Elegoo Saturn 4 Ultra) — le robot vient te
       voir et réagit (son + geste) à la fin ou à l'échec d'une impression
