@@ -137,7 +137,9 @@ fin ou à l'échec d'une impression.
   dedans, **jamais sur GitHub**). HA OS tourne sur un **Raspberry Pi 3B+** ; seuls des Pi 3B+ en stock : pont + cerveau
   mesurés à 29 Mo / < 1 % CPU, donc OK sur un Pi 3B+ (installation **non faite**, `deploy/pi/` préparé non testé).
   YOLO/vision ne tournent pas sur un Pi 3B+ (le robot a un NPU : à étudier à sa livraison).
-- **Entraînement StandUp** arrêté à 18 h (≈ it. 7 000) ; reprise : `~/standup_reprise.txt` (WSL). Objectif : 10 000 puis évaluer.
+- **Entraînement StandUp** arrêté à 10 000 (2026-10-04, dossier `logs/rsl_rl/microduck_stand/2026-10-04_10-49-32_microduck_stand`).
+  Évalué : identique à 7 000 (≈100 % relevé avec poussées) ; robotd se relève déjà seul (`limp_fall`) → plus de GPU pour StandUp.
+  Piège : `--agent.resume` écrit dans un NOUVEAU dossier de logs (surveiller le bon dossier).
 - Photos du chat dans `microduck-brain/photos_chat/` et modèle dans `modeles/` : **ignorés par git** (dépôt public).
 
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)

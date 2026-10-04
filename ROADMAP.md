@@ -414,3 +414,7 @@ pousse doucement la balle vers lui.
 - Notre entraînement StandUp (≈ 7 000 → 10 000 itérations, plusieurs heures de GPU) n'apporte donc quelque chose que
   s'il fait **mieux** sur sol irrégulier, sous les poussées, ou dans des poses que la séquence officielle rate. À
   comparer à 10 000 avant de lui consacrer plus de GPU ; sinon, réserver le GPU au kick tolérant.
+- **Évaluation StandUp (2026-10-04, `scripts/eval_standup.py`, 256 canards par départ, avec poussées)** : points 7 000 et
+  10 000 **identiques** : 100 % debout depuis le ventre et le dos (relevé en ~0,4-0,5 s), 99,6 % assis, 99-100 % debout.
+  Les itérations 7 000 → 10 000 n'ont rien apporté de mesurable. **Recommandation : arrêter d'investir du GPU dans
+  StandUp** (la pile officielle se relève déjà ; politique 10 000 conservée). Le GPU va plutôt au kick tolérant.
