@@ -26,41 +26,44 @@
   contre un faux Home Assistant et contre le simulateur, **pas encore contre ta vraie installation**.
   Visée du tir (direction voulue) : 11 essais sur 12 dans les ±35°.
 - **2026-10-04** :
-  - jeu de balle **dans l'appartement : 15 tirs réussis sur 20** (8/20 le matin) — un défaut du simulateur rendait la
+  - jeu de balle **dans l'appartement : 15 tirs réussis sur 20** (puis cuisine 9/10 après réglage du pied droit) (8/20 le matin) — un défaut du simulateur rendait la
     balle invisible à moins de 14 cm de la caméra ; le dernier pas poussait la balle (remplacé par des micro-pas) ;
     en arène : toujours 9–10/10 ;
   - le canard **suit ton chat des yeux** et se souvient de lui : son accueil passe de méfiant à chaleureux au fil des rencontres ;
   - **promenade autonome sans se cogner** (capteur de distance de la tête) et mémoire des zones déjà explorées ;
   - petits gestes spontanés et rares (s'étirer, s'ébouriffer, se lisser les plumes, éternuer) ;
   - **interrupteur « calme »** pilotable depuis Home Assistant : le canard s'assoit et se tait.
+- **2026-10-04, après-midi et soir** :
+  - **se relever** : déjà assuré par le logiciel officiel du robot ; notre entraînement (évalué : ~100 %) arrêté, GPU libéré ;
+  - **tir tolérant** (balle jusqu'à 15 cm devant) : pied droit entraîné, 26/36 contre 14/36 pour l'officiel au banc, mais pas
+    encore de gain en partie complète dans l'appartement (7/10 et 8/10 contre 9/10) → tir officiel gardé par défaut ;
+  - **jeu avec le chat** (affiche en simulation) : il cherche le chat, va à la balle et la lui passe — 3 passes sur 8, 3 sur 4
+    quand il trouve le chat ; garde-fous (jamais de poursuite, pas de passe vers un chat trop près) ;
+  - **Home Assistant branché sur ta vraie maison** (Saturn 4 Ultra et ta présence) ; accueil à ton retour (plus joyeux après
+    une longue absence) ; publication MQTT prête (attend Mosquitto) ; le canard se tait pendant une conversation vocale ;
+  - **sécurité** : il voit les marches (le robot n'a aucune protection contre les chutes) et s'arrête 40–50 cm avant ;
+  - **trémoussement de joie** sans entraînement (inclinaison du corps) ;
+  - étude de deux projets communautaires (voix pour Home Assistant, navigation/carte de la maison) : on s'appuiera dessus.
 - **Simulateur officiel en ligne découvert** (essai des compétences du fabricant depuis un
   navigateur).
 
-## En cours — l'apprentissage
+## En cours — l'apprentissage (arrêté ce soir, reprise possible)
 
-**Compétence visée : se relever tout seul après une chute**, sur sol irrégulier, en résistant
-aux bousculades (pensé pour un chat qui le pousserait).
-
-- **Arrêté à 18 h le 2026-10-03** à ≈ l'itération 7 000 (sur 17 000 prévues) ; la récompense stagne depuis l'itération 4 500
-  (≈ 47) et le canard ne tombe plus dans les situations testées. Reprise prévue jusqu'à 10 000 puis évaluation (GPU libre d'ici là).
-- Déjà acquis : il se redresse et tient debout de façon fiable.
+- **Tir tolérant du pied gauche** : arrêté à l'itération 1 750 sur 3 000 (point de reprise conservé).
+- **Passe douce** (balle à 0,5 m/s pour le chat ou toi) : préparée, à entraîner ensuite (accord donné).
 
 ## À faire
 
-- **Décision à prendre : réentraîner le tir avec une position de balle beaucoup plus tolérante**
-  (aujourd'hui ±3 cm : le canard doit se placer au centimètre et son propre pied pousse la
-  balle). Demande du GPU (ou Hugging Face Jobs) ; le GPU est déjà occupé par le relevé.
-- Terminer / durcir l'apprentissage du relevé.
-- Jeu de balle : viser une cible (le tir part à ±20° de l'axe), balle dans le dos, pièce
-  encombrée, **chat** (détection par réseau pré-entraîné, la couleur ne suffira pas).
-- Gestes plus riches (content) — probablement entraînement RL nécessaire.
-- **Chat** : l'affiche de ton chat est détectée dans la simulation (0,90, position à 2 cm) ; reste la veille dans le cerveau.
-- **Home Assistant** : brancher sur ta vraie instance (URL, jeton, noms d'entités), puis MQTT et scènes déclenchées par le robot.
-- Le cerveau comportemental complet — personnalité, humeur, mémoire.
+- Finir le pied gauche tolérant, entraîner la passe douce, puis rejouer avec le chat et dans l'appartement.
+- Mieux mesurer et compenser l'angle de départ de la passe ; détection du chat sur le côté (affiche vue de biais).
+- Intégrer le jeu dans le cerveau (proposer de jouer rarement, seulement si le chat est d'humeur).
+- **Toi, côté Home Assistant** : intégration PrusaLink (les Prusa ne sont pas dans HA) ; une entrée Interrupteur
+  `microduck_calme` ; Mosquitto si tu veux le MQTT.
+- À la livraison du robot : voix (quacksat) et carte de la maison (quacknav), puis tout revalider sur le vrai matériel.
 
 ## Pour reprendre demain (tout est arrêté ce soir)
-- **Simulateur** (WSL) : `bash ~/run-scene.sh arena_chat` (≈ 1,5 min ; autres scènes : `arena`, `testball`, `apartment`).
+- **Simulateur** (WSL) : `bash ~/run-scene.sh arena_chat` (≈ 1,5 min ; autres scènes : `arena`, `testball`, `marche`, `apartment`).
 - **Tests sans simulateur** : `bash ~/run-brain.sh test_ha.py` (pont Home Assistant), `test_chat.py` (veille du chat).
-- **Démos dans le simulateur** : `demo_chat.py` (le canard réagit à l'affiche du chat), `demo_ha.py`, `approach_eval.py` (balle).
-- **Entraînement StandUp** : consignes de reprise dans `~/standup_reprise.txt` (WSL) ; objectif 10 000 itérations puis évaluation.
-- **Home Assistant** : remplir `ha.toml` (IP du Pi, jeton), puis `bash ~/run-brain.sh pont_ha.py ha.toml --verifier`.
+- **Démos / bancs** : `jeu_eval.py` (jeu avec le chat), `approach_eval.py` (balle), `essai_vide.py` (marches), `diag_pose.py`.
+- **Entraînements** : consignes de reprise dans `~/kick_reprise.txt` (WSL) : tir tolérant gauche depuis 1 750, puis passe douce.
+- **Home Assistant** : `ha.toml` rempli (IP, jeton, entités) ; vérification : `bash ~/run-brain.sh pont_ha.py ha.toml --verifier`.

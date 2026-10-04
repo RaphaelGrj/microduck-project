@@ -142,6 +142,19 @@ fin ou à l'échec d'une impression.
   Piège : `--agent.resume` écrit dans un NOUVEAU dossier de logs (surveiller le bon dossier).
 - Photos du chat dans `microduck-brain/photos_chat/` et modèle dans `modeles/` : **ignorés par git** (dépôt public).
 
+## État d'avancement (2026-10-04, soir)
+- **Tir tolérant** (fork : `Mjlab-BallKickTolerant-Flat-Backlash-MicroDuck-Right/Left`, balle 8–15 cm) : droit fini
+  (`model_2999.pt` — le dernier checkpoint d'un run de 3000 est 2999), 26/36 au balayage vs 14/36 officiel, pas de gain en
+  appartement → `approach.py` profil `officiel` par défaut (`MICRODUCK_TIR`). **Gauche arrêté à 1 750** ; reprise et passe
+  douce (`Mjlab-BallKickPasse-*`, 0,5 m/s, accord donné) : `~/kick_reprise.txt`. Banc : `~/kick_tol_eval.sh`, `~/bilan_kick.py`.
+- **Jeu avec un joueur** : `microduck-brain/jeu.py` (+ `jeu_eval.py`, scène `arena_chat`) : 3/8 avec l'affiche du chat.
+- **Home Assistant réel connecté** (HA 2026.8.3) ; `ha.toml` rempli. MQTT discovery codé (attend Mosquitto).
+- **Sécurité** : `robotd` n'a pas de protection anti-chute ; `tof.py` détecte les vides, la promenade marche tête à 0,3 rad.
+- `robot.pose` (roulis/tangage du corps debout) et `robot.mouth` existent (geste « content » sans RL).
+- Cohabitation **quacksat / quacknav** : `microduck-brain/QUACKSAT_QUACKNAV.md`.
+- Pièges : `pgrep/pkill -f` se reconnaît lui-même si le motif est dans sa propre ligne de commande ; l'outil d'édition
+  fait perdre le bit exécutable d'un script WSL.
+
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
 Transport : socket Unix, JSON-RPC 2.0 / NDJSON (`/run/robotd.sock` sur un vrai
