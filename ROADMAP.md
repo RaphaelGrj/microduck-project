@@ -445,4 +445,18 @@ pousse doucement la balle vers lui.
 - **quacksat / quacknav étudiés** (`microduck-brain/QUACKSAT_QUACKNAV.md`) : pendant une conversation vocale (entité
   `assist_satellite` de HA), le cerveau se tait ; pièce et « aller à l'entrée » à confier plus tard à `quack-navd`.
 - **Home Assistant** : accueil des habitants (présence), publication MQTT discovery, satellite vocal — tout testé
-  contre de faux HA / broker, en attente de `ha.toml`.
+  contre de faux HA / broker. **Vraie instance connectée le soir** (HA 2026.8.3 : REST, WebSocket et écoute en direct
+  OK ; `person.raphael` et la Saturn 4 Ultra branchées ; pas de PrusaLink ni d'`input_boolean` calme dans HA).
+
+### 2026-10-04, soir — tir tolérant final, jeu avec le chat
+- **Tir tolérant droit final (it. 2 999)** : 26/36 au balayage (it. 1 250 : 28/36 ; officiel : 14/36), un peu plus doux
+  de loin (0,5–1,2 m/s à 13–15 cm). **Jeu complet en appartement** (gauche officiel) : cuisine 7/10, salon 8/10 contre
+  9/10 et 9/10 avec l'officiel — pas de gain mesuré (le pied droit n'a tiré que 4 fois sur 20) ; profil par défaut
+  inchangé (`officiel`), à rejuger avec le pied gauche tolérant. En arène : 17/20 contre 19/20.
+- **Jeu avec un joueur** (`microduck-brain/jeu.py`, banc `jeu_eval.py`, affiche du chat) : chercher le joueur (YOLO),
+  le placer à l'odométrie, viser de la balle vers lui (`Approche(cible_vise=...)`), garde-fous (joueur parti 20 s = fin,
+  pas de passe vers un chat à moins de 80 cm de la balle). **3 passes réussies sur 8, 3 sur 4 quand le chat est trouvé**
+  (écarts +11, −9, −15, −26°). Pièges : l'affiche vue de biais est classée « chien » (accepté) ; d'un côté elle ne dépasse
+  pas 0,28 (artefact de l'affiche plate, à revoir avec un vrai chat).
+- **Passe douce** : tâches `BallKickPasse` (fork, 0,5 m/s visé, dépassement pénalisé −10) ; entraînement du pied droit
+  en file après le tolérant gauche (accord de l'utilisateur).
