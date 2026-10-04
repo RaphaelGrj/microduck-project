@@ -1,7 +1,7 @@
 # Progression — Projet Microduck
 
 > Vue d'ensemble rapide. Détails complets : `ROADMAP.md`. Contexte technique : `CLAUDE.md`.
-> Dernière mise à jour : 2026-10-03 (soir).
+> Dernière mise à jour : 2026-10-04.
 
 ## Fait
 
@@ -25,6 +25,14 @@
 - **Pont Home Assistant écrit** (réactions du canard aux fins/échecs d'impression + publication de son état) ; validé
   contre un faux Home Assistant et contre le simulateur, **pas encore contre ta vraie installation**.
   Visée du tir (direction voulue) : 11 essais sur 12 dans les ±35°.
+- **2026-10-04** :
+  - jeu de balle **dans l'appartement : 15 tirs réussis sur 20** (8/20 le matin) — un défaut du simulateur rendait la
+    balle invisible à moins de 14 cm de la caméra ; le dernier pas poussait la balle (remplacé par des micro-pas) ;
+    en arène : toujours 9–10/10 ;
+  - le canard **suit ton chat des yeux** et se souvient de lui : son accueil passe de méfiant à chaleureux au fil des rencontres ;
+  - **promenade autonome sans se cogner** (capteur de distance de la tête) et mémoire des zones déjà explorées ;
+  - petits gestes spontanés et rares (s'étirer, s'ébouriffer, se lisser les plumes, éternuer) ;
+  - **interrupteur « calme »** pilotable depuis Home Assistant : le canard s'assoit et se tait.
 - **Simulateur officiel en ligne découvert** (essai des compétences du fabricant depuis un
   navigateur).
 
