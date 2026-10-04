@@ -154,9 +154,12 @@ RL seulement si le scripting est insuffisant :
       + `robot.do`). Vérifiés contre `duck-sim` par la mesure des joints de
       tête (amplitudes réelles loguées). `python3 gestures.py <non|oui|
       curieux|surpris|fatigue|fatigue_complet|tous>`.
-- [ ] Content (trémoussement) — mouvement de tout le corps, probablement
+- [x] Content (trémoussement) — mouvement de tout le corps, probablement
       HORS de portée du scripting command-level → **seul vrai candidat RL
-      de la Phase 1**, à traiter plus tard.
+      de la Phase 1**, à traiter plus tard. **Fait sans RL (2026-10-04)** : `robotd` accepte `robot.pose`
+      (roulis / tangage du tronc debout, suivis ~1:1 ; la hauteur est ignorée) ; dandinement à 2 Hz ± 0,25 rad
+      (± 9°) + contre-balancement de la tête, sans chute (`diag_pose.py`). Joué à la fin d'une impression et au
+      retour d'un habitant après une longue absence.
 
 Gestes qui *nécessitent* vraiment du RL (mouvement hors de l'espace de
 commande existant), publiables via `uv run publish --kind episodic
@@ -216,8 +219,12 @@ d'émotions (esprit Lumi, sans écran, pas d'anthropomorphisme visuel).
       politique toujours aveugle (contrat 61 entrées conservé, donc déclenchable par
       `robot.do`). **Entraînement lancé le 2026-10-04 à 16 h 25** (fork : tâches
       `Mjlab-BallKickTolerant-Flat-Backlash-MicroDuck-Right/Left`, balle de 8 à 15 cm devant et ±2,5 cm latéral,
-      3 000 itérations par pied, ~2 h 30 chacune, pied droit puis gauche enchaînés). Évaluation prévue dans duck-sim :
+      3 000 itérations par pied, ~2 h 30 chacune, pied droit puis gauche enchaînés). Évaluation dans duck-sim :
       `~/kick_tol_eval.sh` (export ONNX → `robot.loadPolicy` → balayage x = 7…15 cm → retour à l'officielle).
+      **Premier résultat, pied droit à l'itération 1 250 (arène, 36 tirs)** : **28/36** de 7 à 15 cm contre **14/36**
+      pour l'officiel, et **13/18 au-delà de 12 cm contre 1/18** (hors de la zone où les pas poussent la balle).
+      Défaut : il tape trop fort (jusqu'à 2,9 m/s pour 1,0 visé, entraînement pas encore convergé). `approach.py` :
+      profil `tolerant_droit` (`MICRODUCK_TIR`).
 - [ ] Le tir part à ±15–25° de l'axe, vers l'extérieur (pied gauche +15…+22°, pied droit
       −10…−27°) : pour VISER une cible, compenser le cap avant de tirer.
 - [ ] Cas non couverts par l'évaluation : balle dans le dos (CHERCHER), canard qui
@@ -426,3 +433,16 @@ pousse doucement la balle vers lui.
   10 000 **identiques** : 100 % debout depuis le ventre et le dos (relevé en ~0,4-0,5 s), 99,6 % assis, 99-100 % debout.
   Les itérations 7 000 → 10 000 n'ont rien apporté de mesurable. **Recommandation : arrêter d'investir du GPU dans
   StandUp** (la pile officielle se relève déjà ; politique 10 000 conservée). Le GPU va plutôt au kick tolérant.
+
+### 2026-10-04, après-midi
+- **Mémoire d'exploration confirmée, gain modeste** (promenades de 6 min, cases de 25 cm visitées) : avec 12, 12, 15, 12
+  (moyenne 12,75) ; sans 5, 14, 8, 13, 11 (moyenne 10,2). Forte variance ; gardée active. 0 chute, 0 contact.
+- **Sécurité — les marches** : `robotd` n'a pas de protection contre les chutes (étude `quacknav`). `tof.py` détecte
+  maintenant les vides (rayon > 4 cm sous le sol, ≥ 2 rayons), avec la pose de tête datée à l'instant de la trame ToF et
+  la verticale tirée de la gravité : 0 faux vide sur 4 500 trames en promenade. Scène `arena_marche` (estrade de 15 cm) :
+  tête au neutre le bord n'est vu que trop tard (0/3) ; **tête baissée de 0,3 rad, 3/3, arrêt 41 à 52 cm avant le bord**
+  → la promenade marche tête un peu baissée.
+- **quacksat / quacknav étudiés** (`microduck-brain/QUACKSAT_QUACKNAV.md`) : pendant une conversation vocale (entité
+  `assist_satellite` de HA), le cerveau se tait ; pièce et « aller à l'entrée » à confier plus tard à `quack-navd`.
+- **Home Assistant** : accueil des habitants (présence), publication MQTT discovery, satellite vocal — tout testé
+  contre de faux HA / broker, en attente de `ha.toml`.
