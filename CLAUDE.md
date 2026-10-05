@@ -252,15 +252,16 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
 
 ## État d'avancement (2026-10-05)
 - **Session cloud (Claude Code sur claude.ai, pas d'accès au PC/GPU Windows)** : uniquement du comportemental pur
-  dans `microduck-brain` (`brain.py`, `exploration.py`), rien côté `microduck_rl`/RL/GPU. 9 commits, détail complet
+  dans `microduck-brain` (`brain.py`, `exploration.py`), rien côté `microduck_rl`/RL/GPU. 12 commits, détail complet
   dans `ROADMAP.md` (section "2026-10-05 — session cloud"). En bref : « Occupation autonome et recherche
   d'attention » codée et testée (jeu seul / va vers un habitant ou le chat au-delà de 10 min sans interaction),
-  « zone noire » apprise au point de chute, rêves pendant la sieste profonde, rituel discret au départ (symétrique
-  de l'accueil au retour), fatigue progressive visible (tête, jamais les jambes — zone morte de la marche), coin
-  favori appris par activité (chill/nap — pas encore de déplacement vers ce coin, pas de navigation-vers-un-point
-  dans `brain.py`), pause avant un passage étroit (`Wander`). Suite de tests passante (17 dans `test_brain.py` +
-  `test_exploration.py`) ; 2 bugs préexistants dans `brain.py` trouvés et corrigés au passage (confirmés
-  préexistants via `git stash`, sans lien avec le code ajouté).
+  « zone noire » apprise au point de chute, rêves (tête + murmure sonore) pendant la sieste profonde, rituel
+  discret au départ (symétrique de l'accueil au retour), fatigue progressive visible (tête, jamais les jambes —
+  zone morte de la marche), coin favori appris par activité (chill/nap — pas encore de déplacement vers ce coin,
+  pas de navigation-vers-un-point dans `brain.py`), pause avant un passage étroit (`Wander`), s'ébroue après une
+  longue immobilité réelle (odom, pas une minuterie). Suite de tests passante (19 dans `test_brain.py` +
+  `test_exploration.py`, dont un test d'intégration longue simulation) ; 2 bugs préexistants dans `brain.py`
+  trouvés et corrigés au passage (confirmés préexistants via `git stash`, sans lien avec le code ajouté).
 
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.
