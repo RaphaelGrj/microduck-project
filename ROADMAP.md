@@ -2,7 +2,7 @@
 
 > Objectif : faire de Microduck un membre actif et autonome du foyer (présence,
 > personnalité, jeu avec moi et avec le chat), pas un gadget de démo.
-> Dernière mise à jour : 2026-10-01.
+> Dernière mise à jour : 2026-10-05.
 
 ## Principes directeurs
 
@@ -335,6 +335,98 @@ pousse doucement la balle vers lui.
 - Rollers, roulade : spectacle
 - À surveiller : branche amont `soft_carpet` (état inconnu, pertinente
   pour les tapis)
+
+### Diagnostic / auto-surveillance (à faire plus tard)
+
+Objectif : que le cerveau sache quand quelque chose chez le robot lui-même
+dérive, avant que ça devienne une panne — et que ça remonte dans HA comme
+le reste de l'état du foyer.
+
+- **Batterie dans la durée** : historiser charge/décharge par cycle (pas
+  juste `battery.percent` instantané) pour repérer la dérive de capacité
+  et prévenir avant le remplacement plutôt qu'à l'arrêt sec — utile avec
+  les 2 batteries de rechange du pack (rotation à planifier).
+- **Santé des servos** : suivre charge/température par articulation dans
+  `robot.health` sur la durée ; une dérive localisée (une hanche qui chauffe
+  plus que les autres, un backlash qui grandit) signale une pièce à
+  surveiller avant la casse.
+- **Auto-test au réveil** : petite séquence de vérification (amplitude de
+  chaque articulation, trame caméra, trame ToF) jouée au lever, résultat
+  publié en entité HA plutôt que découvert au moment où une compétence
+  plante en plein jeu.
+- **Qualité de connexion par pièce** : carte du signal Wi-Fi/BLE mesuré en
+  promenade (déjà en train de cartographier la maison pour l'évitement
+  ToF/UWB) → explique les latences ou pertes de trame sans RF à part.
+- **Journal des chutes** : fréquence et lieu des déclenchements `limp_fall`
+  dans le temps — un tapis ou un seuil de porte qui revient souvent dans le
+  journal est un vrai signal d'aménagement, pas juste un incident isolé.
+
+### Capteurs d'état par vision, au-delà balle/chat (à faire plus tard)
+
+Même pipeline que le détecteur de balle (HSV/forme) ou YOLO léger existant,
+appliqué à d'autres questions utiles au foyer plutôt qu'au jeu :
+
+- **Porte/fenêtre laissée ouverte** : détection simple de l'état ouvert/fermé
+  sur les encadrements déjà dans le champ de ses promenades → entité HA,
+  rappel vocal si ouverte à une heure inhabituelle.
+- **Lumière oubliée allumée** : repérer une pièce éclairée alors qu'elle est
+  vide (croisé avec la présence HA) plutôt que d'ajouter des capteurs de
+  luminosité dédiés.
+- **Objet au sol / désordre repéré** : un obstacle imprévu sur son trajet de
+  promenade (déjà détecté par le ToF pour l'évitement) remonté comme
+  événement « objet au sol » exploitable pour `GroundPick` ou juste un
+  signalement.
+- **État visuel de l'impression en cours** : complément local à
+  Prusa Connect / SDCP — un coup d'œil caméra sur le plateau en passant,
+  utile si l'API réseau de l'imprimante est indisponible ou pour détecter
+  un défaut visuel (spaghetti, décollement) que l'API ne voit pas.
+- **Plante qui a besoin d'eau** : repérage visuel simple (feuillage
+  affaissé/jauni) sur un passage régulier, en complément ou à la place d'un
+  capteur d'humidité dédié.
+
+## Pistes supplémentaires — rendre le robot vivant, compagnon de vie
+
+Suggestions indépendantes des deux ensembles ci-dessus, pensées uniquement
+pour la dimension « présence vivante » (pas une nouvelle compétence
+technique isolée), dans l'esprit des principes directeurs (couche
+comportement > nombre de politiques, pas d'écran, identité sonore).
+
+- **Rythme circadien réel** : une courbe d'énergie/humeur du modèle M9 qui
+  suit l'heure du jour (et pas seulement le temps écoulé depuis le dernier
+  repos) — plus vif en fin d'après-midi, qui se calme naturellement le
+  soir sans qu'on ait besoin d'activer le mode « calme » à la main.
+- **Petits rituels de présence** : un geste/son bref et reconnaissable à
+  chaque départ/retour d'un habitant détecté par HA (pas la même « fête »
+  qu'après une longue absence — un signe discret, cohérent, répété) ; à la
+  longue c'est ça qui construit l'impression de présence plus que chaque
+  interaction prise seule.
+- **Mémoire des objets, pas seulement des habitants** : quand `GroundPick`
+  ramasse ou dépose un objet, le robot « se souvient » où il l'a laissé et
+  peut revenir le vérifier plus tard (« tiens, mon jouet est toujours là »)
+  — réutilise la mémoire relationnelle déjà construite pour les habitants,
+  étendue aux objets.
+- **Réaction à la musique/au rythme ambiant** : détecter un battement
+  régulier au micro (déjà utilisé pour `pet-detect`/bruits) et faire suivre
+  un petit mouvement de tête en rythme — pas une danse chorégraphiée,
+  juste une réaction qui donne l'impression d'écouter.
+- **Personnalité qui dérive lentement avec l'usage** : pondérer légèrement
+  les probabilités de transition M9 (plus de `Zoomies`/`Dance` si le jeu
+  balle est fréquent chez vous, plus de `Chill`/`Preen` sinon) pour que le
+  caractère du robot reflète doucement comment la maison l'utilise, plutôt
+  qu'un profil figé au premier démarrage.
+- **Vocalisations gratuites, sans fonction** : de temps en temps, un petit
+  son de canard sans déclencheur ni message à faire passer (pas un geste
+  de l'orchestrateur, juste un bruit de fond occasionnel) — c'est souvent
+  ce genre de détail « inutile » qui rend un animal de compagnie vivant
+  plutôt qu'un système à états.
+- **Conscience du calendrier domestique** : un signe reconnaissable (pas
+  une « célébration » scriptée lourde) le jour d'un événement marqué dans
+  le calendrier HA du foyer, plutôt qu'une ignorance totale du temps qui
+  passe en dehors de la familiarité/habitudes déjà suivies.
+- **Spot favori appris, pas imposé** : au lieu de fixer un point de repos
+  par défaut, laisser le cerveau remarquer où il finit le plus souvent en
+  `Chill`/`Nap` (proximité d'un habitant, lumière, chaleur du radiateur ?)
+  et y retourner par préférence — un territoire choisi plutôt que programmé.
 
 ## Tableau de synthèse
 
