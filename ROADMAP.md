@@ -2,7 +2,7 @@
 
 > Objectif : faire de Microduck un membre actif et autonome du foyer (présence,
 > personnalité, jeu avec moi et avec le chat), pas un gadget de démo.
-> Dernière mise à jour : 2026-10-05 (soir, suite).
+> Dernière mise à jour : 2026-10-05 (fin de journée).
 
 ## Principes directeurs
 
@@ -554,6 +554,55 @@ assistant qui attend qu'on lui parle.
 - **Motif sonore personnel qui dérive légèrement avec le temps** — pas un
   vocabulaire figé depuis le premier jour, pour donner l'impression qu'il
   « grandit » plutôt qu'il reste identique à sa sortie de carton.
+
+### Interaction avec le reste de la maison
+
+- **Curiosité ou méfiance envers le robot aspirateur** : première
+  rencontre prudente (comme avec un visiteur inconnu), qui devient
+  habitude — ignore son passage une fois reconnu comme familier, ou
+  s'amuse à le suivre un peu. Une vraie relation entre deux « habitants »
+  non-humains de la maison.
+- **Va se recharger de sa propre initiative avant d'être à court**, pas
+  juste une alerte batterie passive — anticipation (« je faiblis, je
+  rentre ») plutôt qu'arrêt forcé.
+- **Anticipe un orage annoncé** (alerte météo HA) en cherchant un coin
+  abrité avant même que le bruit commence — instinct plutôt que simple
+  réaction au tonnerre déjà prévue plus haut.
+
+### Préférences et apprentissage non programmé
+
+- **Jouet favori appris** : avec plusieurs balles/objets disponibles,
+  développe une préférence pour l'un d'eux selon l'historique de jeu,
+  plutôt qu'un comportement identique envers tous — une vraie petite
+  manie plutôt qu'un traitement uniforme.
+- **Mot ou son déclencheur qui émerge par répétition**, pas pré-câblé :
+  si une même phrase/intonation précède souvent une même action, le
+  robot finit par y réagir de lui-même — apprentissage associatif
+  progressif plutôt qu'un dictionnaire de commandes figé dès le départ.
+
+### Conscience de l'environnement et de lui-même
+
+- **Toilette après une activité poussiéreuse** (CNC, imprimante 3D,
+  ponçage détecté au bruit caractéristique de l'atelier) → petit geste
+  `Preen`/`Ruffle` après coup, comme s'il « se secouait » après être
+  passé dans la poussière.
+- **Réagit au fait d'être photographié/filmé** : détecte un téléphone
+  pointé vers lui (forme rectangulaire tenue à hauteur, à la caméra) →
+  se redresse, pose. **À approfondir (accord donné) : un vrai répertoire
+  de poses/expressions/réactions différentes** plutôt qu'un seul geste
+  réflexe — à faire varier selon l'état M9 du moment (`Chill` → pose
+  calme tête légèrement inclinée, `Zoomies` → pose plus « speed »,
+  `Curious` → s'avance vers l'objectif) et à ne pas répéter identique à
+  chaque fois (lassitude visuelle sinon, comme pour les gestes de
+  phase 1). Prochaine étape concrète : lister 4-5 poses/réactions
+  distinctes avant tout script.
+- **Baisse spontanément vitesse et volume la nuit** selon la lumière
+  ambiante réelle, indépendamment de l'interrupteur « calme » manuel —
+  un vrai rythme jour/nuit de fond, pas juste une bascule qu'on actionne.
+- **Petit geste d'au revoir en écho à un ton de départ habituel** (la
+  phrase/intonation typique avant de sortir), distinct de la simple
+  détection de présence qui change — réagit à la manière de le dire, pas
+  seulement au fait de partir.
 
 ## Tableau de synthèse
 
