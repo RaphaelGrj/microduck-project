@@ -409,7 +409,7 @@ faciale** (plus fiable, plus respectueux).
 
 ### Le robot dans la maison (HA)
 
-- **Capteur** : chat vu au salon, objet au sol, bruit inhabituel
+- **Capteur** : chat vu au salon **(fait, 2026-10-05 — `binary_sensor.microduck_chat_vu`)**, objet au sol, bruit inhabituel
 - **Interface** : geste ou caresse qui déclenche une scène
 - **État** : batterie, humeur, pièce, activité en entités HA
 
@@ -1528,10 +1528,11 @@ Phase 4 « plus tard », pas dans le chantier actif.
 
 ### 2026-10-05 — session cloud (sans GPU), "Occupation autonome" codé et testé
 Session Claude Code dans le cloud (pas d'accès au PC/GPU de l'utilisateur, consigne explicite) : avance uniquement le
-comportemental pur de `microduck-brain` (`brain.py`, `exploration.py`), rien côté `microduck_rl`/RL. 14 commits
-(`microduck-brain` : `97e60fb`, `f9da070`, `a5dc2df`, `3ec1d95`, `9afa476`, `d16cc67`, `7bf770a`, `dbeaba1`,
-`9981a2f`, `e702362`, `b872fbf`, `fe59556`), suite complète de tests passante (23 tests `test_brain.py` +
-`test_exploration.py`, dont un test d'intégration longue simulation combinant plusieurs fonctions à la fois).
+comportemental pur de `microduck-brain` (`brain.py`, `exploration.py`, `pont_ha.py`), rien côté `microduck_rl`/RL.
+15 commits (`microduck-brain` : `97e60fb`, `f9da070`, `a5dc2df`, `3ec1d95`, `9afa476`, `d16cc67`, `7bf770a`,
+`dbeaba1`, `9981a2f`, `e702362`, `b872fbf`, `fe59556`, `f39d491`), suite complète de tests passante (24 tests
+`test_brain.py` + `test_exploration.py` + `test_ha.py`, dont un test d'intégration longue simulation combinant
+plusieurs fonctions à la fois).
 
 - **"Occupation autonome et recherche d'attention" implémenté** (section ROADMAP ajoutée plus tôt la même session) :
   `JeuSolitaire` et `RechercheAttention` (classes `Etat`) — au-delà de `SEUIL_ENNUI_S` (10 min) sans interaction, le
@@ -1578,6 +1579,11 @@ comportemental pur de `microduck-brain` (`brain.py`, `exploration.py`), rien cô
   rapide (> 0,3 m/s de fermeture) sous un seuil de proximité (0,35 m) déclenche un petit pas en arrière d'1 s
   (vx = -0,35, au-dessus de la zone morte en valeur absolue) puis arrêt ; jamais une fuite continue, jamais
   déclenché par une visite normale (approche lente, même très proche).
+- **« Chat vu au salon » remonté dans Home Assistant** (table « Le robot dans la maison (HA) ») :
+  `PontHA.photographier` lit la veille caméra du chat (`chat.py`) quand elle est branchée au cerveau, publie
+  `binary_sensor.microduck_chat_vu` (on/off) avec un attribut « depuis quand il est parti » mémorisé à chaque
+  disparition — absence de veille caméra (cas des tests qui n'en branchent pas) traitée comme « non vu », jamais
+  un plantage.
 - **Reste à faire** (pistes « Robot seul » encore non codées) : « boude après réprimande » — bloqué, aucune
   détection de ton de voix existante dans le projet (hors scope d'une session sans micro/pipeline audio) ; faire
   effectivement se déplacer le canard vers son coin favori une fois une navigation-vers-un-point disponible ;

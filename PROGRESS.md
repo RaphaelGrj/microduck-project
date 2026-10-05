@@ -53,8 +53,8 @@
   l'accueil au retour) ; se fatigue visiblement à basse énergie (tête, jamais les jambes) ; apprend un coin favori
   distinct pour se poser ou se reposer ; marque une pause avant un couloir étroit ; s'ébroue après une vraie
   immobilité prolongée plutôt que sur une simple minuterie ; se met au repos de sa propre initiative si sa vraie
-  batterie descend sous 25 % ; recule d'un petit pas si le chat se rapproche trop vite. Tout testé (23 tests
-  automatisés), rien côté entraînement RL/GPU.
+  batterie descend sous 25 % ; recule d'un petit pas si le chat se rapproche trop vite ; publie « chat vu au
+  salon » comme entité Home Assistant. Tout testé (24 tests automatisés), rien côté entraînement RL/GPU.
 
 ## En cours — l'apprentissage (arrêté ce soir, reprise possible)
 
