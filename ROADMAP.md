@@ -33,6 +33,17 @@
    « plus tard, délibérément » dans leur roadmap → contribution possible.
    Réf. : `pollen-robotics/microduck` → `docs/ideas/autonomous_behavior.md`
    et `docs/project/roadmap.md`.
+6. **Ordre de développement imposé par la dépendance matérielle (décision
+   2026-10-05) : toute fonction qui dépend d'un appareil externe —
+   **à l'exception de Home Assistant/réseau**, déjà en place — n'est
+   développée qu'une fois **toutes** les fonctions autonomes (robot seul)
+   terminées.** Concrètement, dans le tableau de dépendance ci-dessous :
+   toute la colonne « Robot seul » passe avant toute la colonne
+   « Matériel à ajouter » (et avant la partie « appareil externe » des
+   lignes « Mixte »), quel que soit l'ordre dans lequel les idées ont été
+   notées. La sous-section « Pistes physiques » (jouet sonore, NFC,
+   station météo, etc.) reste donc en Phase 4, non entamée, jusqu'à ce que
+   le chantier autonome soit vidé.
 
 ## Ce que le robot perçoit (vérifié dans le runtime officiel)
 
@@ -805,6 +816,10 @@ assistant qui attend qu'on lui parle.
   pensé pour une ambiance réellement tendue.
 
 ### Pistes physiques (pas seulement comportementales)
+
+**Rappel (principe directeur 6) : toutes les idées de cette sous-section
+demandent du matériel ajouté → développées seulement après l'ensemble des
+fonctions « robot seul ».**
 
 Le matériel du Microduck lui-même est fermé (pas de GPIO documenté), donc
 ces idées ajoutent des éléments **autour** du robot plutôt que de le
