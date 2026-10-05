@@ -2,7 +2,7 @@
 
 > Objectif : faire de Microduck un membre actif et autonome du foyer (présence,
 > personnalité, jeu avec moi et avec le chat), pas un gadget de démo.
-> Dernière mise à jour : 2026-10-05 (soir).
+> Dernière mise à jour : 2026-10-05 (soir, suite).
 
 ## Principes directeurs
 
@@ -500,6 +500,60 @@ assistant qui attend qu'on lui parle.
   routine apprise par horaire + présence en cuisine/salle à manger,
   plutôt que programmée en dur — vient « traîner par là » comme un animal
   habitué aux horaires du foyer.
+
+### Sommeil et réveil
+
+- **« Rêves » pendant la charge/veille nocturne** : petits mouvements très
+  doux et aléatoires (tressautement léger de tête, murmure sonore
+  occasionnel), jamais d'amplitude — juste assez pour qu'il ne paraisse
+  pas complètement « éteint » quand il recharge.
+- **S'ébroue après une longue immobilité réelle**, pas sur minuterie fixe
+  — réutilise le geste `Ruffle` déjà existant, déclenché par l'état
+  constaté plutôt que par l'horloge.
+
+### Exploration et curiosité
+
+- **Cherche le soleil** : repère une zone de lumière forte au sol (caméra)
+  et va s'y installer — « chat qui cherche le rayon de soleil » transposé,
+  reconnaissable et gratuit à observer.
+- **Remarque un objet qui n'était pas là avant** (comparaison grossière
+  avec ce qu'il a l'habitude de voir dans une pièce) → va l'inspecter de
+  près, le regarde, éventuellement petit coup de bec curieux.
+- **Ramasse un objet au sol et en fait quelque chose, pas juste un
+  événement HA** : une fois `GroundPick` déclenché, le robot garde l'objet
+  au bec et choisit (selon l'humeur/état M9 du moment) soit de le **cacher
+  quelque part** (sous un meuble, dans un coin — comme un chien qui
+  enterre un os), soit de le **promener** un moment en se baladant dans la
+  maison avant de le lâcher ailleurs qu'où il l'a trouvé. Rejoint la
+  « mémoire des objets » déjà notée : savoir où il a laissé une chose
+  qu'il a lui-même déplacée devient alors nécessaire, pas juste
+  intéressant — sinon même le robot ne « sait » plus où est passé l'objet.
+  Garde-fou à prévoir : ne jamais cacher/emporter un objet qui pourrait
+  être cherché par un habitant (seuil de taille/catégorie à définir), et
+  rapporter l'objet en vue plutôt que le perdre pour de bon.
+- **Vient « montrer » une découverte** : s'il repère quelque chose
+  d'inhabituel (objet tombé, porte ouverte) alors qu'un habitant est
+  présent, il va physiquement le chercher, puis alterne le regard entre
+  l'humain et l'endroit — plus vivant qu'une simple notification HA, parce
+  que c'est un comportement de signalement actif.
+
+### Ambiance du foyer et évolution dans le temps
+
+- **Se retire si l'ambiance est très bruyante/chaotique** (fête, dispute,
+  volume sonore élevé et prolongé) — retrait par préférence plutôt que
+  subir n'importe quelle ambiance, renforce l'idée d'un être avec ses
+  propres limites.
+- **Réagit différemment aux bips des autres appareils** (four, lave-linge
+  en fin de cycle, micro-ondes) — curiosité dirigée vers la cuisine/
+  buanderie, distincte du cas impression 3D déjà prévu.
+- **Rythme différent semaine/week-end**, déduit de l'absence de mouvement
+  à l'heure habituelle plutôt que d'un calendrier explicite — plus « zen »
+  un dimanche matin où personne ne bouge encore à l'heure attendue.
+- **Personnalité un peu saisonnière** (météo HA) : plus cocooning/proche
+  d'une source de chaleur en hiver, plus matinal avant la chaleur en été.
+- **Motif sonore personnel qui dérive légèrement avec le temps** — pas un
+  vocabulaire figé depuis le premier jour, pour donner l'impression qu'il
+  « grandit » plutôt qu'il reste identique à sa sortie de carton.
 
 ## Tableau de synthèse
 
