@@ -288,7 +288,10 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   (`safety.picked_up`), caresse par le courant (`currents_ma`). 142 tests dont endurance + invariants de sécurité.
   **Patch amont prêt** : `microduck-brain/contrib/robotd-audio-state.patch` (robotd publie caresse/sons dans `robot.state`).
 - **Point d'entrée = `canard.py`** (cerveau + HA + ToF + caméra, `--chat`, `--micro`) : `pont_ha.py` seul lance le cerveau
-  sans ToF ni caméra (le canard ne marche alors jamais). Service Pi mis à jour en conséquence (numpy/OpenCV nécessaires).
+  sans ToF ni caméra (le canard ne marche alors jamais).
+- **Cible de déploiement = SUR le canard** (`microduck-brain/deploy/robot/`, décidé le 2026-10-05) : le cerveau ne parle qu'à
+  `robotd`/`tofd`/`mediad` en local (socket ToF officiel : `/run/tofd/tof.sock`). Seules dépendances externes : Home
+  Assistant (Pi existant, fonctions maison seulement) ; `deploy/pi/` = repli si CPU/RAM du RK3566 insuffisants.
 
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.
