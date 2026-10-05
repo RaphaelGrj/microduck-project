@@ -1008,6 +1008,37 @@ nuisance.
   moindre signe de douleur réelle, jamais de moquerie si ce n'est pas
   clairement anodin.
 
+### Petits services rendus (pas que ludique)
+
+- **Va chercher un objet désigné sur demande** (pantoufles, télécommande…) —
+  service concret au-delà du jeu ou de la taquinerie.
+- **Signale un robinet qui goutte ou de l'eau qui coule anormalement
+  longtemps** — perception sonore tournée vers l'entretien du foyer, pas
+  seulement vers le jeu ou la sécurité.
+- **Rappelle une tâche oubliée via HA** (four resté allumé, lumière
+  extérieure en plein jour…) en venant activement chercher la personne
+  plutôt qu'une simple notification passive.
+- **Aide à retrouver un objet perdu** via une mémoire visuelle passive du
+  dernier endroit où il a été vu — extension utile de l'« air mystérieux »
+  et du « montrer une découverte » déjà prévus, mais orientée service rendu.
+
+### Comportement collectif (plusieurs personnes à la fois)
+
+- **Mode festif distinct** quand plusieurs personnes sont réunies (repas,
+  anniversaire) — virevolte entre les gens plutôt que de se fixer sur un
+  seul.
+- **Répartition de l'attention perçue comme équitable** entre plusieurs
+  personnes présentes, pour éviter l'impression de favoritisme.
+
+### Le monde extérieur vu de l'intérieur (fenêtre, jardin)
+
+- **Observe les oiseaux ou un animal sauvage dans le jardin par la
+  fenêtre**, avec curiosité — pendant depuis l'intérieur, complémentaire
+  de la vigilance chat déjà prévue.
+- **Anticipation visuelle d'une arrivée** (voiture qui se gare, quelqu'un
+  qui approche à pied) avant même la sonnette ou le bruit de clés —
+  perception proactive plutôt que réactive.
+
 ## Tableau de synthèse
 
 | Compétence | Officielle ? | Apport vivant / autonome | Effort |
