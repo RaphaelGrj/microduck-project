@@ -171,6 +171,45 @@ marche) → suivre une personne ou le chat des yeux est du logiciel.
 Ces gestes + les sons natifs du Microduck = briques du futur système
 d'émotions (esprit Lumi, sans écran, pas d'anthropomorphisme visuel).
 
+### Mouvements physiques à entraîner en RL (gestes épisodiques)
+
+Contrairement aux gestes « Non/Oui/Curieux/Content » ci-dessus (résolus
+sans RL, tête/tronc seuls), ceux-ci sortent réellement de l'espace de
+commande existant — équilibre dynamique du corps entier, pas seulement
+tête/tronc — et demandent donc un vrai entraînement (PPO/mjlab, variante
+`-Backlash` comme le reste), publiable ensuite via `uv run publish --kind
+episodic`. Liste de départ, à prioriser quand du GPU est libre (après le
+kick tolérant/passe douce) :
+
+- **Petit bond de joie** (saut vertical, retombée stable) — salutation
+  physique énergique, aucun mouvement actuel ne couvre un vrai décollage
+  des deux pieds.
+- **Bonds répétés façon excitation** (plusieurs petits sauts d'affilée) —
+  équilibre à maintenir sur plusieurs impacts successifs.
+- **Pirouette rapide sur place** (rotation yaw dynamique en gardant
+  l'équilibre) — plus vif qu'un tourner-sur-soi en marche lente.
+- **Tape du pied, impatient** — appui sur une seule jambe le temps d'un
+  tapotement répété de l'autre, équilibre fin sur une jambe.
+- **Salut/inclinaison plus marqué** (vrai *bow*, déplacement notable du
+  centre de masse) — au-delà de l'inclinaison de tronc déjà scriptée via
+  `robot.pose`, volontairement petite par sécurité.
+- **Secousse complète du corps** (type chien qui s'ébroue, pas que la
+  tête) — oscillation du corps entier pendant le mouvement, contrairement
+  au `Ruffle` actuel (tête seule).
+- **Accroupissement curieux** (s'abaisser fortement pour regarder sous un
+  meuble, distinct de `sit_toggle`) — pose basse stable, utile avant un
+  `GroundPick` dans un espace bas.
+- **Dribble au bec en marchant** (pousser/accompagner la balle en continu
+  plutôt qu'un tir ponctuel) — complète le kick actuel par une
+  interaction de jeu prolongée.
+- **Petit coup de bec/poussée douce vers une jambe humaine** — pour
+  réclamer physiquement de l'attention plutôt que par le son/regard seul ;
+  mouvement fin et contrôlé, pas un déplacement du corps entier.
+- **Trébuchement volontaire suivi d'un rattrapage** — presque-tomber
+  assumé et rattrapé pour un effet attachant/maladroit ; politique de
+  récupération dédiée, différente du `limp_fall` (chute réelle non
+  voulue).
+
 ## Phase 2 — Perception et jeu de balle avec vision
 
 - [x] **Détecteur de balle par couleur (classique, sans entraînement)** —
