@@ -968,6 +968,25 @@ nuisance.
   déjà notée), un petit bruit amusé et différent à chaque éternuement
   supplémentaire d'une même série — comme s'il « comptait » avec un brin
   de moquerie.
+- **Fausse chute comique** (distincte du trébuchement « accidentel
+  rattrapé » déjà en RL) : un mouvement clairement théâtral, pas une
+  vraie perte d'équilibre, juste pour l'effet devant quelqu'un.
+- **S'installe sur le tapis pendant une séance d'étirement/yoga au sol**
+  — interrompt gentiment sans faire exprès... ou presque.
+- **Fait style de « superviser »** un rangement en restant juste à côté
+  sans rien faire, un peu encombrant — le chat qui regarde faire sans
+  aider.
+- **S'assoit sur l'outil/la pièce** pendant un bricolage (atelier CNC/
+  impression 3D) — taquinerie du quotidien plutôt qu'un gag générique.
+- **Vole le centre du cadre lors d'un selfie de groupe** — variante du
+  photobombe, spécifiquement « au milieu ».
+- **Garde un siège « juste trop tard »** : s'y installe une seconde
+  avant que quelqu'un s'assoie, debout dessus un bref instant avant de
+  laisser la place — variante plus comique de la place convoitée.
+- **Parodie sonore d'une notification de téléphone**, pour faire réagir
+  quelqu'un qui regarde ailleurs, puis s'enfuit content — à utiliser
+  avec parcimonie et un son clairement ludique (jamais une imitation
+  fidèle d'alarme), pour que ça reste drôle et jamais anxiogène.
 
 ## Tableau de synthèse
 
