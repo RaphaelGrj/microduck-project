@@ -178,65 +178,77 @@ sans RL, tête/tronc seuls), ceux-ci sortent réellement de l'espace de
 commande existant — équilibre dynamique du corps entier, pas seulement
 tête/tronc — et demandent donc un vrai entraînement (PPO/mjlab, variante
 `-Backlash` comme le reste), publiable ensuite via `uv run publish --kind
-episodic`. Liste de départ, à prioriser quand du GPU est libre (après le
-kick tolérant/passe douce) :
+episodic`.
 
-- **Petit bond de joie** (saut vertical, retombée stable) — salutation
-  physique énergique, aucun mouvement actuel ne couvre un vrai décollage
-  des deux pieds.
-- **Bonds répétés façon excitation** (plusieurs petits sauts d'affilée) —
-  équilibre à maintenir sur plusieurs impacts successifs.
-- **Pirouette rapide sur place** (rotation yaw dynamique en gardant
-  l'équilibre) — plus vif qu'un tourner-sur-soi en marche lente.
-- **Tape du pied, impatient** — appui sur une seule jambe le temps d'un
-  tapotement répété de l'autre, équilibre fin sur une jambe.
-- **Salut/inclinaison plus marqué** (vrai *bow*, déplacement notable du
-  centre de masse) — au-delà de l'inclinaison de tronc déjà scriptée via
-  `robot.pose`, volontairement petite par sécurité.
-- **Secousse complète du corps** (type chien qui s'ébroue, pas que la
-  tête) — oscillation du corps entier pendant le mouvement, contrairement
-  au `Ruffle` actuel (tête seule).
-- **Accroupissement curieux** (s'abaisser fortement pour regarder sous un
-  meuble, distinct de `sit_toggle`) — pose basse stable, utile avant un
-  `GroundPick` dans un espace bas.
-- **Dribble au bec en marchant** (pousser/accompagner la balle en continu
-  plutôt qu'un tir ponctuel) — complète le kick actuel par une
-  interaction de jeu prolongée.
-- **Petit coup de bec/poussée douce vers une jambe humaine** — pour
-  réclamer physiquement de l'attention plutôt que par le son/regard seul ;
-  mouvement fin et contrôlé, pas un déplacement du corps entier.
-- **Trébuchement volontaire suivi d'un rattrapage** — presque-tomber
-  assumé et rattrapé pour un effet attachant/maladroit ; politique de
-  récupération dédiée, différente du `limp_fall` (chute réelle non
-  voulue).
-- **Sprint court** (accélération puis décélération franche, pas la
-  marche mesurée habituelle) — pour une poursuite enjouée d'un objet qui
-  roule ou d'un jeu avec le chat.
-- **Pas de côté esquive** (petit saut latéral) — pour éviter un objet ou
-  « jouer » à se dérober, mouvement latéral franc plutôt qu'un pas de
-  rotation.
-- **Pirouette sautée** (saut + rotation combinés) — version plus
-  spectaculaire de la pirouette ci-dessus, équilibre plus exigeant à
-  l'atterrissage.
-- **Étirement sur une jambe** (une patte tenue en l'air, équilibre
-  maintenu) — un vrai étirement dynamique, au-delà du `Stretch` actuel
-  probablement tête/tronc.
-- **Petit frisson/sursaut du corps entier** après une surprise — distinct
-  du simple `Startle` de tête, secousse brève de tout le corps à rattraper
-  en équilibre.
-- **Franchir un petit obstacle en sautant** plutôt que le contourner
-  (seuil de porte, jouet au sol) — utile aussi fonctionnellement pour la
-  promenade, pas seulement esthétique.
-- **Monter sur un support bas** (coussin, marche, caisse) et y rester
-  stable — élargit les « spots favoris » à des surfaces surélevées.
-- **Arrêt théâtral avec léger glissement contrôlé** — freinage plus
-  abrupt et visible qu'un arrêt de marche normal, effet comique/expressif.
-- **Pousser une porte entrouverte avec le poitrail/bec** (exploratoire,
-  à part) : physiquement utile (autonomie réelle dans la maison) mais
-  demande du contrôle de force fin, pas seulement de la trajectoire — à
-  isoler comme un chantier à part plutôt qu'un geste « gratuit » comme
-  les autres, et à valider d'abord en sécurité (force maximale, risque de
-  pincement) avant tout entraînement.
+**Décision (2026-10-05) : un entraînement à la fois, par ordre d'impact
+sur l'effet « vivant », pas tous en parallèle.** Reprise dès que le GPU
+se libère (après kick tolérant/passe douce), à la prochaine session
+code. Ordre proposé, du plus prioritaire au plus accessoire :
+
+1. **Petit bond de joie** (saut vertical, retombée stable) — salutation
+   physique énergique, aucun mouvement actuel ne couvre un vrai décollage
+   des deux pieds. Le plus gros changement de perception pour l'effort
+   le plus contenu.
+2. **Secousse complète du corps** (type chien qui s'ébroue, pas que la
+   tête) — oscillation du corps entier, contrairement au `Ruffle` actuel
+   (tête seule).
+3. **Salut/inclinaison plus marqué** (vrai *bow*, déplacement notable du
+   centre de masse) — au-delà de l'inclinaison de tronc déjà scriptée via
+   `robot.pose`, volontairement petite par sécurité.
+4. **Petit frisson/sursaut du corps entier** après une surprise — distinct
+   du simple `Startle` de tête, secousse brève de tout le corps à
+   rattraper en équilibre.
+5. **Pirouette rapide sur place** (rotation yaw dynamique en gardant
+   l'équilibre) — plus vif qu'un tourner-sur-soi en marche lente.
+6. **Bonds répétés façon excitation** (plusieurs petits sauts d'affilée) —
+   équilibre à maintenir sur plusieurs impacts successifs ; naturel une
+   fois le bond simple (1) acquis.
+7. **Arrêt théâtral avec léger glissement contrôlé** — freinage plus
+   abrupt et visible qu'un arrêt de marche normal, effet comique/
+   expressif.
+8. **Tape du pied, impatient** — appui sur une seule jambe le temps d'un
+   tapotement répété de l'autre, équilibre fin sur une jambe.
+9. **Étirement sur une jambe** (une patte tenue en l'air, équilibre
+   maintenu) — un vrai étirement dynamique, au-delà du `Stretch` actuel
+   probablement tête/tronc.
+10. **Pirouette sautée** (saut + rotation combinés) — version plus
+    spectaculaire de (5), équilibre plus exigeant à l'atterrissage ;
+    attend que (1) et (5) soient acquis séparément.
+11. **Accroupissement curieux** (s'abaisser fortement pour regarder sous
+    un meuble, distinct de `sit_toggle`) — pose basse stable, utile avant
+    un `GroundPick` dans un espace bas.
+12. **Monter sur un support bas** (coussin, marche, caisse) et y rester
+    stable — élargit les « spots favoris » à des surfaces surélevées.
+13. **Franchir un petit obstacle en sautant** plutôt que le contourner
+    (seuil de porte, jouet au sol) — utile aussi fonctionnellement pour
+    la promenade, pas seulement esthétique.
+14. **Sprint court** (accélération puis décélération franche, pas la
+    marche mesurée habituelle) — pour une poursuite enjouée d'un objet
+    qui roule ou d'un jeu avec le chat.
+15. **Pas de côté esquive** (petit saut latéral) — pour éviter un objet
+    ou « jouer » à se dérober, mouvement latéral franc plutôt qu'un pas
+    de rotation.
+16. **Dribble au bec en marchant** (pousser/accompagner la balle en
+    continu plutôt qu'un tir ponctuel) — complète le kick actuel par une
+    interaction de jeu prolongée ; dépend des contrôleurs de la Phase 2.
+17. **Petit coup de bec/poussée douce vers une jambe humaine** — pour
+    réclamer physiquement de l'attention plutôt que par le son/regard
+    seul ; mouvement fin et contrôlé, pas un déplacement du corps entier.
+18. **Trébuchement volontaire suivi d'un rattrapage** — presque-tomber
+    assumé et rattrapé pour un effet attachant/maladroit ; politique de
+    récupération dédiée, différente du `limp_fall` (chute réelle non
+    voulue) ; le plus délicat à faire paraître volontaire plutôt que raté.
+
+**À part, hors de cet ordre (exploratoire, pas un geste « gratuit »)** :
+- **Pousser une porte entrouverte avec le poitrail/bec** : physiquement
+  utile (autonomie réelle dans la maison) mais demande du contrôle de
+  force fin, pas seulement de la trajectoire — à isoler comme un
+  chantier à part, et à valider d'abord en sécurité (force maximale,
+  risque de pincement) avant tout entraînement.
+
+**Matériel externe (UWB, NFC, micro déporté, ESP32, décor physique,
+etc.) : simple piste, rien de prévu aujourd'hui** — reste tel quel en
+Phase 4 « plus tard », pas dans le chantier actif.
 
 ## Phase 2 — Perception et jeu de balle avec vision
 
@@ -333,6 +345,20 @@ d'abord contre `duck-sim`. **Calqué sur M9** (mêmes états, même modèle
 - [ ] Premier cas concret : notifications d'impression 3D (Prusa MK3S →
       MK4S via Prusa Connect, Elegoo Saturn 4 Ultra) — le robot vient te
       voir et réagit (son + geste) à la fin ou à l'échec d'une impression
+
+### Chantier actif — tout le comportemental sans RL (2026-10-05)
+
+**Décision (2026-10-05) :** tout ce qui est listé plus bas dans « Pistes
+supplémentaires — rendre le robot vivant, compagnon de vie » et qui ne
+demande **aucun entraînement RL** (réflexes son/vue, actions vers
+l'humain, sommeil/réveil, exploration, ambiance du foyer, nuances
+sociales, décor visuel/auto-préservation) **n'est plus une liste « pour
+plus tard »** : ça rejoint le chantier actif de `brain.py`/`vision.py`/
+`track.py`/`memoire.py`, à brancher au fil de l'eau parce que ça se fait
+vite (pas de GPU, pas d'attente d'entraînement). Priorité donnée sur les
+nouveaux mouvements RL — voir ci-dessous pour ceux-là. Rien à trier
+par avance : tout y passe, dans l'ordre qui tombe bien pendant le
+développement du cerveau.
 
 ## Interactions par habitant
 
