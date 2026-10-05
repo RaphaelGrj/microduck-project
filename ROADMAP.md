@@ -1528,9 +1528,10 @@ Phase 4 « plus tard », pas dans le chantier actif.
 
 ### 2026-10-05 — session cloud (sans GPU), "Occupation autonome" codé et testé
 Session Claude Code dans le cloud (pas d'accès au PC/GPU de l'utilisateur, consigne explicite) : avance uniquement le
-comportemental pur de `microduck-brain` (`brain.py`, `exploration.py`), rien côté `microduck_rl`/RL. Sept commits
-(`microduck-brain` : `97e60fb`, `f9da070`, `a5dc2df`, `3ec1d95`, `9afa476`, `d16cc67`), suite complète de tests
-passante (15 tests `test_brain.py` + `test_exploration.py`).
+comportemental pur de `microduck-brain` (`brain.py`, `exploration.py`), rien côté `microduck_rl`/RL. 12 commits
+(`microduck-brain` : `97e60fb`, `f9da070`, `a5dc2df`, `3ec1d95`, `9afa476`, `d16cc67`, `7bf770a`, `dbeaba1`,
+`9981a2f`, `e702362`), suite complète de tests passante (19 tests `test_brain.py` + `test_exploration.py`, dont un
+test d'intégration longue simulation combinant plusieurs fonctions à la fois).
 
 - **"Occupation autonome et recherche d'attention" implémenté** (section ROADMAP ajoutée plus tôt la même session) :
   `JeuSolitaire` et `RechercheAttention` (classes `Etat`) — au-delà de `SEUIL_ENNUI_S` (10 min) sans interaction, le
@@ -1557,6 +1558,17 @@ passante (15 tests `test_brain.py` + `test_exploration.py`).
   assumée** : pas encore de navigation vers le coin appris — `brain.py` ne sait commander que vx/vy/vyaw et un cap
   d'exploration, pas se déplacer vers un point connu d'avance (même limite que `Accueil`) ; c'est une mémoire
   exploitable plus tard, pas encore un comportement de déplacement visible.
+- **Pause visible avant un passage étroit** (`Wander`) : couloir < 0,5 m des deux côtés détecté par le ToF déjà
+  câblé → pause de 0,6 s avant de s'y engager, une seule fois par traversée — prudent, pas un évitement.
+- **S'ébroue après une longue immobilité RÉELLE, pas sur minuterie** : suit l'odom plutôt que l'horloge (fenêtre
+  qui se redémarre à chaque vrai déplacement > 10 cm), déclenche le geste `ebouriffe` existant depuis un état de
+  repos (chill/look) seulement — jamais pour interrompre une autre activité.
+- **Murmure sonore occasionnel pendant les rêves** (Nap) : complète le tressaillement de tête déjà codé, silencieux
+  automatiquement en mode calme (règle déjà en place pour tous les sons).
+- **Test d'intégration** : une simulation longue (900 s, départ + retour + chute + ennui dans la même run) vérifie
+  que toutes les fonctions ajoutées cette session ne s'interfèrent pas entre elles.
 - **Reste à faire** (pistes « Robot seul » encore non codées) : « boude après réprimande » — bloqué, aucune
   détection de ton de voix existante dans le projet (hors scope d'une session sans micro/pipeline audio) ; faire
-  effectivement se déplacer le canard vers son coin favori une fois une navigation-vers-un-point disponible.
+  effectivement se déplacer le canard vers son coin favori une fois une navigation-vers-un-point disponible ;
+  tout ce qui dépend d'une analyse audio (rythme, applaudissements, rire, ton de voix) — aucun pipeline micro/FFT
+  n'existe encore dans le projet, à construire avant de coder ces réflexes.
