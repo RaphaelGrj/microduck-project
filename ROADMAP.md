@@ -919,6 +919,56 @@ posés (sac à dos ESP32, tags NFC, balises UWB).
   impression d'« effort », presque plus vivant qu'une version déjà
   parfaite.
 
+### Occupation autonome et recherche d'attention
+
+**Principe (2026-10-05) : si personne ne s'occupe de lui pendant un
+moment, le robot ne reste pas simplement passif — il choisit, selon l'état
+M9 du moment, soit de s'occuper lui-même seul, soit d'aller chercher
+l'attention d'un humain ou du chat.** Les deux familles de comportement
+ci-dessous (solitaire / recherche d'attention) sont les deux issues
+possibles de ce principe, pas deux idées séparées.
+
+- **S'ennuie visiblement si rien ne se passe pendant longtemps** —
+  distinct du simple `Chill` calme : petits soupirs, regards qui errent,
+  comme un animal qui cherche quoi faire, pas juste un état au repos.
+- **Fatigue progressive visible à batterie faible** (ralentissement
+  graduel des mouvements, pas une alerte binaire) — complète l'idée déjà
+  notée « se recharge de sa propre initiative », mais ici c'est la
+  dégradation du comportement lui-même qui se voit avant l'action.
+- **Petit jeu solitaire quand personne n'est là** (pousse sa propre
+  balle, s'amuse seul) — détecté par l'absence de présence HA/caméra,
+  pour un contraste visible avec le jeu social, comme un animal qui
+  s'occupe seul.
+- **Va chercher activement l'attention d'un humain présent** s'il
+  s'ennuie depuis un moment et qu'un habitant est détecté (HA ou
+  caméra/ToF) — vient se placer près de lui, petit son d'appel, sans
+  jamais insister au-delà d'une tentative (cohérent avec la règle « ne
+  jamais insister »).
+- **Va chercher l'attention du chat** si aucun humain n'est disponible
+  mais que le chat est détecté — variante de la recherche d'attention,
+  dirigée vers le seul autre « habitant » présent plutôt que vers du vide.
+- **Mémorise et évite spécifiquement un point précis où il est déjà
+  tombé**, pas juste l'évitement ToF générique — une vraie « zone noire »
+  apprise, distincte d'un obstacle détecté à chaque fois.
+- **Deux coins favoris distincts selon l'activité** (un pour
+  observer/regarder la pièce, un autre pour vraiment se reposer) plutôt
+  qu'un seul « spot favori » — nuance le comportement déjà prévu.
+- **Boude légèrement après avoir été grondé** : une durée de
+  froideur/retrait qui suit la réaction immédiate au ton (déjà prévue),
+  pas juste l'instant où ça arrive.
+- **Distingue le début de la pluie du bruit de pluie qui continue** — ne
+  réagit qu'au changement d'état (son contre la fenêtre), pas à chaque
+  instant où elle tombe, pour ne pas s'habituer à ignorer.
+- **Petite vérification de son reflet le soir avant de s'installer** —
+  complète le rituel « miroir qui évolue » déjà noté, mais ici un geste
+  bref et récurrent, pas une réaction isolée.
+- **Réagit à un objet qui tombe de son propre bec/pattes** (ce qu'il
+  transportait) par une petite surprise + recherche au sol, distinct de
+  la détection d'objets au sol en général.
+- **S'arrête et marque une pause avant un passage étroit** (couloir)
+  plutôt qu'un évitement ToF purement réactif — une prudence apprise sur
+  ce type de passage précis.
+
 ### Taquineries envers les humains
 
 Garde-fou commun à toute cette section : une taquinerie dure quelques
@@ -1256,6 +1306,23 @@ toutes ces lignes sont donc, par construction, du **Matériel à ajouter**.
 | Curiosité méfiante prolongée envers un nouvel appareil | Robot seul |
 | Répertoire de tours sur demande (geste de la main) | Robot seul |
 | Laisser tourner un mouvement RL imparfait tel quel | Robot seul |
+
+### Occupation autonome et recherche d'attention
+
+| Proposition | Dépendance |
+|---|---|
+| S'ennuie visiblement si rien ne se passe pendant longtemps | Robot seul |
+| Fatigue progressive visible à batterie faible | Robot seul |
+| Petit jeu solitaire quand personne n'est là | Robot seul |
+| Va chercher activement l'attention d'un humain présent | Mixte (HA utile pour la présence) |
+| Va chercher l'attention du chat si aucun humain n'est disponible | Robot seul |
+| Mémorise et évite un point précis où il est déjà tombé | Robot seul |
+| Deux coins favoris distincts selon l'activité | Robot seul |
+| Boude légèrement après avoir été grondé | Robot seul |
+| Distingue le début de la pluie du bruit de pluie qui continue | Robot seul |
+| Petite vérification de son reflet le soir avant de s'installer | Robot seul |
+| Réagit à un objet qui tombe de son propre bec/pattes | Robot seul |
+| S'arrête et marque une pause avant un passage étroit | Robot seul |
 
 ### Taquineries envers les humains
 
