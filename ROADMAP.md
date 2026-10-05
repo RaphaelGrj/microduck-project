@@ -1525,3 +1525,32 @@ Phase 4 « plus tard », pas dans le chantier actif.
   pas 0,28 (artefact de l'affiche plate, à revoir avec un vrai chat).
 - **Passe douce** : tâches `BallKickPasse` (fork, 0,5 m/s visé, dépassement pénalisé −10) ; entraînement du pied droit
   en file après le tolérant gauche (accord de l'utilisateur).
+
+### 2026-10-05 — session cloud (sans GPU), "Occupation autonome" codé et testé
+Session Claude Code dans le cloud (pas d'accès au PC/GPU de l'utilisateur, consigne explicite) : avance uniquement le
+comportemental pur de `microduck-brain` (`brain.py`, `exploration.py`), rien côté `microduck_rl`/RL. Quatre commits
+(`microduck-brain` : `97e60fb`, `f9da070`, `a5dc2df`, `3ec1d95`), suite complète de tests passante (13 tests
+`test_brain.py` + `test_exploration.py`).
+
+- **"Occupation autonome et recherche d'attention" implémenté** (section ROADMAP ajoutée plus tôt la même session) :
+  `JeuSolitaire` et `RechercheAttention` (classes `Etat`) — au-delà de `SEUIL_ENNUI_S` (10 min) sans interaction, le
+  canard ne reste pas passif en `chill` : il joue seul si personne n'est disponible, ou va chercher l'attention d'un
+  habitant présent (présence HA) ou du chat (veille caméra), jamais plus souvent que `DELAI_ENNUI_S` (règle « ne
+  jamais insister »). `Brain.presents` (suivi retour/départ) et `Brain.derniere_interaction` ajoutés.
+- **2 bugs préexistants trouvés et corrigés dans `brain.py`** (confirmés via `git stash` sur `94855d5`, aucun lien
+  avec le code ajouté ci-dessus) : `Wander.entre()` plantait (`KeyError: 'odom'`) sur un état sans `"odom"` ; et
+  `self.tombe` ne pouvait jamais se réinitialiser dans les tests faute de champ `"policy"` dans l'état factice de
+  `test_brain.py` (corrigé côté fixture de test, pas côté logique réelle — `robotd` fournit toujours ce champ).
+- **Zone noire apprise au point de chute** (`exploration.py`) : `Exploration.chute(x, y, t)` mémorise la case où le
+  canard est tombé (oubli très lent, ~1 mois), traitée comme un obstacle par `nouveaute()`/`meilleur_ecart()` — donc
+  `Wander` l'évite déjà sans changement côté `brain.py` à part noter la dernière position odom connue au moment de
+  la chute.
+- **Rêves pendant la sieste profonde** (`Nap`) : 0 à 2 petits tressaillements de tête très faibles, jamais pendant
+  l'endormissement (< 2 s) ni le réveil (4 dernières s) — pure code, aucun capteur/RL supplémentaire.
+- **Petit rituel de présence au départ** (`"depart:Nom"`, symétrique de l'accueil au retour déjà existant) : signe
+  discret (geste "oui" + chirp), jamais pendant la sieste/calme/une conversation en cours.
+- **Reste à faire** (pistes « Robot seul » encore non codées, voir tableau de dépendance) : « deux coins favoris
+  distincts selon l'activité » (nécessiterait une notion de navigation vers un point, pas encore présente dans
+  `brain.py` — mouvement uniquement en vx/vy/vyaw et cap d'exploration, pas de suivi de position cible) ; « boude
+  après réprimand » (bloqué : aucune détection de ton de voix existante, hors scope d'une session sans micro/pipeline
+  audio) ; fatigue batterie progressive visible dans le mouvement.
