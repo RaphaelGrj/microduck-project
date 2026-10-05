@@ -1595,3 +1595,47 @@ combinant plusieurs fonctions à la fois).
   effectivement se déplacer le canard vers son coin favori une fois une navigation-vers-un-point disponible ;
   tout ce qui dépend d'une analyse audio (rythme, applaudissements, rire, ton de voix) — aucun pipeline micro/FFT
   n'existe encore dans le projet, à construire avant de coder ces réflexes.
+- **Dernier ajout de la session (après coupure 16h20 initiale, poursuite courte)** : `sensor.microduck_eveil`
+  et `sensor.microduck_habitants_presents` publiés dans Home Assistant (l'éveil et la présence des habitants
+  n'étaient suivis qu'en interne jusque-là).
+
+### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
+
+Vue d'ensemble du **Chantier actif** (section plus haut) et de la table « Interactions par habitant » (Humains)
+pour la prochaine session comportementale (toujours sans RL/GPU) : ce qui est fait, ce qui reste, dans l'ordre
+où ça apporte le plus de « vivant » par rapport à l'effort.
+
+**Déjà fait (cette session et avant)** : accueil au retour avec familiarité, rituel de départ, occupation
+autonome / recherche d'attention après ennui, notifications maison (impression 3D), heures calmes nocturnes
+(opt-in), suivi du chat avec recul si approche rapide, publication HA (état, énergie, éveil, batterie, position,
+habitants présents, chat vu).
+
+**Prochaines pistes humaines, par ordre d'impact probable :**
+
+1. **Caresse (`pet-detect`)** — table Humains : actuellement aucune entrée capteur câblée côté cerveau pour un
+   contact physique (le ToF existant sert à l'évitement, pas au contact). À vérifier à la livraison du robot :
+   le capteur `pet-detect` natif de Pollen (mentionné dans la doc officielle) peut suffire sans vision — c'est
+   probablement la fonctionnalité la plus "vivante" pour l'instant absente (réaction à une caresse = geste
+   content natif déjà prêt côté `brain.py`, juste besoin du déclencheur).
+2. **Main tendue** — suivi de main par ToF pour « venir picorer » : nécessite de regarder `tof.py` (déjà calibré
+   pour l'évitement) et de voir s'il peut aussi fournir une direction de main proche, sans nouvelle caméra.
+3. **Messager physique étendu** — la notification maison existe déjà pour l'impression 3D (`pont_ha.py`) ; le
+   généraliser à "vient te voir là où tu es" (lave-linge, sonnette) suppose une localisation de l'habitant dans
+   la maison (pas encore de UWB/position fiable) — à reporter tant que la navigation-vers-un-point n'existe pas,
+   mais la partie "notification + réaction vocale" peut être étendue à de nouvelles entités HA dès maintenant,
+   sans attendre la navigation.
+4. **Jeux sociaux légers (1-2-3 soleil, cache-cache au son)** — purement comportemental (états + minuterie +
+   son), pas de nouvelle perception nécessaire au-delà de ce qui existe déjà (présence HA, veille chat) ; bon
+   candidat pour une prochaine session courte, dans l'esprit de `JeuSolitaire`/`RechercheAttention` déjà codés.
+5. **Commandes vocales (quacksat)** — le pont existe (`Ecoute` dans `brain.py`, cohabitation documentée dans
+   `QUACKSAT_QUACKNAV.md`) mais n'a jamais été testé en conditions réelles (pas de satellite vocal physique
+   avant la livraison du robot) — à valider dès que possible, pas un chantier de code pur.
+6. **Routine du matin tenant vraiment compte de l'heure** — « heures calmes » est fait (nocturne), mais
+   l'étirement reste déclenché au réveil de sieste, pas à heure fixe le matin ; ajouter un étirement « bonjour »
+   une fois par jour à heure réelle (même mécanisme d'horloge injectable que `heures_calmes`) serait une suite
+   naturelle et rapide.
+
+**Toujours hors de portée sans nouvelle infrastructure** : détection de ton de voix (boude après réprimande),
+analyse audio (rythme/applaudissements/rire), navigation-vers-un-point (coin favori, messager physique complet) —
+chacun nécessite soit un pipeline micro/FFT, soit une localisation fiable (UWB), ni l'un ni l'autre construits
+à ce jour.
