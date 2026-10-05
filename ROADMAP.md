@@ -316,9 +316,28 @@ Phase 4 « plus tard », pas dans le chantier actif.
 
 ## Phase 3 — Le cerveau du foyer (cœur du projet, sans RL)
 
-Service hors robot (PC/serveur), parle à `robotd` via le réseau, développé
-d'abord contre `duck-sim`. **Calqué sur M9** (mêmes états, même modèle
-énergie/humeur) pour pouvoir contribuer en amont ou se brancher dessus.
+Développé d'abord contre `duck-sim` comme un service externe pour itérer
+vite, mais **contrainte matérielle actée (2026-10-05) : le robot ne doit
+dépendre d'aucun appareil externe énergivore pour fonctionner au quotidien.**
+Pas de PC/serveur allumé en permanence comme « cerveau » — le budget de calcul
+externe permanent est plafonné, pour l'instant, à un **Raspberry Pi 3B+** (déjà
+mesuré : pont + cerveau comportemental à 29 Mo / < 1 % CPU) et/ou des **ESP32**
+(capteurs, triggers, pas de calcul lourd). **Calqué sur M9** (mêmes états,
+même modèle énergie/humeur) pour pouvoir contribuer en amont ou se brancher
+dessus.
+
+**Conséquence sur la perception lourde (vision/audio à base de deep
+learning)** : le Pi 3B+ n'a pas de NPU et ne peut pas faire tourner du
+YOLO (déjà noté plus bas). La seule ressource de calcul IA embarquée
+disponible sans dépendance externe est donc le **NPU du robot lui-même**
+(RK3566, 0,8 TOPS) — à profiler réellement à la livraison. D'ici là,
+toutes les idées de reconnaissance ajoutées dans « Pistes supplémentaires »
+(chat, objets, miroir, oiseaux, applaudissements, etc.) restent des
+**candidats à trier une fois le budget NPU mesuré**, pas des acquis :
+priorité à tout ce qui peut se faire sans deep learning (couleur HSV,
+détection de mouvement par différence d'images, seuils audio simples type
+clap/débit d'eau), le reste passera un par un sur le NPU embarqué, pas en
+continu ni en parallèle tant que la marge réelle n'est pas connue.
 
 - [x] Squelette : états M9 + modèle énergie/humeur + transitions (`brain.py`) — **promenade sûre** (2026-10-04) :
       ToF 8×8 → distances libres (`tof.py`, étalonné : mur à 0,84 m mesuré 0,83 m), marche à 0,4 m/s hors zone
