@@ -1058,6 +1058,267 @@ nuisance.
   qui approche à pied) avant même la sonnette ou le bruit de clés —
   perception proactive plutôt que réactive.
 
+## Tableau — dépendance matérielle de chaque proposition
+
+Légende :
+- **Robot seul** : capteurs/calcul déjà embarqués (caméra, ToF, micro, IMU, NPU 0,8 TOPS du robot) — aucun appareil externe, achat ou non.
+- **HA / réseau** : dépend de Home Assistant ou du réseau domestique déjà en place — pas de nouvel achat, mais pas autonome du robot seul.
+- **Mixte** : combine robot seul et HA/réseau.
+- **Matériel à ajouter** : nécessite un nouvel achat/accessoire physique (capteur dédié, tag, station, etc.).
+
+Rappel (Phase 3) : toute case « Robot seul » qui suppose un vrai modèle de
+reconnaissance (pas juste couleur/mouvement/niveau sonore) reste un
+**candidat à trier une fois le NPU du robot profilé à la livraison** — voir
+plus haut. Le tag ici dit *où ça tourne*, pas si c'est déjà garanti faisable.
+
+### Pistes générales (haut de section)
+
+| Proposition | Dépendance |
+|---|---|
+| Rythme circadien réel (M9 + heure du jour) | Robot seul |
+| Petits rituels de présence (départ/retour) | HA / réseau |
+| Mémoire des objets (au-delà des habitants) | Robot seul |
+| Réaction à la musique/au rythme ambiant | Robot seul |
+| Personnalité qui dérive avec l'usage | Robot seul |
+| Vocalisations gratuites, sans fonction | Robot seul |
+| Conscience du calendrier domestique | HA / réseau |
+| Spot favori appris (pas imposé) | Robot seul |
+
+### Réflexes autonomes déclenchés par l'environnement (son, vue)
+
+| Proposition | Dépendance |
+|---|---|
+| Danse au rythme détecté au micro | Robot seul |
+| Sursaut au bruit sec et fort | Robot seul |
+| Réaction aux applaudissements | Robot seul |
+| Rire détecté | Robot seul |
+| Silence inhabituel à une heure bruyante | Robot seul |
+| Son propre reflet (miroir, vitre) | Robot seul |
+| Mouvement périphérique sans cible précise | Robot seul |
+| Synchronisation sur quelqu'un qui danse | Robot seul |
+| Bruit de clés dans la porte, avant ouverture | Robot seul |
+| Bruit machine à café/bouilloire le matin | Robot seul |
+
+### Actions spontanées vers l'humain
+
+| Proposition | Dépendance |
+|---|---|
+| Tenir compagnie pendant une activité longue immobile | Mixte (présence HA + ToF/caméra) |
+| Discrétion automatique pendant un appel téléphonique | Robot seul |
+| Réagir à son prénom entendu | Robot seul |
+| Anticiper la caresse (main qui s'approche) | Robot seul |
+| Contagion du bâillement | Robot seul |
+| Timidité initiale avec un visiteur inconnu | Robot seul |
+| Présence silencieuse si ton de voix triste | Robot seul |
+| Rejoindre la pièce à vivre à l'heure des repas | Robot seul (HA utile en option) |
+
+### Sommeil et réveil
+
+| Proposition | Dépendance |
+|---|---|
+| « Rêves » pendant la charge/veille nocturne | Robot seul |
+| S'ébroue après une longue immobilité réelle | Robot seul |
+
+### Exploration et curiosité
+
+| Proposition | Dépendance |
+|---|---|
+| Cherche le soleil (zone de lumière forte) | Robot seul |
+| Remarque un objet qui n'était pas là avant | Robot seul |
+| Ramasse/cache/promène un objet (`GroundPick`) | Robot seul |
+| Vient « montrer » une découverte | Mixte (HA utile pour localiser l'habitant) |
+
+### Ambiance du foyer et évolution dans le temps
+
+| Proposition | Dépendance |
+|---|---|
+| Se retire si l'ambiance est très bruyante/chaotique | Robot seul |
+| Réagit différemment aux bips des autres appareils | Robot seul |
+| Rythme différent semaine/week-end | Robot seul |
+| Personnalité un peu saisonnière (météo) | HA / réseau |
+| Motif sonore personnel qui dérive avec le temps | Robot seul |
+
+### Interaction avec le reste de la maison
+
+| Proposition | Dépendance |
+|---|---|
+| Curiosité/méfiance envers le robot aspirateur | Robot seul |
+| Va se recharger de sa propre initiative | Robot seul |
+| Anticipe un orage annoncé | HA / réseau |
+
+### Préférences et apprentissage non programmé
+
+| Proposition | Dépendance |
+|---|---|
+| Jouet favori appris (par historique de jeu) | Robot seul (moins fiable sans NFC — voir Pistes physiques) |
+| Mot/son déclencheur qui émerge par répétition | Robot seul |
+
+### Conscience de l'environnement et de lui-même
+
+| Proposition | Dépendance |
+|---|---|
+| Toilette après activité poussiéreuse (CNC, impression) | Robot seul |
+| Réagit au fait d'être photographié/filmé | Robot seul |
+| Baisse vitesse/volume la nuit (lumière ambiante) | Robot seul |
+| Petit geste d'au revoir en écho au ton habituel | Robot seul |
+
+### Sécurité et urgence perçue
+
+| Proposition | Dépendance |
+|---|---|
+| Alarme incendie / détecteur de fumée | Robot seul |
+| Sonnette vs coup à la porte | Robot seul |
+| Feux d'artifice/pétards (distinct du tonnerre) | Robot seul |
+
+### Nuances sociales plus fines
+
+| Proposition | Dépendance |
+|---|---|
+| Distingue le ton en entendant son prénom (gronder/câliner) | Robot seul |
+| Visiteur récurrent reconnu comme tel | Robot seul |
+| Cherche la présence humaine plutôt que la prise | Robot seul |
+| Salutation sonore individualisée par habitant | Robot seul |
+
+### Initiative de jeu, pas seulement réaction
+
+| Proposition | Dépendance |
+|---|---|
+| Lance lui-même une partie de cache-cache | Robot seul |
+| Cherche activement son jouet favori disparu | Robot seul |
+
+### Décor visuel et auto-préservation
+
+| Proposition | Dépendance |
+|---|---|
+| Décorations saisonnières détectées à la vue | Robot seul |
+| Réaction distincte neige vs pluie par la fenêtre | Robot seul |
+| Re-explore après un réaménagement du mobilier | Robot seul |
+| Auto-préservation thermique (température servos) | Robot seul |
+
+### Nuances sociales et comportementales supplémentaires
+
+| Proposition | Dépendance |
+|---|---|
+| Toast / geste collectif (verre levé) | Robot seul |
+| Vérifie le chat s'il arrête soudainement de miauler | Robot seul |
+| Jeu de « chaud/froid » improvisé par intonation | Robot seul |
+| Découragement progressif plutôt que tout-ou-rien | Robot seul |
+| Observe en silence une activité manuelle minutieuse | Robot seul |
+| Rituel face au miroir qui évolue avec le temps | Robot seul |
+| Distingue chahut joueur et vraie dispute | Robot seul |
+
+### Pistes physiques (matériel autour du robot)
+
+Cette sous-section du ROADMAP liste elle-même des accessoires physiques —
+toutes ces lignes sont donc, par construction, du **Matériel à ajouter**.
+
+| Proposition | Dépendance |
+|---|---|
+| Jouet sonore (haut-parleur/grelot intégré) | Matériel à ajouter |
+| Tags NFC dans les jouets | Matériel à ajouter |
+| Tapis de pression / tag NFC au sol près de l'entrée | Matériel à ajouter |
+| Station de recharge avec repère lumineux actif | Matériel à ajouter |
+| Petite station météo extérieure connectée | Matériel à ajouter |
+| Zone de repos dédiée et reconnaissable (tapis texturé) | Matériel à ajouter |
+| Accessoire décoratif amovible (foulard, autocollant) | Matériel à ajouter (zéro électronique) |
+
+### Mécanismes encore inexplorés
+
+| Proposition | Dépendance |
+|---|---|
+| Joue avec sa propre ombre | Robot seul |
+| Hésitation entre deux stimuli intéressants simultanés | Robot seul |
+| Reconnaît une accroche audio récurrente de divertissement | Robot seul |
+| Agitation discrète pendant une absence plus longue qu'à l'habitude | HA / réseau |
+| Offre spontanément son jouet favori à quelqu'un | Robot seul |
+| Indice acoustique de la pièce (écho/réverbération) | Robot seul |
+| Un geste signature rare (≤1×/jour) | Robot seul |
+| Sensibilité à la tendance météo avant l'alerte | HA / réseau |
+| Mini-jeu pierre-papier-ciseaux simplifié | Robot seul |
+| Dépit comique après un tir raté, puis regain | Robot seul |
+| Fierté discrète s'il s'entend complimenter | Robot seul |
+| Petit geste gêné après un trébuchement devant quelqu'un | Robot seul |
+| Curiosité méfiante prolongée envers un nouvel appareil | Robot seul |
+| Répertoire de tours sur demande (geste de la main) | Robot seul |
+| Laisser tourner un mouvement RL imparfait tel quel | Robot seul |
+
+### Taquineries envers les humains
+
+Toutes ces idées s'appuient sur les capteurs déjà embarqués (vision, audio,
+mémoire interne) — aucune n'a besoin d'un appareil externe.
+
+| Proposition | Dépendance |
+|---|---|
+| Vol et planque ludique d'un petit objet | Robot seul |
+| Imite en exagérant un geste qu'on vient de faire | Robot seul |
+| Se place brièvement en travers du chemin | Robot seul |
+| Fait style de dormir, bouge une fois le dos tourné | Robot seul |
+| Secoue la tête « non » avant d'obéir quand même | Robot seul |
+| Mime le ton de voix de qui l'appelle | Robot seul |
+| S'installe délibérément sur un objet qu'on cherche | Robot seul |
+| Fausse feinte avant un tir | Robot seul |
+| Pousse un objet léger juste hors de portée | Robot seul |
+| Suit les pas de quelqu'un en miroir comique | Robot seul |
+| Petite course ludique sur un trajet court | Robot seul |
+| Fait style de ne pas entendre un appel | Robot seul |
+| Bâillement « sarcastique » | Robot seul |
+| Prend la place convoitée | Robot seul |
+| Petit détour volontaire dans les jambes | Robot seul |
+| Pousse doucement la main de quelqu'un | Robot seul |
+| Photobombe (téléphone pointé ailleurs) | Robot seul |
+| S'incruste dans les appels vidéo | Robot seul |
+| Feinte affectueuse (coup de bec dévié) | Robot seul |
+| Joue à se faire désirer avant la caresse | Robot seul |
+| Regard mystérieux vers un point vide | Robot seul |
+| A toujours le dernier mot (silence de conversation) | Robot seul |
+| Running gag reconnu sur son propre numéro | Robot seul |
+| Compte les éternuements | Robot seul |
+| Fausse chute comique (distincte du vrai trébuchement) | Robot seul |
+| S'installe sur le tapis pendant une séance d'étirement | Robot seul |
+| Fait style de « superviser » un rangement | Robot seul |
+| S'assoit sur l'outil/la pièce pendant un bricolage | Robot seul |
+| Vole le centre du cadre lors d'un selfie de groupe | Robot seul |
+| Garde un siège « juste trop tard » | Robot seul |
+| Parodie sonore d'une notification de téléphone | Robot seul |
+| Trophée de malice cumulé | Robot seul |
+| Taquine le robot aspirateur activement | Robot seul |
+| Faux bâillement d'ennui | Robot seul |
+| Air mystérieux sans rien révéler | Robot seul |
+| Petit ricanement bref si quelqu'un glisse sans se faire mal | Robot seul |
+
+### Petits services rendus (pas que ludique)
+
+| Proposition | Dépendance |
+|---|---|
+| Va chercher un objet désigné sur demande | Mixte (reco objet embarquée + commande vocale Wyoming/HA) |
+| Signale un robinet qui goutte / eau qui coule anormalement | Robot seul |
+| Rappelle une tâche oubliée via HA (four, lumière) | HA / réseau |
+| Aide à retrouver un objet perdu (mémoire visuelle) | Robot seul |
+
+### Comportement collectif (plusieurs personnes à la fois)
+
+| Proposition | Dépendance |
+|---|---|
+| Mode festif distinct à plusieurs personnes réunies | Robot seul |
+| Répartition de l'attention perçue comme équitable | Robot seul |
+
+### Le monde extérieur vu de l'intérieur (fenêtre, jardin)
+
+| Proposition | Dépendance |
+|---|---|
+| Observe les oiseaux/un animal sauvage dans le jardin | Robot seul |
+| Anticipation visuelle d'une arrivée (voiture, pas) | Robot seul |
+
+### Bilan rapide
+
+Sur l'ensemble des propositions listées dans « Pistes supplémentaires » :
+l'immense majorité (plus de 9 sur 10) tient sur le robot seul (vision
+simple, audio, IMU, mémoire interne) ou sur Home Assistant déjà en place —
+sans aucun nouvel appareil à acheter. Seule la sous-section « Pistes
+physiques » (jouet sonore, tags NFC, station météo, tapis de repos, décor)
+suppose explicitement du matériel ajouté, et reste par construction en
+Phase 4 « plus tard », pas dans le chantier actif.
+
 ## Tableau de synthèse
 
 | Compétence | Officielle ? | Apport vivant / autonome | Effort |
