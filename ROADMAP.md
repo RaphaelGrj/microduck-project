@@ -604,6 +604,64 @@ assistant qui attend qu'on lui parle.
   détection de présence qui change — réagit à la manière de le dire, pas
   seulement au fait de partir.
 
+### Sécurité et urgence perçue
+
+- **Alarme incendie / détecteur de fumée** : son très spécifique et
+  strident, distinct de tout le reste → réaction d'alerte propre (pas un
+  simple `Startle`), va activement chercher un habitant plutôt que rester
+  sur place.
+- **Sonnette vs coup à la porte** : deux sons différents, deux urgences
+  différentes — la sonnette appelle plus vite vers l'entrée qu'un simple
+  bruit sourd.
+- **Feux d'artifice / pétards**, distincts du tonnerre (répétition rapide,
+  motif différent) → réaction de prudence plus marquée et plus longue, se
+  met en sécurité plutôt qu'un sursaut isolé.
+
+### Nuances sociales plus fines
+
+- **Distingue le ton en entendant son prénom** : gronder vs câliner — tête
+  basse/retrait dans un cas, approche contente dans l'autre, sans
+  comprendre le sens des mots, juste le ton.
+- **Visiteur récurrent reconnu comme tel** (quelqu'un qui revient chaque
+  semaine sans être un habitant — ménage, grand-parent) : familiarité
+  intermédiaire entre « inconnu » et « habitant », plutôt qu'une
+  reconnaissance tout ou rien.
+- **Cherche la présence humaine plutôt que la prise, quand les deux sont
+  possibles** : batterie faible mais calme et un habitant proche → va
+  d'abord vers lui avant de se recharger, tant que ce n'est pas critique —
+  une préférence sociale qui prime sur la pure logique d'autonomie.
+- **Salutation sonore individualisée par habitant**, pas un seul son
+  générique — une variante reconnaissable par personne, qui s'affine avec
+  la familiarité déjà suivie, plutôt qu'un son indifférencié.
+
+### Initiative de jeu, pas seulement réaction
+
+- **Lance lui-même une partie de cache-cache, occasionnellement** : va se
+  placer dans une cachette modérée et émet un petit son d'appel — **une
+  seule fois, sans insister** si personne ne mord (cohérent avec la règle
+  « ne jamais insister » déjà posée).
+- **Cherche activement son jouet favori s'il a disparu**, puis abandonne
+  progressivement après quelques tentatives sur plusieurs jours — un
+  attachement perceptible à un objet précis, pas juste une liste d'objets
+  interchangeables.
+
+### Décor visuel et auto-préservation
+
+- **Décorations saisonnières détectées à la vue** (sapin, guirlandes,
+  citrouilles) plutôt que par calendrier : comportement plus festif tant
+  qu'elles sont visibles — marche même sans intégration calendrier HA.
+- **Réaction distincte neige vs pluie par la fenêtre** : la neige (motif
+  de mouvement différent, rare) déclenche une curiosité plus marquée que
+  la pluie, désormais familière.
+- **Re-explore après un réaménagement du mobilier** (une pièce très
+  différente de ce qu'il a l'habitude de voir) : revisite la pièce plus
+  longuement, comme pour mettre à jour sa carte — réutilise la mémoire
+  d'exploration déjà en place.
+- **Auto-préservation thermique** : si la télémétrie de température des
+  servos (déjà prévue en diagnostic) grimpe, va de lui-même vers une zone
+  plus fraîche plutôt que de continuer son activité — relie directement
+  le diagnostic à un comportement visible, pas seulement à un journal.
+
 ## Tableau de synthèse
 
 | Compétence | Officielle ? | Apport vivant / autonome | Effort |
