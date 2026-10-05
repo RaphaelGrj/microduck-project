@@ -399,7 +399,7 @@ développement du cerveau.
 | Accueil au retour (plus joyeux après une longue absence) | Présence HA (téléphone) | Marche vers l'entrée, son + geste |
 | Caresse | `pet-detect` ; **en attendant : écart des servos de tête** (`caresse.py`, 2026-10-05) | Roucoulement (natif), état Petted, geste content — **fait** (amplitude réelle à valider sur le robot) |
 | Main tendue | ToF (suivi de main) — **fait** (`main_tendue.py`, 2026-10-05) | Regard, « picore » (sans approche : zone morte de la marche) |
-| Commandes vocales | quacksat / Wyoming | Réponse en sons de canard (oui / non / hésitation), pas de voix humaine |
+| Commandes vocales | ~~quacksat / Wyoming~~ → **reconnaissance locale** (`commandes.py`, Vosk hors ligne, 2026-10-05) | Réponse en sons de canard (oui / non / hésitation), pas de voix humaine — **fait**, micro partagé à valider |
 | Messager physique (impression, lave-linge, sonnette) | HA — **fait côté maison** (`[[appareil]]`, prise à mesure de puissance, 2026-10-05) | Réagit, et **redit le message au retour** de l'habitant absent ; « vient te voir » attend une position de l'habitant (UWB) |
 | Routines (étirement du matin, sieste du soir, heures calmes) | Heure, HA | États Stretch / Nap — **faits** (heures calmes, bonjour du matin, `[cerveau]` de `ha.toml`) |
 | Jeux : balle, 1-2-3 soleil, cache-cache au son | Caméra, micro | Phase 2 + états — **1-2-3 soleil fait** (`mouvement.py` + état `soleil`, bouton HA) ; cache-cache au son : pas de direction du son (micro mono ?) |
@@ -1717,6 +1717,34 @@ Décision : pas de `duck-sim` dans le cloud (Hugging Face bloqué) → **tout co
 priorité ce qui touche la sécurité (promenade, aspirateur, poussée de balle, fausse chute, navigation), puis les
 réglages audio (seuils sur le vrai micro), la caresse (amplitude, courant) et `ground_pick`.
 
+### 2026-10-06 — règles d'identité verrouillées, cerveau découpé, suite de la roadmap
+
+**Deux règles décidées par l'utilisateur, désormais vérifiées par des tests (`test_regles.py`)** :
+1. **Le canard ne s'exprime qu'avec ses sons de canard** (banque officielle `SoundTag` : `alarm`, `greet`, `inquire`,
+   `peck`, `chirp`, `coo`, `wheee`) — tout autre son est refusé par `Ctx.sound`, aucune synthèse vocale.
+2. **Tout tourne sur le canard, aucun appareil réseau n'analyse ses données** : `deploy/pi/` supprimé (plus de repli
+   sur un Pi), `canard.py` refuse une caméra lue à distance, seul le pont Home Assistant parle au réseau et n'envoie que
+   des états. Liste exacte des modules embarqués : `deploy/robot/modules.py`.
+
+**Conséquence : quacksat est écarté** (il envoie le son du micro hors du canard et répond par synthèse vocale). Remplacé
+par des **commandes vocales locales** (`commandes.py`) : Vosk hors ligne (modèle français ~40 Mo téléchargé une fois),
+grammaire restreinte, nom du canard obligatoire (« <nom> assis / debout / viens / tourne / on joue / stop / chut /
+réveille-toi / bravo / danse »), réponses en sons de canard, hésitation (« inquire ») s'il n'a pas compris.
+**Micro partagé** : il est mono-client et `robotd` le tient → second patch amont `contrib/robotd-audio-capture.patch`
+(`[audio] capture` séparé du haut-parleur ; tests officiels OK) + `deploy/robot/asound.conf` (`dsnoop`). À noter : la
+caresse officielle (audio) est **désactivée par défaut** dans `robotd` (`[audio] pet_detect = true` à mettre).
+
+- **`brain.py` découpé** (2 300 lignes) : `etats_base.py`, `etats_vie.py`, `etats_jeux.py`, `etats_taquineries.py`,
+  `etats_maison.py` ; `brain.py` garde `Brain`/`run` et réexporte tout (aucun import existant ne change).
+- **Auto-préservation thermique** (`robot.health`) : servo ≥ 60 °C → repos assis sans se relever entre deux siestes, il
+  halète bec entrouvert ; reprise sous 50 °C ; carte ≥ 85 °C → veille caméra en pause. HA : température des servos.
+- **Entendus sur le canard, sans Home Assistant** : l'**alarme incendie** (bips aigus réguliers, motif T3) → alarme
+  prioritaire ; **on frappe à la porte** (chocs graves, distincts des claquements de mains aigus) → réaction sonnette.
+- **Remarque un objet qui n'était pas là avant** (mémoire des cases traversées, 7 jours) : arrêt, regard, « inquire ».
+- **Habitudes sonores** (`habitudes.py`) : silence inhabituel à une heure d'habitude animée → petit tour pour aller voir ;
+  rythme semaine / week-end (`bonjour_weekend`).
+- `microduck-brain` : **164 tests** (dont endurance et règles).
+
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
 Vue d'ensemble du **Chantier actif** (section plus haut) et de la table « Interactions par habitant » (Humains)
@@ -1738,7 +1766,8 @@ habitants présents, chat vu).
 4. ~~Jeux sociaux légers~~ — **1-2-3 soleil fait**. Cache-cache au son : demande la direction du son (le micro du
    canard est-il stéréo ? à voir à la livraison) ; sinon cache-cache visuel quand la détection de personne tournera
    sur le NPU.
-5. **Commandes vocales (quacksat)** — inchangé : à valider avec le vrai satellite.
+5. ~~Commandes vocales (quacksat)~~ — **quacksat écarté** (2026-10-06) ; commandes vocales **locales** faites
+   (`commandes.py`), à valider avec le vrai micro partagé.
 6. ~~Routine du matin~~ — **fait** (`bonjour`).
 
 **Nouvelles pistes ouvertes par cette session** : rythme visible (« quelqu'un qui bouge en rythme devant lui ») en

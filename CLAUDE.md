@@ -293,5 +293,14 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   `robotd`/`tofd`/`mediad` en local (socket ToF officiel : `/run/tofd/tof.sock`). Seules dépendances externes : Home
   Assistant (Pi existant, fonctions maison seulement) ; `deploy/pi/` = repli si CPU/RAM du RK3566 insuffisants.
 
+## Règles d'identité (décidées le 2026-10-06, vérifiées par `microduck-brain/test_regles.py`)
+- **Le canard ne s'exprime QU'avec ses sons de canard** (banque officielle : `alarm`, `greet`, `inquire`, `peck`, `chirp`,
+  `coo`, `wheee`) : jamais de voix humaine, de synthèse vocale ni de mot.
+- **Tout tourne SUR le canard** : aucun appareil réseau n'analyse ses données (images, sons, distances). Seul Home Assistant
+  reçoit des états et envoie les événements de la maison. Pas de repli « cerveau sur un Pi ».
+- Conséquence : **quacksat écarté** (son envoyé hors du canard + synthèse vocale) → commandes vocales locales
+  (`commandes.py`, Vosk hors ligne). Micro mono-client tenu par `robotd` → patches `contrib/robotd-audio-*.patch` +
+  `deploy/robot/asound.conf` (dsnoop). `brain.py` découpé en `etats_*.py`.
+
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.
