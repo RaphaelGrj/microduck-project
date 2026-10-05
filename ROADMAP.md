@@ -209,6 +209,34 @@ kick tolérant/passe douce) :
   assumé et rattrapé pour un effet attachant/maladroit ; politique de
   récupération dédiée, différente du `limp_fall` (chute réelle non
   voulue).
+- **Sprint court** (accélération puis décélération franche, pas la
+  marche mesurée habituelle) — pour une poursuite enjouée d'un objet qui
+  roule ou d'un jeu avec le chat.
+- **Pas de côté esquive** (petit saut latéral) — pour éviter un objet ou
+  « jouer » à se dérober, mouvement latéral franc plutôt qu'un pas de
+  rotation.
+- **Pirouette sautée** (saut + rotation combinés) — version plus
+  spectaculaire de la pirouette ci-dessus, équilibre plus exigeant à
+  l'atterrissage.
+- **Étirement sur une jambe** (une patte tenue en l'air, équilibre
+  maintenu) — un vrai étirement dynamique, au-delà du `Stretch` actuel
+  probablement tête/tronc.
+- **Petit frisson/sursaut du corps entier** après une surprise — distinct
+  du simple `Startle` de tête, secousse brève de tout le corps à rattraper
+  en équilibre.
+- **Franchir un petit obstacle en sautant** plutôt que le contourner
+  (seuil de porte, jouet au sol) — utile aussi fonctionnellement pour la
+  promenade, pas seulement esthétique.
+- **Monter sur un support bas** (coussin, marche, caisse) et y rester
+  stable — élargit les « spots favoris » à des surfaces surélevées.
+- **Arrêt théâtral avec léger glissement contrôlé** — freinage plus
+  abrupt et visible qu'un arrêt de marche normal, effet comique/expressif.
+- **Pousser une porte entrouverte avec le poitrail/bec** (exploratoire,
+  à part) : physiquement utile (autonomie réelle dans la maison) mais
+  demande du contrôle de force fin, pas seulement de la trajectoire — à
+  isoler comme un chantier à part plutôt qu'un geste « gratuit » comme
+  les autres, et à valider d'abord en sécurité (force maximale, risque de
+  pincement) avant tout entraînement.
 
 ## Phase 2 — Perception et jeu de balle avec vision
 
