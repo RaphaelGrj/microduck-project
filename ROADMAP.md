@@ -987,6 +987,26 @@ nuisance.
   quelqu'un qui regarde ailleurs, puis s'enfuit content — à utiliser
   avec parcimonie et un son clairement ludique (jamais une imitation
   fidèle d'alarme), pour que ça reste drôle et jamais anxiogène.
+- **Trophée de malice cumulé** : après plusieurs taquineries réussies
+  (photobombe, planque d'objet…), un petit air fier distinct — une
+  fierté qui se construit sur l'historique des blagues plutôt
+  qu'identique à chaque fois.
+- **Taquine le robot aspirateur activement** : lui bloque brièvement le
+  chemin pour « jouer », au-delà de la simple curiosité/méfiance déjà
+  notée — passe d'une relation passive à une vraie taquinerie entre les
+  deux « habitants » non-humains.
+- **Faux bâillement d'ennui** pendant une réunion ou une discussion qui
+  s'étire — commentaire ironique sur la longueur, sans jugement réel du
+  contenu.
+- **Air mystérieux sans rien révéler** : hoche la tête d'un air entendu
+  si quelqu'un cherche un objet longtemps — gag pur, jamais au détriment
+  d'une vraie aide (s'il sait réellement où est l'objet, le comportement
+  « montrer une découverte » déjà prévu prend le relai, pas la rétention
+  malicieuse).
+- **Petit ricanement bref si quelqu'un glisse sans se faire mal** —
+  garde-fou fort : bascule immédiatement en inquiétude/retrait au
+  moindre signe de douleur réelle, jamais de moquerie si ce n'est pas
+  clairement anodin.
 
 ## Tableau de synthèse
 
