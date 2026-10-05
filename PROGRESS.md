@@ -56,7 +56,8 @@
   batterie descend sous 25 % ; recule d'un petit pas si le chat se rapproche trop vite ; publie « chat vu au
   salon » comme entité Home Assistant ; « heures calmes » nocturnes optionnelles (réutilise l'interrupteur calme,
   rien ne change si on ne les configure pas) ; publie aussi son éveil (`sensor.microduck_eveil`, pas seulement
-  l'énergie). Tout testé (27 tests automatisés), rien côté entraînement RL/GPU.
+  l'énergie) et les habitants qu'il sait présents (`sensor.microduck_habitants_presents`). Tout testé
+  (27 tests automatisés), rien côté entraînement RL/GPU.
 
 ## En cours — l'apprentissage (arrêté ce soir, reprise possible)
 
