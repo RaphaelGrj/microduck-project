@@ -942,6 +942,32 @@ nuisance.
 - **Pousse doucement la main de quelqu'un qui tient un objet**, comme
   pour réclamer alors qu'il n'a besoin de rien — un geste espiègle
   plutôt qu'un vrai besoin, sans jamais faire perdre l'objet.
+- **Photobombe** : se place entre la caméra d'un téléphone et le sujet
+  qu'on essaie de photographier/filmer (détecte un téléphone pointé
+  *ailleurs* que vers lui) — vol de vedette classique.
+- **S'incruste dans les appels vidéo** : vient se placer dans le champ
+  pendant un appel, comme s'il voulait « participer » — variante du
+  photobombe, spécifique à l'écran plutôt qu'au téléphone.
+- **Feinte affectueuse** : fait mine de donner un petit coup de bec
+  tendre, puis dévie au dernier moment en s'écartant d'un bond — un
+  « je t'aurai pas » joueur plutôt qu'un vrai refus.
+- **Joue à se faire désirer avant la caresse** : esquive une fois la
+  main qui s'approche (un pas de côté), puis se laisse caresser la fois
+  suivante — jeu de la poursuite affectueuse, pas un vrai évitement.
+- **Regard mystérieux vers un point vide** : fixe intensément un endroit
+  sans rien de particulier, pour attirer l'attention, comme un chat qui
+  regarde fixement le vide — gag pur, sans vraie alerte derrière.
+- **A toujours le dernier mot** : répond systématiquement par un bref
+  son de canard à chaque silence dans une conversation entre humains,
+  comme s'il voulait participer sans jamais rien dire d'utile.
+- **Running gag reconnu sur son propre numéro** : si la « planque
+  d'objet » ci-dessus se répète souvent, un petit air content/fier
+  distinct après coup — comme s'il savait que c'est devenu sa blague
+  récurrente, pas juste un comportement isolé répété sans variation.
+- **Compte les éternuements** : au-delà du premier (contagion sincère
+  déjà notée), un petit bruit amusé et différent à chaque éternuement
+  supplémentaire d'une même série — comme s'il « comptait » avec un brin
+  de moquerie.
 
 ## Tableau de synthèse
 
