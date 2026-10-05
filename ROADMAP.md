@@ -662,6 +662,75 @@ assistant qui attend qu'on lui parle.
   plus fraîche plutôt que de continuer son activité — relie directement
   le diagnostic à un comportement visible, pas seulement à un journal.
 
+### Nuances sociales et comportementales supplémentaires
+
+- **Toast / geste collectif** : quand les habitants lèvent leur verre
+  (geste visuel assez caractéristique), petit relevé de tête synchronisé
+  — mimétisme social minimal, sans rien comprendre de l'occasion.
+- **Vérifie le chat s'il arrête soudainement de miauler** alors qu'il
+  miaule souvent : silence inhabituel *spécifique au chat*, distinct du
+  silence général de la maison déjà noté — va voir ce qu'il devient.
+- **Jeu de « chaud/froid » improvisé** : un habitant guide par
+  l'intonation (ton qui monte en s'approchant d'une cible, baisse en
+  s'éloignant, sans mot-clé précis) → le robot ajuste sa direction de
+  recherche — jeu basé sur le ton plutôt que sur une commande.
+- **Découragement progressif plutôt que tout-ou-rien** : après une
+  initiative ignorée (cache-cache proposé, personne ne mord), le délai
+  avant une nouvelle initiative du même genre s'allonge tout seul et se
+  reconstruit avec le temps — plus fin que « une fois puis silence ».
+- **Observe en silence une activité manuelle minutieuse** (soudure, vis,
+  peinture de figurine — motif « mains très concentrées, peu de
+  mouvement du corps ») : reste à proximité sans interagir, comme un
+  animal qui regarde faire sans déranger.
+- **Rituel face au miroir qui évolue avec le temps** : la réaction de
+  surprise au reflet (déjà notée) laisse place, après plusieurs jours,
+  à un bref arrêt pour « se regarder » au réveil plutôt qu'ignorer ou
+  sursauter systématiquement — la réaction elle-même change, pas
+  seulement sa fréquence.
+- **Distingue chahut joueur et vraie dispute** : rires mêlés aux éclats
+  de voix vs ton soutenu sans rire → ne se retire que dans le second cas,
+  pour ne pas fuir un simple chahut alors que le retrait (déjà prévu) est
+  pensé pour une ambiance réellement tendue.
+
+### Pistes physiques (pas seulement comportementales)
+
+Le matériel du Microduck lui-même est fermé (pas de GPIO documenté), donc
+ces idées ajoutent des éléments **autour** du robot plutôt que de le
+modifier — réseau ou purement passif, cohérent avec les principes déjà
+posés (sac à dos ESP32, tags NFC, balises UWB).
+
+- **Jouet sonore** (balle ou objet avec petit haut-parleur/grelot
+  intégré) : donne une piste auditive en plus du visuel pour le jeu de
+  balle — utile en basse lumière ou si l'objet sort du champ caméra, et
+  renforce le lien avec le chat qui réagit aussi au bruit.
+- **Tags NFC dans les jouets** (prolonge l'idée déjà notée pour les
+  objets au bec) : permet une vraie permanence d'objet — distinguer
+  *son* jouet favori d'un objet qui lui ressemble visuellement, plutôt
+  que de deviner à la vision seule. Fiabilise directement la « préférence
+  apprise » ci-dessus.
+- **Tapis de pression ou tag NFC au sol près de l'entrée**, connecté
+  réseau : détecte le passage/arrivée plus fiablement que la seule
+  présence HA par téléphone — fiabilise l'« anticipation au bruit de
+  clés » et l'accueil, indépendamment de qui a son téléphone sur soi.
+- **Station de recharge avec repère visuel actif** (anneau lumineux doux
+  piloté par une prise/ampoule connectée) : sert de balise de navigation
+  pour le retour autonome au chargeur (en plus ou à la place d'UWB pour
+  cette seule tâche), et ritualise l'arrivée — la lumière qui s'allume
+  doucement rend le retour visible et « accueillant » plutôt que furtif.
+- **Petite station météo extérieure connectée** (température/humidité/
+  pluie) : alimente directement l'anticipation d'orage et la
+  personnalité saisonnière avec une vraie mesure locale, en complément
+  de l'API météo HA.
+- **Zone de repos dédiée et reconnaissable** (tapis texturé à un endroit
+  fixe) : donne un signal physique distinct (texture au sol, perceptible
+  par l'IMU/la marche) en plus de la vision pour le « spot favori
+  appris » — le robot peut alors le reconnaître même sans bien voir.
+- **Accessoire décoratif amovible** (foulard, autocollant saisonnier) que
+  les habitants peuvent lui mettre : purement cosmétique, zéro
+  électronique, mais renforce le « membre du foyer » de la même façon
+  qu'habiller un animal de compagnie — sans toucher au matériel fermé du
+  robot.
+
 ## Tableau de synthèse
 
 | Compétence | Officielle ? | Apport vivant / autonome | Effort |
