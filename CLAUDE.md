@@ -269,5 +269,15 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   `test_exploration.py` + `test_ha.py`, dont un test d'intégration longue simulation) ; 2 bugs préexistants dans
   `brain.py` trouvés et corrigés au passage (confirmés préexistants via `git stash`, sans lien avec le code ajouté).
 
+## État d'avancement (2026-10-05, soir — session cloud, suite)
+- Les 6 « prochaines étapes » de la ROADMAP codées et testées dans `microduck-brain` (95 tests unitaires, rien essayé contre
+  `duck-sim` : à faire en premier sur le PC) : bonjour du matin (`[cerveau]` de `ha.toml`), messager (`[[appareil]]` :
+  sonnette, machines, prise à puissance ; message redit au retour), main tendue (`main_tendue.py`, ToF), caresse
+  (`caresse.py`, écart des servos de tête — hypothèse à valider), 1-2-3 soleil (`mouvement.py` + boutons MQTT),
+  navigation vers un point (`navigation.py` : sieste dans le coin favori), garde-fou « chat agacé », réflexes sonores
+  (`audio.py` : sursaut, appel, applaudissements, danse au tempo ; micro ALSA non testé).
+- **Point d'entrée = `canard.py`** (cerveau + HA + ToF + caméra, `--chat`, `--micro`) : `pont_ha.py` seul lance le cerveau
+  sans ToF ni caméra (le canard ne marche alors jamais). Service Pi mis à jour en conséquence (numpy/OpenCV nécessaires).
+
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.
