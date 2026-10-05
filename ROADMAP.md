@@ -2,7 +2,7 @@
 
 > Objectif : faire de Microduck un membre actif et autonome du foyer (présence,
 > personnalité, jeu avec moi et avec le chat), pas un gadget de démo.
-> Dernière mise à jour : 2026-10-05.
+> Dernière mise à jour : 2026-10-05 (soir).
 
 ## Principes directeurs
 
@@ -427,6 +427,79 @@ comportement > nombre de politiques, pas d'écran, identité sonore).
   par défaut, laisser le cerveau remarquer où il finit le plus souvent en
   `Chill`/`Nap` (proximité d'un habitant, lumière, chaleur du radiateur ?)
   et y retourner par préférence — un territoire choisi plutôt que programmé.
+
+### Réflexes autonomes déclenchés par l'environnement (son, vue)
+
+Même principe que « danse si de la musique » : une détection de motif sur
+un capteur déjà en place (micro, caméra) déclenche un geste/état existant,
+**sans commande ni initiative programmée par horloge** — c'est la
+réactivité non sollicitée qui fait la différence avec un système à états.
+
+- **Danse au rythme** : battement régulier détecté au micro → hochements
+  de tête en tempo, s'arrête tout seul avec le son (cf. ligne « Réaction à
+  la musique » ci-dessus — à fusionner si implémenté).
+- **Sursaut au bruit sec et fort** (objet qui tombe, verre cassé, porte
+  qui claque, tonnerre) → `Startle`, puis vient regarder d'où ça vient.
+- **Réaction aux claquements de main / applaudissements** : motif sonore
+  bref et caractéristique → se retourne et s'approche, comme « appelé »,
+  sans mot-clé vocal.
+- **Rire détecté** (motif de pics sonores courts et répétés, pas besoin de
+  comprendre les mots) → vient voir, devient plus enjoué.
+- **Silence inhabituel** à une heure où la maison est d'ordinaire bruyante
+  (appris via les habitudes déjà suivies) → petit tour d'exploration,
+  comme pour aller voir ce qui se passe.
+- **Son propre reflet** (miroir, vitre, écran noir) : détecte « un autre
+  canard » → curiosité/surprise.
+- **Mouvement périphérique sans cible précise** (ombre, rideau, oiseau
+  derrière la fenêtre) : bref regard dans cette direction, sans poursuite
+  — l'air « distrait » plutôt qu'un radar qui scanne.
+- **Quelqu'un qui bouge en rythme devant lui** (danse visible à la
+  caméra) : tente de synchroniser un petit mouvement de tête — complément
+  visuel à la détection audio du rythme.
+- **Bruit de clés dans la porte, avant même l'ouverture** : se tourne déjà
+  vers l'entrée — anticipation plutôt que réaction après coup, effet
+  « il m'attendait » particulièrement marquant pour l'impression de vie.
+- **Bruit de la machine à café / bouilloire le matin** : association
+  apprise par répétition avec l'heure du réveil → vient rôder dans la
+  cuisine à ce moment-là sans qu'on le lui demande.
+
+### Actions spontanées vers l'humain
+
+Le point commun : agir (ou délibérément s'abstenir) **à l'initiative du
+robot envers un habitant précis**, pas en réponse à une commande — c'est
+ce registre qui le rapproche d'un animal de compagnie plutôt que d'un
+assistant qui attend qu'on lui parle.
+
+- **Tenir compagnie pendant une activité longue et immobile** : un
+  habitant assis au même endroit depuis longtemps (présence HA + absence
+  de mouvement ToF/caméra, ex. télétravail) → le robot vient se poser à
+  côté, sans rien demander — présence plutôt qu'alerte.
+- **Discrétion automatique pendant un appel téléphonique** : voix détectée
+  sans deuxième interlocuteur dans la pièce → le robot évite de venir
+  interrompre, reste en retrait. Une *absence* d'action délibérée est
+  aussi un signe de vie/d'attention, pas seulement les initiatives.
+- **Réagir à son prénom entendu dans une conversation normale** (pas une
+  commande adressée) : tourne simplement la tête vers qui l'a prononcé,
+  sans déclencher toute une réponse vocale — juste « j'ai entendu ».
+- **Anticiper la caresse** : une main qui s'approche détectée à la caméra
+  avant même le contact ToF → légère avance de tête pour « venir à la
+  rencontre » du geste plutôt que de le recevoir passivement.
+- **Contagion du bâillement** : bâillement audible (motif sonore
+  particulier) → petit étirement/bâillement du robot à son tour, comme
+  chez un animal.
+- **Timidité initiale avec un visiteur inconnu** (pas dans la mémoire
+  relationnelle), qui se dissipe au fil de la visite — distinct de la
+  méfiance progressive déjà prévue pour le chat, ici appliquée à un humain
+  jamais rencontré.
+- **Présence silencieuse si le ton de voix est triste/abattu** (variation
+  de ton détectée, pas de compréhension du contenu) : s'approche
+  doucement et reste là, sans bruit ni geste — soutien discret plutôt
+  qu'intrusif, à bien encadrer pour ne jamais paraître surveiller l'état
+  émotionnel de quelqu'un.
+- **Rejoindre machinalement la pièce à vivre à l'heure des repas** :
+  routine apprise par horaire + présence en cuisine/salle à manger,
+  plutôt que programmée en dur — vient « traîner par là » comme un animal
+  habitué aux horaires du foyer.
 
 ## Tableau de synthèse
 
