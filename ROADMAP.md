@@ -429,7 +429,7 @@ faciale** (plus fiable, plus respectueux).
 |---|---|---|
 | Le suivre du regard | `head_pose` piloté par la détection | Non |
 | Réagir à son arrivée (son + geste) | Gestes de la phase 1 | Déjà fait en phase 1 |
-| Reculer s'il approche vite | Marche arrière (`lin_vel_x` ∈ [-0,4 ; 0,4] m/s) | Non |
+| Reculer s'il approche vite | Marche arrière (`lin_vel_x` ∈ [-0,4 ; 0,4] m/s) | Non — **fait (2026-10-05)** |
 | Le suivre à distance | Suivi de cible via `twist` | Non |
 | **Lui passer la balle** | Kick doux (phase 2) | Oui (config) |
 | Cache-cache / 1-2-3 soleil | États de l'orchestrateur | Non |
@@ -1528,10 +1528,10 @@ Phase 4 « plus tard », pas dans le chantier actif.
 
 ### 2026-10-05 — session cloud (sans GPU), "Occupation autonome" codé et testé
 Session Claude Code dans le cloud (pas d'accès au PC/GPU de l'utilisateur, consigne explicite) : avance uniquement le
-comportemental pur de `microduck-brain` (`brain.py`, `exploration.py`), rien côté `microduck_rl`/RL. 13 commits
+comportemental pur de `microduck-brain` (`brain.py`, `exploration.py`), rien côté `microduck_rl`/RL. 14 commits
 (`microduck-brain` : `97e60fb`, `f9da070`, `a5dc2df`, `3ec1d95`, `9afa476`, `d16cc67`, `7bf770a`, `dbeaba1`,
-`9981a2f`, `e702362`, `b872fbf`), suite complète de tests passante (21 tests `test_brain.py` + `test_exploration.py`,
-dont un test d'intégration longue simulation combinant plusieurs fonctions à la fois).
+`9981a2f`, `e702362`, `b872fbf`, `fe59556`), suite complète de tests passante (23 tests `test_brain.py` +
+`test_exploration.py`, dont un test d'intégration longue simulation combinant plusieurs fonctions à la fois).
 
 - **"Occupation autonome et recherche d'attention" implémenté** (section ROADMAP ajoutée plus tôt la même session) :
   `JeuSolitaire` et `RechercheAttention` (classes `Etat`) — au-delà de `SEUIL_ENNUI_S` (10 min) sans interaction, le
@@ -1573,6 +1573,11 @@ dont un test d'intégration longue simulation combinant plusieurs fonctions à l
   conditions sont indépendantes (`or`), aucune n'écrase l'autre. **Limite assumée** : « se recharger » veut dire ici
   se mettre au repos (`nap`), pas se déplacer physiquement vers une station de charge — même limite de navigation
   que `coin_favori`/`Accueil`, pas de contrôleur point-à-point dans `brain.py`.
+- **« Reculer s'il approche vite » implémenté** (table « Le chat », déjà listée RL=Non) : `RegardeChat` suit
+  maintenant la distance au chat (estimation sol de `chat.py`, repère du tronc) en plus du regard — une approche
+  rapide (> 0,3 m/s de fermeture) sous un seuil de proximité (0,35 m) déclenche un petit pas en arrière d'1 s
+  (vx = -0,35, au-dessus de la zone morte en valeur absolue) puis arrêt ; jamais une fuite continue, jamais
+  déclenché par une visite normale (approche lente, même très proche).
 - **Reste à faire** (pistes « Robot seul » encore non codées) : « boude après réprimande » — bloqué, aucune
   détection de ton de voix existante dans le projet (hors scope d'une session sans micro/pipeline audio) ; faire
   effectivement se déplacer le canard vers son coin favori une fois une navigation-vers-un-point disponible ;
