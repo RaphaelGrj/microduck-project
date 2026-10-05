@@ -824,6 +824,74 @@ posés (sac à dos ESP32, tags NFC, balises UWB).
   qu'habiller un animal de compagnie — sans toucher au matériel fermé du
   robot.
 
+### Mécanismes encore inexplorés
+
+- **Joue avec sa propre ombre** : la repère au sol (lumière + mouvement),
+  bouge pour voir si elle suit, petite insistance curieuse — gratuit et
+  amusant à observer.
+- **Hésitation visible entre deux stimuli intéressants simultanés** (la
+  balle roule pendant que le chat traverse) : petit balancement de tête
+  entre les deux avant de choisir, plutôt qu'une priorité rigide toujours
+  identique.
+- **Reconnaît une accroche audio récurrente de divertissement** (le
+  jingle d'une émission suivie souvent à la même heure) : vient
+  s'installer calmement pour « co-regarder », plutôt que son jeu
+  habituel — une routine partagée plutôt qu'une réaction isolée.
+- **Agitation discrète pendant une absence plus longue qu'à l'habitude**,
+  *avant* le retour — pas la joie déjà prévue après, mais une petite
+  nervosité/vérification répétée (va à la fenêtre, à la porte) si
+  quelqu'un n'est pas rentré à l'heure attendue.
+- **Offre spontanément son jouet favori à quelqu'un** : au-delà de
+  « montrer une découverte » déjà noté, un vrai geste de don — vient
+  déposer l'objet devant la personne comme une invitation à jouer.
+- **Indice acoustique de la pièce** (écho/réverbération, pas seulement
+  l'odométrie) pour deviner grossièrement la taille/le type de pièce →
+  nuance discrètement le comportement (plus exploratoire dans une grande
+  pièce qui résonne, plus posé dans une petite pièce feutrée).
+- **Un geste signature rare**, pas plus d'une fois par jour, différent
+  des initiatives habituelles déjà prévues (~6/h) — la rareté elle-même
+  comme ingrédient, en écho direct au principe Pollen déjà noté (« un duo
+  surprise est un plaisir, un juke-box non »).
+- **Sensibilité à la tendance météo avant même l'alerte** : si HA donne
+  une tendance de pression qui chute, léger changement d'humeur qui
+  précède l'alerte officielle plutôt que d'attendre la notification.
+
+### Taquineries envers les humains
+
+Garde-fou commun à toute cette section : une taquinerie dure quelques
+secondes, jamais plus, et **s'arrête au premier signe d'ennui réel**
+(ton qui change, geste d'écart) — cohérent avec la règle « ne jamais
+insister » déjà posée. L'objectif est l'amusement partagé, pas la
+nuisance.
+
+- **Vol et planque ludique d'un petit objet sans importance**
+  (chaussette, petit jouet) : l'emporte, reste à distance en le montrant,
+  puis s'échappe si on approche — un jeu du chat-et-la-souris, pas un
+  vrai vol (distinct du « cache » déjà prévu pour `GroundPick`, ici
+  explicitement joueur et face à un humain).
+- **Imite en exagérant un geste qu'on vient de faire** — par exemple
+  secouer la tête juste après qu'on lui a dit « non », comme s'il
+  « répétait » de façon un peu moqueuse.
+- **Se place brièvement en travers du chemin** de quelqu'un qui marche
+  (jamais dans un escalier ni un passage à risque), puis s'écarte avec un
+  petit son amusé — un courant d'air ludique, pas un obstacle réel.
+- **Fait style de dormir quand on l'appelle**, puis bouge soudainement
+  une fois qu'on a le dos tourné — faux-endormi classique chez un animal
+  joueur.
+- **Secoue la tête « non » à une demande de jeu, avant d'obéir quand même
+  après un court délai** — résistance théâtrale et comique, jamais
+  appliquée à une consigne de sécurité ou à un ordre sérieux, seulement
+  au registre du jeu.
+- **Mime le ton de voix de qui l'appelle**, de façon exagérée (intonation
+  montante/descendante reproduite en son de canard, pas un vrai mot) —
+  un petit effet « perroquet » ironique.
+- **S'installe délibérément sur un objet qu'on cherche** (jouet, feuille
+  de papier) comme pour s'amuser à être dessus — mini blocage ludique,
+  se lève dès qu'on insiste un peu.
+- **Fausse feinte avant un tir** (regarde ostensiblement une direction
+  puis shoote dans une autre) — un clin d'œil « sportif », purement pour
+  l'effet comique pendant une partie de balle.
+
 ## Tableau de synthèse
 
 | Compétence | Officielle ? | Apport vivant / autonome | Effort |
