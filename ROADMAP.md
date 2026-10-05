@@ -2,7 +2,7 @@
 
 > Objectif : faire de Microduck un membre actif et autonome du foyer (présence,
 > personnalité, jeu avec moi et avec le chat), pas un gadget de démo.
-> Dernière mise à jour : 2026-10-05 (fin de journée).
+> Dernière mise à jour : 2026-10-05 (fin de matinée).
 
 ## Principes directeurs
 
@@ -855,6 +855,35 @@ posés (sac à dos ESP32, tags NFC, balises UWB).
 - **Sensibilité à la tendance météo avant même l'alerte** : si HA donne
   une tendance de pression qui chute, léger changement d'humeur qui
   précède l'alerte officielle plutôt que d'attendre la notification.
+- **Mini-jeu pierre-papier-ciseaux simplifié** : trois gestes de tête/bec
+  distincts proposés par le robot, l'humain répond avec sa main devant
+  la caméra — un vrai petit jeu dédié, à part du jeu de balle.
+- **Dépit comique après un tir raté, puis regain de motivation** : au
+  lieu d'un score plat, une petite réaction de frustration visible
+  suivie d'un nouvel essai plus déterminé — donne un arc émotionnel à la
+  partie plutôt qu'une série de tentatives identiques.
+- **Fierté discrète s'il s'entend complimenter en parlant de lui** (« il
+  est mignon » dit à un invité, pas adressé directement à lui) —
+  distinct de la réaction au ton quand on l'appelle, ici il capte qu'on
+  parle de lui en bien sans qu'on s'adresse à lui.
+- **Petit geste gêné après un trébuchement devant quelqu'un** : au-delà
+  du simple rattrapage physique déjà prévu, une touche sociale, comme
+  s'il savait qu'on l'a vu rater son coup.
+- **Curiosité méfiante prolongée envers un nouvel appareil domestique**
+  (nouvelle enceinte, nouvel aspirateur) tant qu'il reste « nouveau » —
+  plus marquée et plus longue qu'avec un simple objet déplacé, parce que
+  celui-ci bouge/fait du bruit lui aussi.
+- **Répertoire de tours sur demande** (salut, tour sur lui-même)
+  déclenchés par un geste de la main plutôt qu'un ordre vocal, à
+  distinguer des réflexes autonomes : ici il « obéit » volontiers à une
+  demande claire, comme un animal qui fait un tour pour le plaisir de la
+  relation, pas une initiative spontanée.
+- **Note pour plus tard, pas un comportement en soi** : pendant qu'un
+  mouvement RL est encore en cours d'affinage (checkpoint intermédiaire),
+  le laisser tourner tel quel une fois devant vous — l'imperfection
+  visible (petit déséquilibre qu'il corrige) donne involontairement une
+  impression d'« effort », presque plus vivant qu'une version déjà
+  parfaite.
 
 ### Taquineries envers les humains
 
@@ -891,6 +920,28 @@ nuisance.
 - **Fausse feinte avant un tir** (regarde ostensiblement une direction
   puis shoote dans une autre) — un clin d'œil « sportif », purement pour
   l'effet comique pendant une partie de balle.
+- **Pousse un objet léger juste hors de portée** (stylo, balle en mousse)
+  quand quelqu'un essaie de l'attraper — une ou deux fois, pas une
+  boucle sans fin.
+- **Suit exactement les pas de quelqu'un en miroir comique**, juste
+  derrière, jusqu'à ce que la personne se retourne — jeu du « copycat ».
+- **Petite course ludique sur un trajet court** (accélère légèrement pour
+  arriver avant quelqu'un à la porte ou au canapé) — compétition
+  amicale, pas une vraie gêne de passage.
+- **Fait style de ne pas entendre un appel** (regarde ailleurs
+  ostensiblement), puis réaction exagérée après coup — faux air distrait
+  volontaire, distinct d'une vraie inattention.
+- **Bâillement « sarcastique »** décalé et exagéré, sur un ton différent
+  de la contagion sincère déjà notée — pour se moquer gentiment plutôt
+  que par réflexe.
+- **Prend la place convoitée** (s'installe sur le coussin/la chaise
+  qu'on allait prendre) — transposition du « chat qui prend ta place ».
+- **Petit détour volontaire dans les jambes** de quelqu'un qui marche,
+  comme pour le ralentir un instant — à garder bref, jamais près d'un
+  escalier ou les mains chargées.
+- **Pousse doucement la main de quelqu'un qui tient un objet**, comme
+  pour réclamer alors qu'il n'a besoin de rien — un geste espiègle
+  plutôt qu'un vrai besoin, sans jamais faire perdre l'objet.
 
 ## Tableau de synthèse
 
