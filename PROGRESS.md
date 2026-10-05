@@ -52,8 +52,8 @@
   (tête + murmure) pendant la sieste profonde ; marque un petit signe discret quand quelqu'un part (symétrique de
   l'accueil au retour) ; se fatigue visiblement à basse énergie (tête, jamais les jambes) ; apprend un coin favori
   distinct pour se poser ou se reposer ; marque une pause avant un couloir étroit ; s'ébroue après une vraie
-  immobilité prolongée plutôt que sur une simple minuterie. Tout testé (19 tests automatisés), rien côté
-  entraînement RL/GPU.
+  immobilité prolongée plutôt que sur une simple minuterie ; se met au repos de sa propre initiative si sa vraie
+  batterie descend sous 25 %. Tout testé (21 tests automatisés), rien côté entraînement RL/GPU.
 
 ## En cours — l'apprentissage (arrêté ce soir, reprise possible)
 

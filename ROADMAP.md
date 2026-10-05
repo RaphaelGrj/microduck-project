@@ -1528,10 +1528,10 @@ Phase 4 « plus tard », pas dans le chantier actif.
 
 ### 2026-10-05 — session cloud (sans GPU), "Occupation autonome" codé et testé
 Session Claude Code dans le cloud (pas d'accès au PC/GPU de l'utilisateur, consigne explicite) : avance uniquement le
-comportemental pur de `microduck-brain` (`brain.py`, `exploration.py`), rien côté `microduck_rl`/RL. 12 commits
+comportemental pur de `microduck-brain` (`brain.py`, `exploration.py`), rien côté `microduck_rl`/RL. 13 commits
 (`microduck-brain` : `97e60fb`, `f9da070`, `a5dc2df`, `3ec1d95`, `9afa476`, `d16cc67`, `7bf770a`, `dbeaba1`,
-`9981a2f`, `e702362`), suite complète de tests passante (19 tests `test_brain.py` + `test_exploration.py`, dont un
-test d'intégration longue simulation combinant plusieurs fonctions à la fois).
+`9981a2f`, `e702362`, `b872fbf`), suite complète de tests passante (21 tests `test_brain.py` + `test_exploration.py`,
+dont un test d'intégration longue simulation combinant plusieurs fonctions à la fois).
 
 - **"Occupation autonome et recherche d'attention" implémenté** (section ROADMAP ajoutée plus tôt la même session) :
   `JeuSolitaire` et `RechercheAttention` (classes `Etat`) — au-delà de `SEUIL_ENNUI_S` (10 min) sans interaction, le
@@ -1567,6 +1567,12 @@ test d'intégration longue simulation combinant plusieurs fonctions à la fois).
   automatiquement en mode calme (règle déjà en place pour tous les sons).
 - **Test d'intégration** : une simulation longue (900 s, départ + retour + chute + ennui dans la même run) vérifie
   que toutes les fonctions ajoutées cette session ne s'interfèrent pas entre elles.
+- **Va se recharger de sa propre initiative sur batterie réelle basse** (`Brain.BATTERIE_BASSE_PCT = 25.0`,
+  `_batterie_pct` lu depuis `state["battery"]["percent"]`) : bascule en `nap` dès que la vraie batterie descend sous
+  le seuil, en plus du déclencheur existant sur l'énergie comportementale simulée (`humeur.energie`) — les deux
+  conditions sont indépendantes (`or`), aucune n'écrase l'autre. **Limite assumée** : « se recharger » veut dire ici
+  se mettre au repos (`nap`), pas se déplacer physiquement vers une station de charge — même limite de navigation
+  que `coin_favori`/`Accueil`, pas de contrôleur point-à-point dans `brain.py`.
 - **Reste à faire** (pistes « Robot seul » encore non codées) : « boude après réprimande » — bloqué, aucune
   détection de ton de voix existante dans le projet (hors scope d'une session sans micro/pipeline audio) ; faire
   effectivement se déplacer le canard vers son coin favori une fois une navigation-vers-un-point disponible ;
