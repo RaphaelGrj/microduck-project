@@ -1,7 +1,7 @@
 # Progression — Projet Microduck
 
 > Vue d'ensemble rapide. Détails complets : `ROADMAP.md`. Contexte technique : `CLAUDE.md`.
-> Dernière mise à jour : 2026-10-04.
+> Dernière mise à jour : 2026-10-05.
 
 ## Fait
 
@@ -46,6 +46,14 @@
   - étude de deux projets communautaires (voix pour Home Assistant, navigation/carte de la maison) : on s'appuiera dessus.
 - **Simulateur officiel en ligne découvert** (essai des compétences du fabricant depuis un
   navigateur).
+- **2026-10-05, session cloud (sans PC/GPU, comportemental pur dans `microduck-brain`)** : le canard ne reste
+  plus simplement passif si on ne s'occupe pas de lui depuis longtemps — il joue seul, ou va chercher l'attention
+  de l'habitant présent ou du chat ; mémorise l'endroit précis où il est tombé pour l'éviter ; a de petits « rêves »
+  (tête + murmure) pendant la sieste profonde ; marque un petit signe discret quand quelqu'un part (symétrique de
+  l'accueil au retour) ; se fatigue visiblement à basse énergie (tête, jamais les jambes) ; apprend un coin favori
+  distinct pour se poser ou se reposer ; marque une pause avant un couloir étroit ; s'ébroue après une vraie
+  immobilité prolongée plutôt que sur une simple minuterie. Tout testé (19 tests automatisés), rien côté
+  entraînement RL/GPU.
 
 ## En cours — l'apprentissage (arrêté ce soir, reprise possible)
 
