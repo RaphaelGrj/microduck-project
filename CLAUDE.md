@@ -285,7 +285,7 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   aux clients → `audio.py`/`MicroAlsa` à rebrancher (contribution amont : exposer ces événements dans `robot.subscribe`).
 - **Fin de nuit (2026-10-05)** : décision de tout coder et de valider d'un coup plus tard. Faits : taquineries lots B, C,
   D (partie sûre), maison (alarme fumée prioritaire, météo, tours HA), social, chargeur appris, état « porté »
-  (`safety.picked_up`), caresse par le courant (`currents_ma`). 145 tests dont endurance + invariants de sécurité.
+  (`safety.picked_up`), caresse par le courant (`currents_ma`). 142 tests dont endurance + invariants de sécurité.
   **Patch amont prêt** : `microduck-brain/contrib/robotd-audio-state.patch` (robotd publie caresse/sons dans `robot.state`).
 - **Point d'entrée = `canard.py`** (cerveau + HA + ToF + caméra, `--chat`, `--micro`) : `pont_ha.py` seul lance le cerveau
   sans ToF ni caméra (le canard ne marche alors jamais). Service Pi mis à jour en conséquence (numpy/OpenCV nécessaires).

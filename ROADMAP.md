@@ -1683,7 +1683,7 @@ qui bouge (vérité terrain) ; (4) coin de sieste : `eval_promenade.py` avec én
 ### 2026-10-05, fin de nuit — tout le code faisable sans robot, validation groupée plus tard
 
 Décision : pas de `duck-sim` dans le cloud (Hugging Face bloqué) → **tout coder, tout valider d'un coup plus tard**.
-`microduck-brain` : **145 tests unitaires** (dont 3 d'endurance) ; tout compile en Python 3.11.
+`microduck-brain` : **142 tests unitaires** (dont 3 d'endurance) ; tout compile en Python 3.11.
 
 - **Taquineries lots B, C, D (partie sûre)** : voir « Chantier suivant » ci-dessus. Nouveau `balle.py` (veille de la
   balle, 2 images/s ; `approach.py` lui délègue son estimation).
