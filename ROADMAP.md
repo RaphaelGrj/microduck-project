@@ -1680,6 +1680,43 @@ qui bouge (vérité terrain) ; (4) coin de sieste : `eval_promenade.py` avec én
 - **Défaut trouvé** : une discussion dense passait parfois pour de la musique (le canard aurait dansé) → le tempo exige
   maintenant une corrélation au double de la période et 2 s de tempo stable. 110 tests, robustes sur 20 graines.
 
+### 2026-10-05, fin de nuit — tout le code faisable sans robot, validation groupée plus tard
+
+Décision : pas de `duck-sim` dans le cloud (Hugging Face bloqué) → **tout coder, tout valider d'un coup plus tard**.
+`microduck-brain` : **145 tests unitaires** (dont 3 d'endurance) ; tout compile en Python 3.11.
+
+- **Taquineries lots B, C, D (partie sûre)** : voir « Chantier suivant » ci-dessus. Nouveau `balle.py` (veille de la
+  balle, 2 images/s ; `approach.py` lui délègue son estimation).
+- **Maison** : alarme fumée / CO (`[[appareil]] type = "fumee"`) **prioritaire sur tout**, même le mode calme, la sieste,
+  une conversation ou les bras ; météo (`type = "meteo"`, `weather.*`) : réagit au *début* de la pluie, à la neige,
+  se blottit dans son coin par orage, moins envie de promenade quand il pleut ; tours sur demande (boutons HA :
+  salut, toupie à l'odométrie, assis/debout) ; toilette après une impression.
+- **Social** : salut propre à chaque habitant (choisi par son nom, stable), découragement progressif (demande d'attention
+  ignorée → il demande deux fois moins souvent, puis s'occupe seul), geste signature une fois par jour, gêne après une
+  chute devant quelqu'un, attente inquiète quand quelqu'un tarde (heure habituelle de `memoire.py`), refuge après une
+  série de détonations (pétards, orage).
+- **Navigation** : chargeur appris (la batterie remonte sans qu'il bouge) et retour au chargeur sur batterie basse ;
+  coin d'observation en journée. HA : `binary_sensor.microduck_veille`, `sensor.microduck_blagues`.
+- **Ce que `robot.state` sait déjà** (lu dans le code officiel) : `safety.picked_up` (détecteur officiel « pris dans
+  les bras ») → état `porte` (M9 « Held ») ; `currents_ma` (v36, « la seule mesure de force extérieure ») → la caresse
+  utilise aussi le courant des servos de tête ; `targets` (consignes réelles).
+- **Contribution amont prête** : `microduck-brain/contrib/robotd-audio-state.patch` pour `pollen-robotics/microduck`
+  — `robotd` publie `RobotState.audio = {petting, pettings, noises, voices}` (compteurs, jamais manqués par un abonné
+  décimé). Compile, tests officiels `duck-ipc-proto` (+1), `robotd`, `robotctl` passent. Débloque la caresse audio
+  officielle et les sons pour le cerveau (le micro est mono-client et `robotd` l'occupe). Le cerveau le lit déjà.
+- **Défauts trouvés par les tests** : arrêté pendant une sieste du mode calme, le cerveau laissait le canard assis et le
+  croyait debout au démarrage suivant (chaque `sit_toggle` aurait fait l'inverse) → `arret()` relève toujours, et le
+  premier tick se cale sur `policy == "sit"` ; une demande d'attention était jugée « ignorée » 10 s après (60 s
+  maintenant) ; une course dans un test HA.
+- **Tests d'endurance** (`test_endurance.py`) : 3 × 2 h et 2 × 1 h simulées avec un flux aléatoire de tous les événements,
+  chutes, prises dans les bras et capteurs factices ; invariants à chaque commande : jamais de marche sans capteur de
+  distance, jamais un pas vers un vide, aucune commande de marche dans les bras, aucun son en mode calme hors alarme
+  incendie, jamais laissé assis à l'arrêt.
+
+**À valider d'un coup (PC + `duck-sim`, puis robot)** : tout ce qui est listé dans les journaux du 2026-10-05 ; en
+priorité ce qui touche la sécurité (promenade, aspirateur, poussée de balle, fausse chute, navigation), puis les
+réglages audio (seuils sur le vrai micro), la caresse (amplitude, courant) et `ground_pick`.
+
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
 Vue d'ensemble du **Chantier actif** (section plus haut) et de la table « Interactions par habitant » (Humains)
@@ -1715,8 +1752,9 @@ Après la validation dans `duck-sim` des ajouts du 2026-10-05 : **tout ce qui es
 envers les humains » ci-dessus, 35 idées) — déplacer / planquer les objets au sol, imiter l'humain pour s'en moquer, faux
 endormi, photobombe, etc. Triées ci-dessous selon les briques existantes ; on les code dans cet ordre.
 
-**État (2026-10-05, nuit) : socle commun et lot A FAITS** (`taquineries.py` + états de `brain.py`, 15 tests dans
-`test_taquineries.py`) ; non essayés contre `duck-sim` (voir le journal). Lots B, C, D : à faire.
+**État (2026-10-05, nuit) : socle commun, lot A, lot B, lot C (sauf ce qui demande de voir une personne marcher) et la
+partie sûre du lot D FAITS** (`taquineries.py`, `balle.py`, `audio.py`, états de `brain.py` ; tests dans
+`test_taquineries.py`) ; rien d'essayé contre `duck-sim` (validation groupée plus tard, décision du 2026-10-05).
 
 **Socle commun, à coder en premier** (sans lui, une taquinerie devient une nuisance) — **fait** (4 par heure, 5 min
 d'écart, familiarité ≥ 0,6, stop = bouton HA `button.microduck_stop_taquinerie` ou événement `non`, bloque 30 min ;
@@ -1741,7 +1779,9 @@ running gag après 5 fois la même blague) :
 - fausse feinte avant un tir — tête vers une direction, tir dans l'autre (`approach.py`, Phase 2) ;
 - trophée de malice et running gag — mémoire des blagues ci-dessus.
 
-**Lot B — déplacer / jouer avec les objets au sol** (le cœur de « déplacer les objets ») :
+**Lot B — déplacer / jouer avec les objets au sol** (le cœur de « déplacer les objets ») — **fait** : pousser la balle
+hors de portée, **mime** de vol (`ground_pick` = s'accroupir et piquer le sol, piloté par le robot ; on ne sait pas s'il
+saisit : à requalifier sur le robot), aspirateur (curiosité, barre le chemin, s'écarte toujours avant 30 cm) :
 - pousser un objet léger juste hors de portée — la balle orange existe déjà (vision HSV + approche + tir doux
   `BallKickPasse` en entraînement) : la pousser quand une main s'en approche (ToF), une ou deux fois seulement ;
 - vol et planque ludique d'un petit objet — skill officiel `ground_pick` (déjà accepté par `robot.do`) ; à étudier :
@@ -1751,7 +1791,9 @@ running gag après 5 fois la même blague) :
 - taquiner le robot aspirateur — son état est dans HA (`vacuum.*` : `cleaning`), le ToF le voit comme un obstacle
   mobile : lui barrer brièvement le chemin, sans jamais le suivre.
 
-**Lot C — imiter l'humain pour se moquer** (perception à construire) :
+**Lot C — imiter l'humain pour se moquer** (perception à construire) — **fait** : mimer l'intonation, compter les
+éternuements. **Volontairement pas fait** : imiter le « non » de l'humain (« non » est le signal stop des taquineries).
+Restent ceux qui demandent de voir une personne marcher (NPU) :
 - mimer le ton de voix de qui l'appelle — extraire la courbe de hauteur (montante / descendante) au micro, la
   rejouer en sons de canard (`inquire` monte, à voir quels sons `robot.sound` permet) ;
 - imiter en exagérant un geste qu'on vient de faire (« non » de la tête après qu'on lui a dit non) — le « non »
@@ -1762,7 +1804,8 @@ running gag après 5 fois la même blague) :
   personne sur le NPU du robot (à profiler à la livraison) ; garde-fous forts (jamais près d'un escalier, mains
   chargées, ni d'une personne âgée ou d'un enfant qui court).
 
-**Lot D — plus tard (perception lourde ou risque)** : photobombe / selfie / appel vidéo (détecter un téléphone pointé
+**Lot D — plus tard (perception lourde ou risque)** — **partie sûre faite** : fausse chute comique (dandinement à
+0,25 rad + assis, aucune vraie perte d'équilibre), parodie de notification (deux chirps). Le reste : photobombe / selfie / appel vidéo (détecter un téléphone pointé
 ailleurs), s'installer sur l'objet cherché / le tapis de yoga / l'outil de l'atelier, « superviser » un rangement, air
 mystérieux quand quelqu'un cherche (reconnaissance d'activité) ; parodie sonore de notification (dépend des sons
 qu'accepte `robot.sound`) ; fausse chute comique (à faire avec `robot.pose` + `sit_toggle` sans vraie perte
