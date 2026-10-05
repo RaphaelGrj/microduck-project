@@ -276,6 +276,9 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   (`caresse.py`, écart des servos de tête — hypothèse à valider), 1-2-3 soleil (`mouvement.py` + boutons MQTT),
   navigation vers un point (`navigation.py` : sieste dans le coin favori), garde-fou « chat agacé », réflexes sonores
   (`audio.py` : sursaut, appel, applaudissements, danse au tempo ; micro ALSA non testé).
+- **Chantier suivant décidé** (après validation dans `duck-sim`) : **taquiner l'humain** (déplacer/planquer les objets au
+  sol, imiter pour se moquer, faux endormi...) — tri en lots A-D et socle commun (budget de malice, signal « stop »,
+  mémoire des blagues) dans la ROADMAP, section « Chantier suivant ».
 - **Point d'entrée = `canard.py`** (cerveau + HA + ToF + caméra, `--chat`, `--micro`) : `pont_ha.py` seul lance le cerveau
   sans ToF ni caméra (le canard ne marche alors jamais). Service Pi mis à jour en conséquence (numpy/OpenCV nécessaires).
 

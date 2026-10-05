@@ -1686,5 +1686,60 @@ combinant `mouvement.py` et le tempo d'`audio.py` ; « silence inhabituel » (ha
 « d'observation » (`coin_favori("chill")`) visité en journée ; apprendre la position du chargeur (là où la batterie
 remonte) pour y aller sur batterie basse ; publier `veille`/`jeu en cours` dans HA.
 
+### Chantier suivant (décidé le 2026-10-05) : « taquiner l'humain »
+
+Après la validation dans `duck-sim` des ajouts du 2026-10-05 : **tout ce qui est taquinerie** (section « Taquineries
+envers les humains » ci-dessus, 35 idées) — déplacer / planquer les objets au sol, imiter l'humain pour s'en moquer, faux
+endormi, photobombe, etc. Triées ci-dessous selon les briques existantes ; on les code dans cet ordre.
+
+**Socle commun, à coder en premier** (sans lui, une taquinerie devient une nuisance) :
+- un **budget de malice** : quelques taquineries par heure au plus, jamais la même deux fois de suite, seulement si
+  la familiarité de la personne est élevée (`memoire.py`), jamais en mode calme, la nuit, pendant une conversation
+  vocale ou juste après un accueil ;
+- un **signal « stop »** qui coupe net toute taquinerie en cours et en bloque de nouvelles pendant un moment :
+  « non » vocal (quacksat), main qui l'écarte (ToF), `fin_jeu`, bouton HA ;
+- la **mémoire des blagues** (compteurs par taquinerie et par personne) : sert au « running gag » et au « trophée de
+  malice » (petit air fier qui grandit avec l'historique).
+
+**Lot A — faisable avec ce qui existe déjà (code pur, testable contre `duck-sim`)** :
+- ~~« Non » théâtral avant d'obéir~~ — **fait** (état `taquin`, 1 fois sur 5 avant 1-2-3 soleil) ;
+- feinte affectueuse (coup de bec dévié + petit bond en arrière) — sur la main tendue (`main_tendue.py`) ;
+- se faire désirer avant la caresse (esquive la main qui approche une fois, accepte la suivante) — ToF ;
+- faux endormi quand on l'appelle / fait mine de ne pas entendre, puis réaction exagérée — sur l'`appel` (audio) ;
+- regard mystérieux vers un point vide — `robot.look` scripté, sans aucune alerte derrière ;
+- bâillement « sarcastique » / faux bâillement d'ennui pendant une longue discussion — geste + son, discussion
+  repérée par le niveau sonore continu (`audio.py`) ;
+- « toujours le dernier mot » — petit son dans les silences d'une conversation (parole puis silence, `audio.py`) ;
+- fausse feinte avant un tir — tête vers une direction, tir dans l'autre (`approach.py`, Phase 2) ;
+- trophée de malice et running gag — mémoire des blagues ci-dessus.
+
+**Lot B — déplacer / jouer avec les objets au sol** (le cœur de « déplacer les objets ») :
+- pousser un objet léger juste hors de portée — la balle orange existe déjà (vision HSV + approche + tir doux
+  `BallKickPasse` en entraînement) : la pousser quand une main s'en approche (ToF), une ou deux fois seulement ;
+- vol et planque ludique d'un petit objet — skill officiel `ground_pick` (déjà accepté par `robot.do`) ; à étudier :
+  ce que fait vraiment le skill (prendre ? tenir ? lâcher ?), et reconnaître un objet « sans importance » (couleur
+  ou tag NFC, pas de deep learning sur le Pi) ; s'échapper si on approche = recul + rotation (zone morte : pas de
+  fuite fine) ;
+- taquiner le robot aspirateur — son état est dans HA (`vacuum.*` : `cleaning`), le ToF le voit comme un obstacle
+  mobile : lui barrer brièvement le chemin, sans jamais le suivre.
+
+**Lot C — imiter l'humain pour se moquer** (perception à construire) :
+- mimer le ton de voix de qui l'appelle — extraire la courbe de hauteur (montante / descendante) au micro, la
+  rejouer en sons de canard (`inquire` monte, à voir quels sons `robot.sound` permet) ;
+- imiter en exagérant un geste qu'on vient de faire (« non » de la tête après qu'on lui a dit non) — le « non »
+  vocal via quacksat ; le geste vu à la caméra demande une détection de personne (NPU) ;
+- compter les éternuements — détecteur audio d'éternuement à construire (motif bref et fort, à étalonner) ;
+- suivre les pas en miroir (copycat), se mettre en travers du chemin, détour dans les jambes, petite course, prendre
+  la place / le siège « juste trop tard » — demandent de **voir une personne marcher et où elle va** : détection de
+  personne sur le NPU du robot (à profiler à la livraison) ; garde-fous forts (jamais près d'un escalier, mains
+  chargées, ni d'une personne âgée ou d'un enfant qui court).
+
+**Lot D — plus tard (perception lourde ou risque)** : photobombe / selfie / appel vidéo (détecter un téléphone pointé
+ailleurs), s'installer sur l'objet cherché / le tapis de yoga / l'outil de l'atelier, « superviser » un rangement, air
+mystérieux quand quelqu'un cherche (reconnaissance d'activité) ; parodie sonore de notification (dépend des sons
+qu'accepte `robot.sound`) ; fausse chute comique (à faire avec `robot.pose` + `sit_toggle` sans vraie perte
+d'équilibre, ou en RL — jamais au risque d'une vraie chute) ; ricanement si quelqu'un glisse (garde-fou fort :
+inquiétude au moindre doute, à ne faire qu'avec une détection fiable).
+
 **Toujours hors de portée sans nouvelle infrastructure** : détection de ton de voix (boude après réprimande), rire
 (trop proche de la parole sans modèle), position des habitants (UWB) pour un vrai messager et l'accueil à l'entrée.
