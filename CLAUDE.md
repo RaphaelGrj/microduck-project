@@ -279,6 +279,10 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
 - **Chantier suivant décidé** (après validation dans `duck-sim`) : **taquiner l'humain** (déplacer/planquer les objets au
   sol, imiter pour se moquer, faux endormi...) — tri en lots A-D et socle commun (budget de malice, signal « stop »,
   mémoire des blagues) dans la ROADMAP, section « Chantier suivant ».
+- **Taquineries socle + lot A faits** (`taquineries.py`, 2026-10-05 nuit) ; lots B-D à faire. `duck-sim` ne tourne pas
+  dans le cloud tant que `huggingface.co` est bloqué par l'environnement (politiques ONNX).
+- **Micro du robot** : occupé par `robotd` (le `pet-detect` officiel est AUDIO ; sentinelle Noise/Voice), rien d'exposé
+  aux clients → `audio.py`/`MicroAlsa` à rebrancher (contribution amont : exposer ces événements dans `robot.subscribe`).
 - **Point d'entrée = `canard.py`** (cerveau + HA + ToF + caméra, `--chat`, `--micro`) : `pont_ha.py` seul lance le cerveau
   sans ToF ni caméra (le canard ne marche alors jamais). Service Pi mis à jour en conséquence (numpy/OpenCV nécessaires).
 

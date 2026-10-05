@@ -1657,6 +1657,29 @@ fausse main n'est vue en `chill` près des meubles ; (3) 1-2-3 soleil en arène 
 qui bouge (vérité terrain) ; (4) coin de sieste : `eval_promenade.py` avec énergie basse. **À la livraison** : caresse
 (amplitude), `pet-detect`, chemin de `tofd`, micro (périphérique ALSA, partage avec quacksat), mémoire sur Pi 3B+.
 
+### 2026-10-05, nuit — validation `duck-sim` bloquée ; taquineries : socle + lot A
+
+- **`duck-sim` dans le cloud : presque**. Le dépôt officiel `pollen-robotics/microduck` se clone, les daemons compilent
+  (Rust ≥ 1.99 requis), `uv sync` de `microduck_rl` passe sur CPU — mais les **politiques ONNX** (marche, debout…) ne
+  sont que sur Hugging Face, et `huggingface.co` est **refusé par la politique réseau** de l'environnement cloud (le
+  connecteur HF ne lit que du texte). À ouvrir dans les réglages de l'environnement (Network access → Custom, ajouter
+  `huggingface.co`) ; sinon la validation se fait sur le PC (ordre dans le journal précédent).
+- **Découverte en lisant le code officiel** : le `pet-detect` de Pollen est **audio** (le micro est dans la tête, il
+  entend le grattage ; petit CNN log-mel), exécuté **par `robotd`**, qui roucoule tout seul ; une « sentinelle » y classe
+  déjà les sons en `Noise` (claquement, choc) / `Voice` (parole). **Rien de tout ça n'est exposé aux clients** (« pas de
+  consommateur avant le cerveau autonome »), et **le micro n'accepte qu'un client** : notre `MicroAlsa` (audio.py) ne
+  pourra pas tourner à côté. Conséquences : (1) la caresse par les servos de tête (`caresse.py`) reste utile tant que
+  `pet-detect` n'est pas exposé ; (2) piste de **contribution amont** : publier petting / Noise / Voice dans
+  `robot.subscribe` — exactement ce dont notre cerveau a besoin ; (3) nos réflexes sonores (`audio.py`) devront se
+  brancher sur ce flux ou sur un partage ALSA.
+- **Taquineries, socle commun** (`taquineries.py`) : budget de malice, signal stop, mémoire des blagues persistante
+  (running gag, trophée de malice). **Lot A** : feinte de bec, esquive puis accepte la main, faux endormi / sourde
+  oreille sur un appel, regard mystérieux, faux bâillement d'ennui, dernier mot dans les silences, « non » théâtral (sous
+  budget), fausse feinte avant le tir (`approach.py`, option `feinte`, désactivée par défaut : la tête pèse 38 % de la
+  masse, **à mesurer en arène** avec `approach_eval.py --feinte` avant de l'activer dans `jeu.py`).
+- **Défaut trouvé** : une discussion dense passait parfois pour de la musique (le canard aurait dansé) → le tempo exige
+  maintenant une corrélation au double de la période et 2 s de tempo stable. 110 tests, robustes sur 20 graines.
+
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
 Vue d'ensemble du **Chantier actif** (section plus haut) et de la table « Interactions par habitant » (Humains)
@@ -1692,7 +1715,12 @@ Après la validation dans `duck-sim` des ajouts du 2026-10-05 : **tout ce qui es
 envers les humains » ci-dessus, 35 idées) — déplacer / planquer les objets au sol, imiter l'humain pour s'en moquer, faux
 endormi, photobombe, etc. Triées ci-dessous selon les briques existantes ; on les code dans cet ordre.
 
-**Socle commun, à coder en premier** (sans lui, une taquinerie devient une nuisance) :
+**État (2026-10-05, nuit) : socle commun et lot A FAITS** (`taquineries.py` + états de `brain.py`, 15 tests dans
+`test_taquineries.py`) ; non essayés contre `duck-sim` (voir le journal). Lots B, C, D : à faire.
+
+**Socle commun, à coder en premier** (sans lui, une taquinerie devient une nuisance) — **fait** (4 par heure, 5 min
+d'écart, familiarité ≥ 0,6, stop = bouton HA `button.microduck_stop_taquinerie` ou événement `non`, bloque 30 min ;
+running gag après 5 fois la même blague) :
 - un **budget de malice** : quelques taquineries par heure au plus, jamais la même deux fois de suite, seulement si
   la familiarité de la personne est élevée (`memoire.py`), jamais en mode calme, la nuit, pendant une conversation
   vocale ou juste après un accueil ;
@@ -1701,7 +1729,7 @@ endormi, photobombe, etc. Triées ci-dessous selon les briques existantes ; on l
 - la **mémoire des blagues** (compteurs par taquinerie et par personne) : sert au « running gag » et au « trophée de
   malice » (petit air fier qui grandit avec l'historique).
 
-**Lot A — faisable avec ce qui existe déjà (code pur, testable contre `duck-sim`)** :
+**Lot A — faisable avec ce qui existe déjà (code pur, testable contre `duck-sim`)** — **fait** sauf validation :
 - ~~« Non » théâtral avant d'obéir~~ — **fait** (état `taquin`, 1 fois sur 5 avant 1-2-3 soleil) ;
 - feinte affectueuse (coup de bec dévié + petit bond en arrière) — sur la main tendue (`main_tendue.py`) ;
 - se faire désirer avant la caresse (esquive la main qui approche une fois, accepte la suivante) — ToF ;
