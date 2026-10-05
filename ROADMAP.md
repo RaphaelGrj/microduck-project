@@ -1529,10 +1529,10 @@ Phase 4 « plus tard », pas dans le chantier actif.
 ### 2026-10-05 — session cloud (sans GPU), "Occupation autonome" codé et testé
 Session Claude Code dans le cloud (pas d'accès au PC/GPU de l'utilisateur, consigne explicite) : avance uniquement le
 comportemental pur de `microduck-brain` (`brain.py`, `exploration.py`, `pont_ha.py`), rien côté `microduck_rl`/RL.
-15 commits (`microduck-brain` : `97e60fb`, `f9da070`, `a5dc2df`, `3ec1d95`, `9afa476`, `d16cc67`, `7bf770a`,
-`dbeaba1`, `9981a2f`, `e702362`, `b872fbf`, `fe59556`, `f39d491`), suite complète de tests passante (24 tests
-`test_brain.py` + `test_exploration.py` + `test_ha.py`, dont un test d'intégration longue simulation combinant
-plusieurs fonctions à la fois).
+16 commits (`microduck-brain` : `97e60fb`, `f9da070`, `a5dc2df`, `3ec1d95`, `9afa476`, `d16cc67`, `7bf770a`,
+`dbeaba1`, `9981a2f`, `e702362`, `b872fbf`, `fe59556`, `f39d491`, `7f6f824`), suite complète de tests passante
+(27 tests `test_brain.py` + `test_exploration.py` + `test_ha.py`, dont un test d'intégration longue simulation
+combinant plusieurs fonctions à la fois).
 
 - **"Occupation autonome et recherche d'attention" implémenté** (section ROADMAP ajoutée plus tôt la même session) :
   `JeuSolitaire` et `RechercheAttention` (classes `Etat`) — au-delà de `SEUIL_ENNUI_S` (10 min) sans interaction, le
@@ -1584,6 +1584,12 @@ plusieurs fonctions à la fois).
   `binary_sensor.microduck_chat_vu` (on/off) avec un attribut « depuis quand il est parti » mémorisé à chaque
   disparition — absence de veille caméra (cas des tests qui n'en branchent pas) traitée comme « non vu », jamais
   un plantage.
+- **« Heures calmes » nocturnes optionnelles implémentées** (table « Humains », routine « Heure, HA » →
+  États Stretch/Nap) : `Brain(heures_calmes=(debut, fin), horloge=...)` — synthétise les mêmes événements
+  `calme_on`/`calme_off` que l'interrupteur Home Assistant pendant la plage configurée (ex. 23h-7h), réutilisant
+  tout le chemin déjà testé plutôt que de le dupliquer. **Opt-in** : `heures_calmes=None` par défaut, aucun
+  changement de comportement pour un cerveau qui ne le configure pas ; un toggle HA manuel pendant la nuit reste
+  respecté jusqu'au prochain changement d'heure.
 - **Reste à faire** (pistes « Robot seul » encore non codées) : « boude après réprimande » — bloqué, aucune
   détection de ton de voix existante dans le projet (hors scope d'une session sans micro/pipeline audio) ; faire
   effectivement se déplacer le canard vers son coin favori une fois une navigation-vers-un-point disponible ;
