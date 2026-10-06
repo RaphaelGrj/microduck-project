@@ -166,7 +166,10 @@ fin ou à l'échec d'une impression.
   HA.
 - Pistes « vivant » : circadien, sons gratuits, téléphone, visiteur, calendrier, bâillement, coup d'œil, repas,
   compagnie.
-- Lumière oubliée et objets au sol publiés dans HA. 232 tests. Détail dans la ROADMAP.
+- Lumière oubliée et objets au sol publiés dans HA. Retrait au vacarme, bips d'appareil, relation à l'aspirateur.
+- Relecture : 13 défauts corrigés. **Piège** : `robot.state.joints`/`targets`/`currents_ma` = 15 entrées, le **bec à
+  l'index 9** (tête 5..8, jambe droite 10..14).
+- 249 tests. Détail dans la ROADMAP.
 
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 

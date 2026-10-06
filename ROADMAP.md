@@ -1816,6 +1816,16 @@ robot.
   sol, publiés dans HA.
 - **À étalonner sur le robot** : seuils audio (téléphone, bâillement), seuil de luminosité 0,25, et le critère de
   dérive des servos.
+- **Relecture du code de la nuit : 13 défauts réels corrigés**, chacun avec son test dans `test_revue.py`. Le plus
+  important : `robot.state.joints` compte **15** articulations, avec le **bec à l'index 9** (`duck-ipc-proto`
+  `JOINT_NAMES`). Toute la jambe droite était décalée d'un cran dans le suivi des servos.
+  - Autres corrections : sieste possible pendant un appel, l'alarme incendie jamais rendue muette, présence initiale
+    lue dans HA au démarrage, cycle de batterie conservé au redémarrage, résumé HA calculé hors de la boucle à 50 Hz.
+- **Ambiance et maison** :
+  - il se retire dans son coin quand l'ambiance est très bruyante ;
+  - les bips d'un appareil (four, micro-ondes) le rendent curieux ;
+  - avec l'aspirateur, il est méfiant les premières fois, curieux ensuite, puis l'ignore.
+- `microduck-brain` : **249 tests**.
 
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
