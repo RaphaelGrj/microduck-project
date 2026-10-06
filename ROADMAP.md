@@ -1846,7 +1846,17 @@ robot.
 - **Voix personnelle qui évolue** : les petits sons qui font réagir la maison reviennent plus souvent, et tous
   dérivent un peu chaque jour.
 - **Pétards et feux d'artifice**, distincts du tonnerre : il va s'abriter 10 min.
-- `microduck-brain` : **260 tests**.
+- **Deux relectures** (la tienne et une automatique) : tout est corrigé, avec des tests.
+  - Champs `null` de robotd (`battery`, `safety`, `odom`, `frames`) : ils plantaient le tick ou le ToF.
+  - Ton du nom : il écrasait la commande qui le suivait.
+  - Le niveau de référence du ton restait figé.
+  - Des applaudissements forts étaient pris pour des pétards.
+  - Un visiteur sans prénom était mémorisé comme un « être ».
+  - Deux déclencheurs HA sur la même entité s'écrasaient.
+  - Mémoire : arrêt propre sur SIGTERM, avec une dernière sauvegarde.
+  - Scénario `coup_oeil` du banc : impossible à réussir tel quel, corrigé.
+- `ha.exemple.toml` est à jour : toutes les options du cerveau y figurent.
+- `microduck-brain` : **272 tests**.
 
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 

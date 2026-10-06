@@ -173,7 +173,9 @@ fin ou à l'échec d'une impression.
 - **À la livraison** : lancer `microduck-brain/bench_cerveau.py` sur le robot. Sur PC, une trame prend 0,03 ms en
   moyenne, 2 ms au pire (budget 20 ms).
 - `valider_sim.py` : 13 scénarios, dont `bec_index` (hypothèse du bec à l'index 9 à confirmer en premier). Saisons,
-  voix personnelle, pétards. 260 tests.
+  voix personnelle, pétards.
+- Deux relectures corrigées (champs `null` de robotd, ton du nom, pétarades, déclencheurs HA fusionnés, SIGTERM).
+  `ha.exemple.toml` complet. 272 tests.
 
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
