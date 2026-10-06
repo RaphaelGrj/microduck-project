@@ -1499,6 +1499,18 @@ clair et sombre ; pas encore essayée avec le canard.
 - **Écarté** : l'appairage par QR code. Le canard n'a pas d'écran, et l'appli le trouve déjà seule sur le Wi-Fi ;
   le code ne se tape qu'une fois.
 
+- **APK 0.8 (2026-10-06)** :
+  - **Où es-tu ?** : trois `chirp`, pas en mode calme.
+  - **Son look** : l'accueil prend les couleurs du schéma actif, pose par pose.
+  - **Fiche d'impression** (couleur → pièces → STL d'origine) et **photo** 4:3 dans le design.
+  - **Mise en route** : liste du jour de la livraison, cochée seule quand c'est vérifiable.
+  - **Routines** programmées.
+  - **Sauvegarde et restauration** de sa mémoire (jamais `ha.toml`).
+  - **Présence par le téléphone** : seulement l'arrivée, le départ reste à Home Assistant.
+  - **Mise à jour de l'APK** proposée (`android/version.json`).
+  - **À changer quand la branche sera fusionnée** : l'adresse de mise à jour pointe sur la branche
+    `ccr-4c5851c0-mdd2p8` (`Accueil.DEPOT`).
+
 **Plus tard** :
 - vue caméra en option (image envoyée au téléphone : à arbitrer avec la règle « rien ne sort du canard ») ;
 - son « look » (schéma actif du design) sur l'image de l'accueil ;
