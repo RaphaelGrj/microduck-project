@@ -56,3 +56,5 @@ Le canard ne parle jamais avec des mots : il s'exprime uniquement avec ses sons 
 - Robot : Microduck (Pollen Robotics), livré avec 2 batteries de rechange.
 - Développement : Windows 11 + WSL2 (Ubuntu), GPU NVIDIA RTX 5070 Ti pour l'entraînement.
 - Maison : Home Assistant OS sur Raspberry Pi 3B+, deux Prusa (MK3S → MK4S), une Elegoo Saturn 4 Ultra.
+
+Support me : https://buymeacoffee.com/raphaelgrj
