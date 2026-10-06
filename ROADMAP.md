@@ -1858,7 +1858,17 @@ robot.
 - `ha.exemple.toml` est à jour : toutes les options du cerveau y figurent.
 - **`scripts-wsl/valider-tout.sh`** fait toute la validation groupée en une commande : tests, coût du cerveau, puis
   les 13 scénarios dans `duck-sim`, scène par scène. Il écrit un rapport daté.
-- `microduck-brain` : **272 tests**.
+- **Le canard déclenche des scènes dans la maison** (projet prioritaire n°2, partie qui manquait) : sections
+  `[[action]]` de `ha.toml`.
+  - Déclencheur : un état du canard (accueil, bonjour, sieste…) ou un événement, qui appelle un service HA.
+  - Ou une phrase vocale (« canard, lumière du salon »), reconnue sur le canard ; seule la commande part vers HA.
+  - Une action dont l'entité n'est pas remplie est ignorée : `light.turn_on` sans cible allumerait toutes les
+    lumières.
+- **Mode garde** (opt-in) : maison vide et voix, choc ou coups à la porte → événement HA `microduck_garde`, avec
+  seulement le type de son.
+- **Journal de bord du jour** dans HA (`sensor.microduck_journal`).
+- Le journal des états du cerveau est maintenant borné : il grossissait d'environ 1 Mo par jour.
+- `microduck-brain` : **277 tests**.
 
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 

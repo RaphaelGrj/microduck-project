@@ -179,6 +179,8 @@ fin ou à l'échec d'une impression.
 - **Validation groupée en une commande** (WSL, après `git pull` de la branche) :
   `setsid bash ~/microduck-brain/scripts-wsl/valider-tout.sh > /dev/null 2>&1 < /dev/null &`
   Durée ~45 min. Rapport `~/validation-AAAA-MM-JJ_HHMM.txt`, à renvoyer à Claude.
+- **Canard → maison** : `[[action]]` dans `ha.toml` (état ou phrase vocale → service HA). Mode garde (opt-in),
+  journal du jour dans HA. 277 tests.
 
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
