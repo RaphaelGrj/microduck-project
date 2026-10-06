@@ -180,7 +180,9 @@ fin ou à l'échec d'une impression.
   `setsid bash ~/microduck-brain/scripts-wsl/valider-tout.sh > /dev/null 2>&1 < /dev/null &`
   Durée ~45 min. Rapport `~/validation-AAAA-MM-JJ_HHMM.txt`, à renvoyer à Claude.
 - **Canard → maison** : `[[action]]` dans `ha.toml` (état ou phrase vocale → service HA). Mode garde (opt-in),
-  journal du jour dans HA. 277 tests.
+  journal du jour dans HA.
+- **Application Microduck** (`appli.py` + `interface/`) : servie par le canard sur le réseau local (port 8090, code
+  `[appli]` dans `ha.toml`). 7 sections, dont la télécommande avec garde-fous et le diagnostic à la demande. 295 tests.
 
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 

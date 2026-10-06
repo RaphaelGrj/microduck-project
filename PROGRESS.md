@@ -85,10 +85,13 @@
       lumière du salon » à la voix ;
     - mode garde quand la maison est vide, journal de bord du jour.
   - **Qualité** :
-    - 277 tests automatiques ;
+    - 295 tests automatiques ;
     - quatre relectures du code, dont la tienne : une quarantaine de défauts réels corrigés, plusieurs touchant à la
       sécurité (vides, alarme incendie, plantages sur données manquantes) ;
     - coût mesuré : 0,03 ms par trame pour un budget de 20 ms.
+  - **Application Microduck** : une appli pour téléphone servie par le canard lui-même, sans Home Assistant. Elle a
+    7 sections : accueil, jeux, télécommande avec garde-fous, santé avec **diagnostic à la demande**, caractère,
+    réglages, journal. À activer avec un code dans `ha.toml` (`[appli]`).
   - **Validation préparée** : une seule commande sur le PC (`valider-tout.sh`) lance les tests, le banc de coût et
     13 scénarios dans `duck-sim`, puis écrit un rapport.
 

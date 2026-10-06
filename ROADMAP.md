@@ -1427,10 +1427,15 @@ la maison). Elle n'a pas de serveur ailleurs : **c'est le canard qui la sert**, 
 | Réglages | Mode calme, mode garde, couper les taquineries |
 | Journal | Les derniers états et événements, pour comprendre ce qu'il a fait |
 
-**État** : v1 en cours (2026-10-06).
-- `appli.py` dans `microduck-brain` : serveur intégré à `canard.py`, sans dépendance nouvelle.
-- `appli/` : l'interface (HTML, CSS, JS sans framework, utilisable hors ligne).
-- À valider avec `duck-sim`, puis sur le robot.
+**État : v1 faite (2026-10-06)**, vérifiée par des tests et rendue dans un navigateur au format téléphone, en thème
+clair et sombre ; pas encore essayée avec le canard.
+- `appli.py` : serveur intégré à `canard.py`, sans dépendance nouvelle.
+- `interface/` : HTML, CSS et JS sans framework.
+- Les 7 sections ci-dessus sont en place. Le diagnostic se lance à la main (bouton aussi présent dans HA).
+- La télécommande passe par le cerveau : `PasGuide`, `RegardGuide`.
+- À valider avec `duck-sim` (`[appli] code` dans `ha.toml`, puis `http://127.0.0.1:8090`), puis sur le robot.
+- Limite connue : en HTTP sur le réseau local, le navigateur n'active pas le mode hors ligne (il faudrait HTTPS).
+  L'ajout à l'écran d'accueil fonctionne quand même.
 
 **Plus tard** :
 - notifications sur le téléphone (alarme, garde, diagnostic en échec) ;
@@ -1926,6 +1931,21 @@ robot.
 - **Journal de bord du jour** dans HA (`sensor.microduck_journal`).
 - Le journal des états du cerveau est maintenant borné : il grossissait d'environ 1 Mo par jour.
 - `microduck-brain` : **277 tests**.
+
+### 2026-10-06, fin de soirée — application Microduck, diagnostic à la main, deux relectures
+
+- **Application Microduck** (téléphone, servie par le canard, sans HA) : v1 faite, voir la section « Application
+  Microduck » plus haut.
+- **Diagnostic lancé à la main** (appli ou bouton HA) : il se joue au prochain moment de repos, batterie comprise
+  (niveau, tension, santé, autonomie).
+- **Deux relectures corrigées** :
+  - actions HA : une action sans cible est refusée ; une plage horaire mal écrite ne fait plus planter le canard ; pas
+    de double appel ; le « oui » n'arrive que si l'action est vraiment partie ;
+  - mode garde : il ne s'entend plus lui-même, et une présence inconnue ne compte plus comme maison vide ;
+  - journal du jour : remis à zéro à minuit, et gardé en mémoire ;
+  - batterie : le rebond de tension est filtré ;
+  - auto-test : fonctionne aussi à 10 Hz.
+- `microduck-brain` : **295 tests**.
 
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
