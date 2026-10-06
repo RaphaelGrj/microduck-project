@@ -191,6 +191,8 @@ fin ou à l'échec d'une impression.
   la carte, usure des servos, carnet d'entretien, invités (QR), partage de chorégraphies, G-code → Prusa. 357 tests.
   Clé de l'utilisateur créée (`android/creer_cle.sh`, sauvegarde sur la carte SD du laptop) : GitHub publie l'APK à chaque
   version (`releases/latest`) ; plus d'APK dans le dépôt.
+- **Démo en ligne** (GitHub Pages, `pages.yml`, interface en chemins relatifs) : https://raphaelgrj.github.io/microduck-brain/?demo
+  — Pages à activer (Source : GitHub Actions) puis relancer le workflow.
 - **Appli ordinateur** (`microduck-brain/ordinateur/`, Electron, release `ordinateur-v*`) et **iPhone** (web, Safari →
   écran d'accueil). Design : code couleur, couleurs gardées, schémas partagés (`microduck-catalogue/schemas/`).
 
