@@ -2,7 +2,7 @@
 
 > Objectif : faire de Microduck un membre actif et autonome du foyer (présence,
 > personnalité, jeu avec moi et avec le chat), pas un gadget de démo.
-> Dernière mise à jour : 2026-10-07 (branches fusionnées dans `main`).
+> Dernière mise à jour : 2026-10-07, nuit (appli sur Android, ordinateur et iPhone ; démo en ligne).
 
 ## Où on en est (2026-10-07) — à lire en premier
 
@@ -35,7 +35,9 @@ dans `duck-sim` (le cloud n'y a pas accès). C'est la prochaine étape, elle ne 
    - iPhone : l'appli web installée depuis Safari.
 
    Le design gagne le code couleur, « Mes couleurs » et le partage des schémas (fichier, QR, `schemas/` du catalogue).
-   L'APK (1.2) est maintenant publié par GitHub avec la clé de l'utilisateur.
+   L'APK (1.3) est maintenant publié par GitHub avec la clé de l'utilisateur.
+   Démo en ligne : <https://raphaelgrj.github.io/microduck-brain/?demo>, publiée par `pages.yml`. Il reste à régler
+   Settings → Pages → Source = « GitHub Actions » (le premier essai a échoué sans ce réglage).
 
 Au-delà, le travail sans robot s'épuise : les réglages fins (seuils, gestes, caresse, index du bec) demandent le vrai
 canard.

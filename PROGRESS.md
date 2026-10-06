@@ -1,7 +1,7 @@
 # Progression — Projet Microduck
 
 > Vue d'ensemble rapide. Détails complets : `ROADMAP.md`. Contexte technique : `CLAUDE.md`.
-> Dernière mise à jour : 2026-10-06 (soir).
+> Dernière mise à jour : 2026-10-07 (nuit).
 
 ## Fait
 
@@ -94,6 +94,17 @@
     réglages, journal. À activer avec un code dans `ha.toml` (`[appli]`).
   - **Validation préparée** : une seule commande sur le PC (`valider-tout.sh`) lance les tests, le banc de coût et
     13 scénarios dans `duck-sim`, puis écrit un rapport.
+- **Application Microduck complète (2026-10-07)**, avec ou sans Home Assistant. 358 tests.
+  - **Android** : APK 1.3, publié par GitHub avec ta clé à chaque version.
+    Lien : <https://github.com/RaphaelGrj/microduck-brain/releases/latest/download/microduck.apk>
+  - **Ordinateur** (Windows, Mac, Linux) : release `ordinateur-v*`.
+  - **iPhone** : démo en ligne <https://raphaelgrj.github.io/microduck-brain/?demo> (Safari → « Sur l'écran
+    d'accueil »). Sur le canard, même chose par son adresse.
+  - **Fonctions** : installation depuis le téléphone, messages, vacances, journal et mode photo, jeux sur sa carte,
+    usure des servos, carnet d'entretien, invités, imprimantes, studio de chorégraphies.
+  - **Design 3D** : code couleur, couleurs gardées, schémas partagés.
+  - **Catalogue** `microduck-catalogue` : pièces (avec G-code pour la Prusa), chorégraphies et schémas de couleurs.
+  - Les trois dépôts sont fusionnés dans `main` (`develop` pour `microduck_rl`).
 
 ## En cours — l'apprentissage (en pause, reprise possible)
 
@@ -102,8 +113,11 @@
 
 ## À faire
 
+0. **GitHub Pages** : Settings → Pages → Source = « GitHub Actions », puis Actions → Pages → Run workflow (la démo
+   iPhone n'est pas encore en ligne sans ce réglage). Exporter les schémas de la démo de l'ancienne appli avant de la
+   désinstaller, puis installer l'APK de GitHub.
 1. **Sur ton PC** :
-   - `git pull` de la branche dans `~/microduck-brain` ;
+   - `git pull` de `main` dans `~/microduck-brain` ;
    - lancer la validation groupée : `setsid bash ~/microduck-brain/scripts-wsl/valider-tout.sh > /dev/null 2>&1 < /dev/null &` ;
    - me renvoyer le rapport `~/validation-*.txt`. Je corrige d'après les vrais résultats.
 2. **Côté Home Assistant** :
