@@ -1436,6 +1436,15 @@ clair et sombre ; pas encore essayée avec le canard.
 - À valider avec `duck-sim` (`[appli] code` dans `ha.toml`, puis `http://127.0.0.1:8090`), puis sur le robot.
 - Limite connue : en HTTP sur le réseau local, le navigateur n'active pas le mode hors ligne (il faudrait HTTPS).
   L'ajout à l'écran d'accueil fonctionne quand même.
+- **APK Android** (`microduck-brain/android/`, 2026-10-06) : coquille plein écran autour de l'interface du canard,
+  aucune logique dedans (une mise à jour du cerveau met l'appli à jour).
+  - Trouve le canard seule : elle interroge `/api/sante` sur le port 8090 de tout le sous-réseau du téléphone.
+  - Sinon, adresse à taper (mémorisée).
+  - **Mode démo** (`interface/demo.js`, canard imaginaire) pour l'essayer sans le robot.
+  - Construite sans Android Studio : `bash android/construire.sh` (paquets Ubuntu `aapt`, `dalvik-exchange`,
+    `apksigner`…). Clé de signature hors du dépôt (`~/.microduck-android/`).
+  - Logo de l'appli : `outils/logo.png` → `outils/icone_logo.py`.
+  - À tester sur le téléphone : la démo d'abord, puis contre le canard.
 
 **Plus tard** :
 - notifications sur le téléphone (alarme, garde, diagnostic en échec) ;
