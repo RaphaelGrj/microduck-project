@@ -155,6 +155,42 @@ fin ou à l'échec d'une impression.
 - Pièges : `pgrep/pkill -f` se reconnaît lui-même si le motif est dans sa propre ligne de commande ; l'outil d'édition
   fait perdre le bit exécutable d'un script WSL.
 
+## État d'avancement (2026-10-06, soir)
+- **Validation groupée** : lancer `microduck-brain/valider_sim.py` contre `duck-sim`. Il couvre 8 scénarios et donne un
+  verdict par scénario.
+- Revue de code : 10 défauts corrigés (vide vérifié à chaque trame, micro sourd à sa propre voix, caméra distante
+  refusée...), voir ROADMAP. 191 tests.
+
+## État d'avancement (2026-10-06, nuit)
+- `diagnostic.py` : batterie dans la durée, dérive des servos, journal des chutes, auto-test au réveil, publiés dans
+  HA.
+- Pistes « vivant » : circadien, sons gratuits, téléphone, visiteur, calendrier, bâillement, coup d'œil, repas,
+  compagnie.
+- Lumière oubliée et objets au sol publiés dans HA. Retrait au vacarme, bips d'appareil, relation à l'aspirateur.
+- Relecture : 13 défauts corrigés. **Piège** : `robot.state.joints`/`targets`/`currents_ma` = 15 entrées, le **bec à
+  l'index 9** (tête 5..8, jambe droite 10..14).
+- Ton grondeur ou câlin sur son nom, visiteur récurrent, présence avant le chargeur. Détail dans la ROADMAP.
+- **À la livraison** : lancer `microduck-brain/bench_cerveau.py` sur le robot. Sur PC, une trame prend 0,03 ms en
+  moyenne, 2 ms au pire (budget 20 ms).
+- `valider_sim.py` : 13 scénarios, dont `bec_index` (hypothèse du bec à l'index 9 à confirmer en premier). Saisons,
+  voix personnelle, pétards.
+- Deux relectures corrigées (champs `null` de robotd, ton du nom, pétarades, déclencheurs HA fusionnés, SIGTERM).
+  `ha.exemple.toml` complet. 272 tests.
+- **Validation groupée en une commande** (WSL, après `git pull` de la branche) :
+  `setsid bash ~/microduck-brain/scripts-wsl/valider-tout.sh > /dev/null 2>&1 < /dev/null &`
+  Durée ~45 min. Rapport `~/validation-AAAA-MM-JJ_HHMM.txt`, à renvoyer à Claude.
+- **Canard → maison** : `[[action]]` dans `ha.toml` (état ou phrase vocale → service HA). Mode garde (opt-in),
+  journal du jour dans HA.
+- **Application Microduck** (`appli.py` + `interface/`) : servie par le canard sur le réseau local (port 8090, code
+  `[appli]` dans `ha.toml`). 7 sections, dont la télécommande avec garde-fous et le diagnostic à la demande. 295 tests.
+- **Appli complète, avec ou sans HA (APK 1.0, `android/microduck.apk`)** : installation depuis le téléphone,
+  `configuration.json` (prend le dessus sur `ha.toml`), profil enfant, imprimantes en direct (PrusaLink, SDCP), studio de
+  chorégraphies, mises à jour du cerveau, anglais. Catalogue de pièces : dépôt `microduck-catalogue`. 334 tests.
+  Clé de signature de l'APK hors dépôt (secrets GitHub `MICRODUCK_KEYSTORE_*`).
+- **APK 1.1 (lots 5-8)** : messages, vacances, journal/mode photo (opt-in, sur le canard), parcours et balle guidée sur
+  la carte, usure des servos, carnet d'entretien, invités (QR), partage de chorégraphies, G-code → Prusa. 357 tests.
+  Clé de l'utilisateur : `android/creer_cle.sh` (pas encore lancé) ; ensuite GitHub publie l'APK à chaque version.
+
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
 Transport : socket Unix, JSON-RPC 2.0 / NDJSON (`/run/robotd.sock` sur un vrai
@@ -268,6 +304,43 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   HA, opt-in, aucun changement de comportement par défaut). Suite de tests passante (27 dans `test_brain.py` +
   `test_exploration.py` + `test_ha.py`, dont un test d'intégration longue simulation) ; 2 bugs préexistants dans
   `brain.py` trouvés et corrigés au passage (confirmés préexistants via `git stash`, sans lien avec le code ajouté).
+
+## État d'avancement (2026-10-05, soir — session cloud, suite)
+- Les 6 « prochaines étapes » de la ROADMAP codées et testées dans `microduck-brain` (95 tests unitaires, rien essayé contre
+  `duck-sim` : à faire en premier sur le PC) : bonjour du matin (`[cerveau]` de `ha.toml`), messager (`[[appareil]]` :
+  sonnette, machines, prise à puissance ; message redit au retour), main tendue (`main_tendue.py`, ToF), caresse
+  (`caresse.py`, écart des servos de tête — hypothèse à valider), 1-2-3 soleil (`mouvement.py` + boutons MQTT),
+  navigation vers un point (`navigation.py` : sieste dans le coin favori), garde-fou « chat agacé », réflexes sonores
+  (`audio.py` : sursaut, appel, applaudissements, danse au tempo ; micro ALSA non testé).
+- **Chantier suivant décidé** (après validation dans `duck-sim`) : **taquiner l'humain** (déplacer/planquer les objets au
+  sol, imiter pour se moquer, faux endormi...) — tri en lots A-D et socle commun (budget de malice, signal « stop »,
+  mémoire des blagues) dans la ROADMAP, section « Chantier suivant ».
+- **Taquineries socle + lot A faits** (`taquineries.py`, 2026-10-05 nuit) ; lots B-D à faire. `duck-sim` ne tourne pas
+  dans le cloud tant que `huggingface.co` est bloqué par l'environnement (politiques ONNX).
+- **Micro du robot** : occupé par `robotd` (le `pet-detect` officiel est AUDIO ; sentinelle Noise/Voice), rien d'exposé
+  aux clients → `audio.py`/`MicroAlsa` à rebrancher (contribution amont : exposer ces événements dans `robot.subscribe`).
+- **Fin de nuit (2026-10-05)** : décision de tout coder et de valider d'un coup plus tard. Faits : taquineries lots B, C,
+  D (partie sûre), maison (alarme fumée prioritaire, météo, tours HA), social, chargeur appris, état « porté »
+  (`safety.picked_up`), caresse par le courant (`currents_ma`). 142 tests dont endurance + invariants de sécurité.
+  **Patch amont prêt** : `microduck-brain/contrib/robotd-audio-state.patch` (robotd publie caresse/sons dans `robot.state`).
+- **Point d'entrée = `canard.py`** (cerveau + HA + ToF + caméra, `--chat`, `--micro`) : `pont_ha.py` seul lance le cerveau
+  sans ToF ni caméra (le canard ne marche alors jamais).
+- **Cible de déploiement = SUR le canard** (`microduck-brain/deploy/robot/`, décidé le 2026-10-05) : le cerveau ne parle qu'à
+  `robotd`/`tofd`/`mediad` en local (socket ToF officiel : `/run/tofd/tof.sock`). Seules dépendances externes : Home
+  Assistant (Pi existant, fonctions maison seulement) ; `deploy/pi/` = repli si CPU/RAM du RK3566 insuffisants.
+
+## Règles d'identité (décidées le 2026-10-06, vérifiées par `microduck-brain/test_regles.py`)
+- **Le canard ne s'exprime QU'avec ses sons de canard** (banque officielle : `alarm`, `greet`, `inquire`, `peck`, `chirp`,
+  `coo`, `wheee`) : jamais de voix humaine, de synthèse vocale ni de mot.
+- **Tout tourne SUR le canard** : aucun appareil réseau n'analyse ses données (images, sons, distances). Seul Home Assistant
+  reçoit des états et envoie les événements de la maison. Pas de repli « cerveau sur un Pi ».
+- Conséquence : **quacksat écarté** (son envoyé hors du canard + synthèse vocale) → commandes vocales locales
+  (`commandes.py`, Vosk hors ligne). Micro mono-client tenu par `robotd` → patches `contrib/robotd-audio-*.patch` +
+  `deploy/robot/asound.conf` (dsnoop). `brain.py` découpé en `etats_*.py`.
+
+## État d'avancement (2026-10-06)
+- Personnalité évolutive (`personnalite.py`), jeu de balle autonome intégré au cerveau (état `balle`, `approach.py`
+  pilotable par `etape`), cache-cache lancé par le canard, Zoomies/GroundPick : **M9 complet**. 179 tests.
 
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.

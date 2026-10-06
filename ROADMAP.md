@@ -2,7 +2,44 @@
 
 > Objectif : faire de Microduck un membre actif et autonome du foyer (présence,
 > personnalité, jeu avec moi et avec le chat), pas un gadget de démo.
-> Dernière mise à jour : 2026-10-05 (fin de matinée).
+> Dernière mise à jour : 2026-10-07 (branches fusionnées dans `main`).
+
+## Où on en est (2026-10-07) — à lire en premier
+
+**Fait, sans robot.**
+- **Cerveau** (`microduck-brain`) : machine à états M9 complète, personnalité, jeu de balle avec vision (`approach.py`),
+  le chat, taquineries, vie de la maison, diagnostic, Home Assistant facultatif. 357 tests.
+- **Application** (APK 1.1, servie par le canard, anglais compris) : tout le pilotage, les réglages, la santé, le
+  design 3D, la marketplace (`microduck-catalogue`), les invités, etc.
+- **RL** (fork `microduck_rl`) : marche, StandUp (abandonné, robotd se relève seul), tir tolérant droit fini.
+- Les trois dépôts sont fusionnés dans `main` (`develop` pour `microduck_rl`).
+
+**Pas encore validé : presque tout le comportemental depuis le 2026-10-05.** Ce code n'a tourné que dans les tests, pas
+dans `duck-sim` (le cloud n'y a pas accès). C'est la prochaine étape, elle ne demande ni GPU ni robot.
+
+**Ce qu'on peut encore faire SANS GPU (hors RL)**, par ordre d'utilité :
+1. **Validation groupée dans `duck-sim`** sur le PC : `scripts-wsl/valider-tout.sh` (~45 min, CPU), puis corriger ce
+   qui casse. C'est le plus important : des semaines de code jamais exécuté contre de vrais daemons.
+2. **Essais sur le vrai matériel de la maison**, sans le canard :
+   - imprimantes : PrusaLink de la MK4S (lecture, envoi d'un G-code), SDCP de la Saturn 4 Ultra ;
+   - Home Assistant réel : pont, MQTT discovery avec Mosquitto, actions `[[action]]` ;
+   - l'APK sur le téléphone : démo, présence par le Wi-Fi, widget, notifications.
+3. **Clé de signature et publication** : `android/creer_cle.sh`, puis la première release GitHub.
+4. **Préparer la livraison** :
+   - étude du NPU du RK3566 (conversion RKNN du détecteur du chat) ;
+   - `bench_cerveau.py` prêt ;
+   - contributions amont à Pollen (patches `contrib/robotd-audio-*`, machine M9).
+5. **Contenu** : vraies pièces dans le catalogue (coques, G-code), chorégraphies partagées.
+6. **Versions de l'appli pour ordinateur et iPhone** (demandées le 2026-10-07).
+
+Au-delà, le travail sans robot s'épuise : les réglages fins (seuils, gestes, caresse, index du bec) demandent le vrai
+canard.
+
+**Ce qui demande le GPU (RL)** :
+- tir réentraîné avec une randomisation de position large (fenêtre de tir actuelle : 3–4 cm) ;
+- tir gauche et passe douce (`~/kick_reprise.txt`) ;
+- à terme, une politique de balle qui voit vraiment (objectif n°1 du projet), et des gestes épisodiques entraînés
+  (Phase 1).
 
 ## Principes directeurs
 
@@ -397,12 +434,12 @@ développement du cerveau.
 | Interaction | Entrées | Sorties |
 |---|---|---|
 | Accueil au retour (plus joyeux après une longue absence) | Présence HA (téléphone) | Marche vers l'entrée, son + geste |
-| Caresse | `pet-detect` | Roucoulement (natif), état Petted, geste content |
-| Main tendue | ToF (suivi de main) | Regard, approche, « picore » |
-| Commandes vocales | quacksat / Wyoming | Réponse en sons de canard (oui / non / hésitation), pas de voix humaine |
-| Messager physique (impression, lave-linge, sonnette) | HA | Vient te voir là où tu es |
-| Routines (étirement du matin, sieste du soir, heures calmes) | Heure, HA | États Stretch / Nap |
-| Jeux : balle, 1-2-3 soleil, cache-cache au son | Caméra, micro | Phase 2 + états |
+| Caresse | `pet-detect` ; **en attendant : écart des servos de tête** (`caresse.py`, 2026-10-05) | Roucoulement (natif), état Petted, geste content — **fait** (amplitude réelle à valider sur le robot) |
+| Main tendue | ToF (suivi de main) — **fait** (`main_tendue.py`, 2026-10-05) | Regard, « picore » (sans approche : zone morte de la marche) |
+| Commandes vocales | ~~quacksat / Wyoming~~ → **reconnaissance locale** (`commandes.py`, Vosk hors ligne, 2026-10-05) | Réponse en sons de canard (oui / non / hésitation), pas de voix humaine — **fait**, micro partagé à valider |
+| Messager physique (impression, lave-linge, sonnette) | HA — **fait côté maison** (`[[appareil]]`, prise à mesure de puissance, 2026-10-05) | Réagit, et **redit le message au retour** de l'habitant absent ; « vient te voir » attend une position de l'habitant (UWB) |
+| Routines (étirement du matin, sieste du soir, heures calmes) | Heure, HA | États Stretch / Nap — **faits** (heures calmes, bonjour du matin, `[cerveau]` de `ha.toml`) |
+| Jeux : balle, 1-2-3 soleil, cache-cache au son | Caméra, micro | Phase 2 + états — **1-2-3 soleil fait** (`mouvement.py` + état `soleil`, bouton HA) ; cache-cache au son : pas de direction du son (micro mono ?) |
 
 Identification des humains : **présence HA plutôt que reconnaissance
 faciale** (plus fiable, plus respectueux).
@@ -432,7 +469,7 @@ faciale** (plus fiable, plus respectueux).
 | Reculer s'il approche vite | Marche arrière (`lin_vel_x` ∈ [-0,4 ; 0,4] m/s) | Non — **fait (2026-10-05)** |
 | Le suivre à distance | Suivi de cible via `twist` | Non |
 | **Lui passer la balle** | Kick doux (phase 2) | Oui (config) |
-| Cache-cache / 1-2-3 soleil | États de l'orchestrateur | Non |
+| Cache-cache / 1-2-3 soleil | États de l'orchestrateur | Non — 1-2-3 soleil **fait** (avec les humains, 2026-10-05) |
 | « Chat vu au salon » dans HA | Entité / événement HA | Non |
 
 Jeu phare : **ballon partagé** — le robot repère la balle et le chat, puis
@@ -447,7 +484,8 @@ pousse doucement la balle vers lui.
 - **Pas de geste rapide** sous un seuil de distance (risque de pincer une
   patte ou la queue dans les articulations).
 - **Mode « chat agacé »** : renversé plusieurs fois de suite → s'assoit
-  et passe en veille plutôt que de recommencer.
+  et passe en veille plutôt que de recommencer. **Fait (2026-10-05)** : 3 chutes en 10 min (chat ou autre) →
+  veille assise de 15 min, sans se relever entre deux siestes.
 
 ## Phase 4 — Plus tard
 
@@ -1401,26 +1439,160 @@ physiques » (jouet sonore, tags NFC, station météo, tapis de repos, décor)
 suppose explicitement du matériel ajouté, et reste par construction en
 Phase 4 « plus tard », pas dans le chantier actif.
 
+## Application Microduck (téléphone, sans Home Assistant) — décidé le 2026-10-06
+
+Une **application à part entière pour gérer le canard**, indépendante de Home Assistant (HA reste un complément pour
+la maison). Elle n'a pas de serveur ailleurs : **c'est le canard qui la sert**, sur le réseau local.
+- Sur le téléphone, on l'ouvre une fois dans le navigateur, puis « Ajouter à l'écran d'accueil » : elle s'ouvre alors
+  comme une appli, avec son icône (application web installable, PWA).
+- Rien n'est installé sur le téléphone.
+
+**Règles** :
+- Le téléphone **affiche des états et envoie des commandes**. Il n'analyse rien, et ne reçoit ni image ni son.
+- L'accès est protégé par un **code d'appairage** défini dans `ha.toml` (`[appli]`), et réservé au réseau local.
+- Une vue caméra éventuelle ne viendrait que plus tard, en option explicite (vie privée).
+
+**Sections** :
+
+| Section | Contenu |
+|---|---|
+| Accueil | Ce qu'il fait, son humeur (énergie, éveil), sa batterie, qui est à la maison, son journal du jour |
+| Jouer | Balle, cache-cache, 1-2-3 soleil, fin du jeu ; tours : salut, toupie, assis/debout, danse |
+| Télécommande | Tête ; petits pas guidés (avancer, tourner) passés **par le cerveau**, avec les mêmes garde-fous : capteur de distance obligatoire, jamais vers un vide, pas de recul à l'aveugle ; arrêt immédiat |
+| Maintenance | **Lancer le diagnostic** ; dernier résultat détaillé ; batterie (niveau, tension, santé, autonomie, cycles) ; servos (dérives, servo le plus chaud) ; chutes (7 jours, lieux à risque) ; températures ; version du cerveau |
+| Caractère et mémoire | Traits de personnalité, voix (ses sons préférés), habitants et familiarité, blagues, coins appris |
+| Réglages | Mode calme, mode garde, couper les taquineries |
+| Journal | Les derniers états et événements, pour comprendre ce qu'il a fait |
+
+**État : v1 faite (2026-10-06)**, vérifiée par des tests et rendue dans un navigateur au format téléphone, en thème
+clair et sombre ; pas encore essayée avec le canard.
+- `appli.py` : serveur intégré à `canard.py`, sans dépendance nouvelle.
+- `interface/` : HTML, CSS et JS sans framework.
+- Les 7 sections ci-dessus sont en place. Le diagnostic se lance à la main (bouton aussi présent dans HA).
+- La télécommande passe par le cerveau : `PasGuide`, `RegardGuide`.
+- À valider avec `duck-sim` (`[appli] code` dans `ha.toml`, puis `http://127.0.0.1:8090`), puis sur le robot.
+- Limite connue : en HTTP sur le réseau local, le navigateur n'active pas le mode hors ligne (il faudrait HTTPS).
+  L'ajout à l'écran d'accueil fonctionne quand même.
+- **APK Android** (`microduck-brain/android/`, 2026-10-06) : coquille plein écran autour de l'interface du canard,
+  aucune logique dedans (une mise à jour du cerveau met l'appli à jour).
+  - Trouve le canard seule : elle interroge `/api/sante` sur le port 8090 de tout le sous-réseau du téléphone.
+  - Sinon, adresse à taper (mémorisée).
+  - **Mode démo** (`interface/demo.js`, canard imaginaire) pour l'essayer sans le robot.
+  - Construite sans Android Studio : `bash android/construire.sh` (paquets Ubuntu `aapt`, `dalvik-exchange`,
+    `apksigner`…). Clé de signature hors du dépôt (`~/.microduck-android/`).
+  - Logo de l'appli : `outils/logo.png` → `outils/icone_logo.py`.
+  - À tester sur le téléphone : la démo d'abord, puis contre le canard.
+- **Carte des zones** (accueil, APK 0.2) : dessinée **par le canard lui-même**, sur le robot, à partir de sa mémoire
+  d'exploration (`exploration.py`).
+  - Odométrie de `robotd` → cases de 25 cm traversées.
+  - ToF → obstacles ; chutes → zones noires.
+  - Coins favoris (sieste, repos, repas), chargeur appris, objets remarqués.
+  - `GET /api/carte`, recalculée toutes les 3 s.
+  - Limites : odométrie seule, donc la carte **repart de zéro à chaque démarrage** et dérive avec la distance. Ce
+    n'est pas un SLAM.
+  - Bouton « Effacer sa carte » (Réglages) : meubles déplacés, autre pièce.
+- **Lieux** (`lieux.py`, APK 0.3, fait le 2026-10-06) : le canard reconnaît où il est **par son Wi-Fi**.
+  - Le Wi-Fi est lu sur le canard (`iwgetid`, `wpa_cli` ou `nmcli`), toutes les 30 s, dans un fil à part.
+  - Réseau inconnu vu 2 fois de suite → « Nouveau lieu » : il le crée, y bascule, et devient curieux. Retour sur un
+    réseau connu → il y rebascule et s'étire. Pas de Wi-Fi → il ne bouge pas.
+  - Chaque changement de lieu : nouvelle carte. La dernière carte du lieu quitté est gardée pour être regardée dans
+    l'appli.
+  - Dans l'appli (Réglages → Lieux) :
+    - « Y aller », renommer, nouveau lieu ;
+    - lier le Wi-Fi actuel à un lieu (répéteur, ou un lieu créé à la main) ;
+    - bascule automatique oui/non par lieu (non : il le propose au lieu d'y aller) ;
+    - archiver (rangé, mais reconnu s'il y retourne), restaurer, supprimer.
+  - Fichier local `lieux.json` à côté de la mémoire ; `lieux = false` dans `[cerveau]` pour couper.
+  - **À valider sur le robot** : quel outil lit le Wi-Fi sur son système (iwgetid, wpa_cli, nmcli…). Il faudra
+    aussi lui donner le Wi-Fi des parents avant d'y aller.
+  - **Plus tard**, quand la carte sera gardée d'un jour à l'autre (balises UWB, recalage sur le chargeur) : la
+    réutiliser pour naviguer dans un lieu connu (coins, chargeur, zones noires).
+
+- **Design space** (icône palette en haut à droite, 2026-10-06) : le vrai Microduck en 3D, à recolorer avant
+  d'imprimer.
+  - Modèle officiel allégé (`outils/modele_3d.py` : 112 000 triangles, 1,3 Mo, 19 groupes de pièces). three.js est
+    embarqué : aucun CDN.
+  - Toucher une pièce, nuancier (« mes filaments » + palette), couleur libre, comparer avec l'origine, schémas
+    nommés gardés sur le canard (`/api/design`).
+  - **STL perso** : dessiné à partir du STL d'origine, dans le même repère, il se pose exactement à sa place
+    (mm ou m détectés).
+- **Marketplace** (icône sac) + dépôt public
+  [`microduck-catalogue`](https://github.com/RaphaelGrj/microduck-catalogue).
+  - Une fiche `fiche.toml` et des photos par pièce, ajoutées depuis github.com.
+  - Un GitHub Action vérifie les fiches et fabrique `catalogue.json`.
+  - L'appli montre les pièces, ouvre Printables/Cults dans le navigateur, et « Essayer sur mon Microduck » pose
+    l'aperçu STL dans le design.
+  - C'est le téléphone qui lit le catalogue, pas le canard.
+- **Alertes et notifications** :
+  - Le canard tient ses alertes (`/api/alertes`) : chute, batterie faible, diagnostic en échec, garde, incendie,
+    impressions et machines.
+  - L'APK les notifie toutes les 15 min en arrière-plan (minimum d'Android), et tout de suite quand l'appli est
+    ouverte.
+- **Ses 3 batteries** : après un échange, l'appli demande laquelle est mise ; cycles, autonomie et santé par batterie.
+- **Réglages → Sa journée** (heures calmes, bonjour, repas, auto-test, rythme) : `reglages.json` prend le dessus sur
+  `ha.toml`, appliqué sans redémarrer.
+- **Sa semaine** (Journal) : historique des jours dans la mémoire (60 jours).
+- **Widget Android** : son état et sa batterie.
+- **Écarté** : l'appairage par QR code. Le canard n'a pas d'écran, et l'appli le trouve déjà seule sur le Wi-Fi ;
+  le code ne se tape qu'une fois.
+
+- **APK 0.8 (2026-10-06)** :
+  - **Où es-tu ?** : trois `chirp`, pas en mode calme.
+  - **Son look** : l'accueil prend les couleurs du schéma actif, pose par pose.
+  - **Fiche d'impression** (couleur → pièces → STL d'origine) et **photo** 4:3 dans le design.
+  - **Mise en route** : liste du jour de la livraison, cochée seule quand c'est vérifiable.
+  - **Routines** programmées.
+  - **Sauvegarde et restauration** de sa mémoire (jamais `ha.toml`).
+  - **Présence par le téléphone** : seulement l'arrivée, le départ reste à Home Assistant.
+  - **Mise à jour de l'APK** proposée (`android/version.json`).
+  - **À changer quand la branche sera fusionnée** : l'adresse de mise à jour pointe sur la branche
+    `ccr-4c5851c0-mdd2p8` (`Accueil.DEPOT`).
+
+**Plus tard** :
+- vue caméra en option (image envoyée au téléphone : à arbitrer avec la règle « rien ne sort du canard ») ;
+- son « look » (schéma actif du design) sur l'image de l'accueil ;
+- notifications instantanées en arrière-plan (service permanent) si 15 min s'avèrent trop longues.
+
 ## Tableau de synthèse
 
-| Compétence | Officielle ? | Apport vivant / autonome | Effort |
-|---|---|---|---|
-| Marche + relevé (VelStand Backlash renforcé) | Oui | Socle de l'autonomie | Moyen |
-| Gestes expressifs | Non | ★★★ personnalité | Faible |
-| Regard / suivi de tête | Commande existante | ★★★ présence | Logiciel |
-| Cerveau du foyer (aligné M9) | Non (M9 non porté) | ★★★ autonomie | Élevé |
-| Détection ballon + chat | — | ★★★ perception | Moyen |
-| Balle avec vision + passe douce | Kick oui, vision non | ★★★ jeu (moi + chat) | Élevé |
-| Assis / repos | Oui | ★★ rythme de vie | Nul |
-| Ramassage au sol | Oui | ★★ objets | Faible–moyen |
-| Roulade, rollers | Oui | ★ spectacle | Nul |
+État au 2026-10-06 (soir). « Codé » = écrit et testé sans robot, à valider dans `duck-sim` puis sur le robot.
+
+| Compétence | Officielle ? | Apport vivant / autonome | Effort | État |
+|---|---|---|---|---|
+| Marche + relevé | Oui | Socle de l'autonomie | Moyen | Officiel ; StandUp évalué (~100 %), arrêté : robotd se relève déjà |
+| Gestes expressifs | Non | ★★★ personnalité | Faible | Fait (gestes scriptés, sans RL) |
+| Regard / suivi de tête | Commande existante | ★★★ présence | Logiciel | Fait (`robot.look`, balle, chat) |
+| Cerveau du foyer (aligné M9) | Non (M9 non porté) | ★★★ autonomie | Élevé | Codé : les 16 états M9 ; personnalité, taquineries, diagnostic ; 277 tests |
+| Détection ballon + chat | — | ★★★ perception | Moyen | Fait en simulation (HSV, YOLOv8n) ; NPU du robot à étudier |
+| Balle avec vision + passe douce | Kick oui, vision non | ★★★ jeu (moi + chat) | Élevé | Approche + tir validés en simulation ; tir gauche tolérant et passe douce à finir (GPU) |
+| Home Assistant (dans les deux sens) | Non | ★★★ membre du foyer | Moyen | Codé : événements de la maison, entités du canard, scènes déclenchées par le canard, voix locale |
+| Assis / repos | Oui | ★★ rythme de vie | Nul | Fait (`sit_toggle`) |
+| Ramassage au sol | Oui | ★★ objets | Faible–moyen | Utilisé en mime (`ground_pick`) ; ce qu'il saisit vraiment est à voir sur le robot |
+| Roulade, rollers | Oui | ★ spectacle | Nul | Disponible (`robot.do`) |
 
 ## Prochaines actions
 
-1. Relancer l'entraînement Velocity-Flat en arrière-plan (GPU).
-2. Installer et lancer `duck-sim` (scène apartment + caméra).
-3. Inventaire de l'API `robotd` utile au cerveau.
-4. Puis : `VelStand-Rough-Backlash` renforcé, premier geste (« non »).
+État au 2026-10-06 (soir) : tout ce qui pouvait être codé sans robot ni simulateur l'est. La suite demande le PC (WSL)
+puis le robot.
+
+1. **Validation groupée sur le PC** : `git pull` de la branche dans `~/microduck-brain`, puis
+   `setsid bash ~/microduck-brain/scripts-wsl/valider-tout.sh > /dev/null 2>&1 < /dev/null &` (~45 min). Il lance les
+   tests, le banc de coût et 13 scénarios dans `duck-sim`, en commençant par `bec_index`. Renvoyer le rapport
+   `~/validation-*.txt` à Claude.
+2. **Home Assistant** :
+   - reporter dans `ha.toml` les nouvelles sections de `ha.exemple.toml` : `[[action]]`, calendrier, température,
+     visiteur, compagnie, repas, garde ;
+   - vérifier avec `pont_ha.py ha.toml --verifier` ;
+   - installer Mosquitto si tu veux le MQTT ;
+   - installer l'intégration PrusaLink pour les Prusa.
+3. **GPU, quand le PC est libre** : finir le tir tolérant du pied gauche (depuis 1 750), puis la passe douce
+   (`~/kick_reprise.txt`).
+4. **À la livraison du robot** :
+   - lancer `bench_cerveau.py` sur le robot ;
+   - appliquer les patchs `contrib/robotd-audio-*.patch` (micro partagé) ;
+   - déployer avec `deploy/robot/` ;
+   - étudier le NPU (détection de personnes) ;
+   - étalonner les seuils audio et la caresse.
 
 ### Phase 2 — état de clôture (2026-10-03, fin de session)
 - **Visée** (`approach.py`, `cap_vise`) : le canard se place derrière la balle sur la ligne de tir voulue
@@ -1599,6 +1771,336 @@ combinant plusieurs fonctions à la fois).
   et `sensor.microduck_habitants_presents` publiés dans Home Assistant (l'éveil et la présence des habitants
   n'étaient suivis qu'en interne jusque-là).
 
+### 2026-10-05, après-midi/soir — session cloud (suite) : les 6 « prochaines étapes » codées et testées
+
+Toujours sans GPU ni robot (`microduck-brain` uniquement, branche `ccr-4c5851c0-mdd2p8`). **95 tests unitaires** passent
+(`test_brain`, `test_exploration`, `test_ha`, `test_chat`, + nouveaux `test_main_tendue`, `test_caresse`, `test_soleil`,
+`test_navigation`, `test_canard`, `test_audio`). Tous les nouveaux modules compilent en Python 3.11 (Pi OS Bookworm).
+Rien n'a été essayé contre `duck-sim` (pas de simulateur dans le cloud) : **première chose à faire sur le PC**.
+
+- **Routine du matin** (étape 6) : `Brain(bonjour=(7, 30))` — une fois par jour, dans les 4 h qui suivent l'heure, dès
+  qu'il est au repos et hors calme : étirement + bonjour (« greet » seulement si un habitant est là). Section
+  `[cerveau]` de `ha.toml` (`heures_calmes`, `bonjour`), enfin branchée au lancement. Bug d'ordre trouvé par le test
+  (le bonjour passait avant un `calme_on` en attente) et corrigé.
+- **Messager étendu** (étape 3) : `[[appareil]]` dans `ha.toml` — sonnette (`binary_sensor` ou `event.*`), machine
+  connectée (états `finished`/`end`…), **appareil « bête » sur prise à mesure de puissance** (fini = sous le seuil
+  pendant 3 min après un vrai cycle de 5 min ; les pauses de trempage ne déclenchent rien). **Si personne n'est à la
+  maison, le canard garde le message et le redit à l'accueil du prochain retour** (`sensor.microduck_messages`). Le
+  « vient te voir là où tu es » attend toujours une position de l'habitant.
+- **Main tendue** (étape 2, `main_tendue.py`) : un objet qui *apparaît* à 4–30 cm devant un canard immobile (pas un
+  meuble déjà là), tenu 0,25 s → il la regarde (`robot.look`) et la picore (coups de tête + « peck »), chirp quand elle
+  part. Seulement en `chill`, tête immobile depuis 1 s (sinon un meuble « apparaît » quand la tête tourne — défaut
+  trouvé en relisant), jamais si le chat est visible, une fois par 20 s. Corps immobile (zone morte).
+- **Caresse** (étape 1, `caresse.py`) : sans attendre `pet-detect`, une main posée sur la tête **déplace les servos de
+  tête** : consigne immobile depuis 1 s → position de repos mesurée → écart > 0,06 rad tenu 0,3 s = caresse. État
+  `caresse` (Petted M9) : roucoulement, tête appuyée contre la main, trémoussement ; en sieste, un roucoulement sans se
+  réveiller. L'événement `caresse` reste ouvert à `pet-detect`. **Hypothèse à vérifier sur le robot** : les XL330 de
+  la tête cèdent-ils vraiment de plus de 3° sous une caresse ?
+- **1-2-3 soleil** (étape 4) : `mouvement.py` (différence d'images 90×160, seuil + ouverture morphologique ; ignore
+  bruit du capteur et changement de lumière ; ~13 ms/image sur PC, caméra analysée **seulement pendant le jeu**) +
+  état `soleil` : demi-tour, compte en chirps à rythme variable, se retourne, regarde 3,5 s ; mouvement → alarme +
+  « non » ; joueur à < 30 cm (ToF) ou caresse → gagné (wheee + trémoussement). Défaut trouvé en traçant : chaque
+  demi-tour s'arrêtait à 160° dans le même sens → 40° de dérive par manche ; corrigé par des caps absolus (le joueur,
+  puis le dos au joueur). Lancement : boutons MQTT `button.microduck_jouer_soleil` / `fin_jeu`, ou `[[declencheur]]`
+  générique (n'importe quelle entité HA → n'importe quel événement du cerveau). Taquinerie (registre du jeu) : 1 fois
+  sur 5, « non » théâtral avant de jouer quand même.
+- **Navigation vers un point** (`navigation.py`, « hors de portée » levé en partie) : pivote jusqu'à 10° du cap, marche
+  droit, re-pivote au-delà de 35° (hystérésis : sans elle, 12 bascules pivot/marche sur un trajet), arrivée à 25 cm,
+  arrêt si le ToF ne voit pas 45 cm libres. Premier usage : **fatigué, il va faire la sieste dans son coin favori**
+  (`coin_favori("nap")`, 0,5–4 m, ToF obligatoire, jamais sur batterie basse). Reste approximatif (odométrie qui dérive,
+  remise à zéro au redémarrage de robotd) — UWB pour un vrai repère.
+- **Garde-fou « chat agacé »** (section Le chat, non négociable, pas encore codé jusque-là) : 3 chutes en 10 min →
+  veille assise 15 min au lieu de s'ébrouer et repartir.
+- **Réflexes sonores** (`audio.py`, « hors de portée » levé pour la partie analyse) : pipeline micro sans deep learning
+  — choc très fort → `bruit` (sursaut existant), 2–3 claquements réguliers → `appel` (« oui ? »), applaudissements →
+  joie, battement régulier → **il danse de la tête au tempo** et s'arrête avec la musique (une fois par 5 min au plus).
+  Claquement / syllabe distingués par le temps de montée (sous-blocs de 2,5 ms) : 140/140 sur 7 scénarios × 20 graines,
+  dont de la parole simulée. Source `MicroAlsa` (arecord) **non testée** ; partage du micro avec quacksat à prévoir.
+- **`canard.py`, lanceur du canard complet** : `pont_ha.py` lançait le cerveau **sans ToF ni caméra** — en production,
+  promenade, main tendue, coin de sieste et jeu auraient été inactifs. `canard.py` assemble ce qui est disponible
+  (robotd, tofd, caméra, `--chat`, `--micro`, HA + `[cerveau]`, mémoire). Déploiement Pi mis à jour (service sur
+  `canard.py`, tunnel SSH qui transporte aussi `tofd` et la caméra en local, numpy/OpenCV ajoutés — chemin du socket
+  `tofd` sur le robot **supposé** `/run/tofd.sock`).
+
+**À faire sur le PC (duck-sim), dans l'ordre** : (1) `bash ~/run-brain.sh canard.py --sans-ha 300` dans l'appartement
+(rien ne casse, promenade toujours sûre) ; (2) main tendue : la simulation n'a pas de main — vérifier au moins qu'aucune
+fausse main n'est vue en `chill` près des meubles ; (3) 1-2-3 soleil en arène avec la balle téléportée comme « joueur »
+qui bouge (vérité terrain) ; (4) coin de sieste : `eval_promenade.py` avec énergie basse. **À la livraison** : caresse
+(amplitude), `pet-detect`, chemin de `tofd`, micro (périphérique ALSA, partage avec quacksat), mémoire sur Pi 3B+.
+
+### 2026-10-05, nuit — validation `duck-sim` bloquée ; taquineries : socle + lot A
+
+- **`duck-sim` dans le cloud : presque**. Le dépôt officiel `pollen-robotics/microduck` se clone, les daemons compilent
+  (Rust ≥ 1.99 requis), `uv sync` de `microduck_rl` passe sur CPU — mais les **politiques ONNX** (marche, debout…) ne
+  sont que sur Hugging Face, et `huggingface.co` est **refusé par la politique réseau** de l'environnement cloud (le
+  connecteur HF ne lit que du texte). À ouvrir dans les réglages de l'environnement (Network access → Custom, ajouter
+  `huggingface.co`) ; sinon la validation se fait sur le PC (ordre dans le journal précédent).
+- **Découverte en lisant le code officiel** : le `pet-detect` de Pollen est **audio** (le micro est dans la tête, il
+  entend le grattage ; petit CNN log-mel), exécuté **par `robotd`**, qui roucoule tout seul ; une « sentinelle » y classe
+  déjà les sons en `Noise` (claquement, choc) / `Voice` (parole). **Rien de tout ça n'est exposé aux clients** (« pas de
+  consommateur avant le cerveau autonome »), et **le micro n'accepte qu'un client** : notre `MicroAlsa` (audio.py) ne
+  pourra pas tourner à côté. Conséquences : (1) la caresse par les servos de tête (`caresse.py`) reste utile tant que
+  `pet-detect` n'est pas exposé ; (2) piste de **contribution amont** : publier petting / Noise / Voice dans
+  `robot.subscribe` — exactement ce dont notre cerveau a besoin ; (3) nos réflexes sonores (`audio.py`) devront se
+  brancher sur ce flux ou sur un partage ALSA.
+- **Taquineries, socle commun** (`taquineries.py`) : budget de malice, signal stop, mémoire des blagues persistante
+  (running gag, trophée de malice). **Lot A** : feinte de bec, esquive puis accepte la main, faux endormi / sourde
+  oreille sur un appel, regard mystérieux, faux bâillement d'ennui, dernier mot dans les silences, « non » théâtral (sous
+  budget), fausse feinte avant le tir (`approach.py`, option `feinte`, désactivée par défaut : la tête pèse 38 % de la
+  masse, **à mesurer en arène** avec `approach_eval.py --feinte` avant de l'activer dans `jeu.py`).
+- **Défaut trouvé** : une discussion dense passait parfois pour de la musique (le canard aurait dansé) → le tempo exige
+  maintenant une corrélation au double de la période et 2 s de tempo stable. 110 tests, robustes sur 20 graines.
+
+### 2026-10-05, fin de nuit — tout le code faisable sans robot, validation groupée plus tard
+
+Décision : pas de `duck-sim` dans le cloud (Hugging Face bloqué) → **tout coder, tout valider d'un coup plus tard**.
+`microduck-brain` : **142 tests unitaires** (dont 3 d'endurance) ; tout compile en Python 3.11.
+
+- **Taquineries lots B, C, D (partie sûre)** : voir « Chantier suivant » ci-dessus. Nouveau `balle.py` (veille de la
+  balle, 2 images/s ; `approach.py` lui délègue son estimation).
+- **Maison** : alarme fumée / CO (`[[appareil]] type = "fumee"`) **prioritaire sur tout**, même le mode calme, la sieste,
+  une conversation ou les bras ; météo (`type = "meteo"`, `weather.*`) : réagit au *début* de la pluie, à la neige,
+  se blottit dans son coin par orage, moins envie de promenade quand il pleut ; tours sur demande (boutons HA :
+  salut, toupie à l'odométrie, assis/debout) ; toilette après une impression.
+- **Social** : salut propre à chaque habitant (choisi par son nom, stable), découragement progressif (demande d'attention
+  ignorée → il demande deux fois moins souvent, puis s'occupe seul), geste signature une fois par jour, gêne après une
+  chute devant quelqu'un, attente inquiète quand quelqu'un tarde (heure habituelle de `memoire.py`), refuge après une
+  série de détonations (pétards, orage).
+- **Navigation** : chargeur appris (la batterie remonte sans qu'il bouge) et retour au chargeur sur batterie basse ;
+  coin d'observation en journée. HA : `binary_sensor.microduck_veille`, `sensor.microduck_blagues`.
+- **Ce que `robot.state` sait déjà** (lu dans le code officiel) : `safety.picked_up` (détecteur officiel « pris dans
+  les bras ») → état `porte` (M9 « Held ») ; `currents_ma` (v36, « la seule mesure de force extérieure ») → la caresse
+  utilise aussi le courant des servos de tête ; `targets` (consignes réelles).
+- **Contribution amont prête** : `microduck-brain/contrib/robotd-audio-state.patch` pour `pollen-robotics/microduck`
+  — `robotd` publie `RobotState.audio = {petting, pettings, noises, voices}` (compteurs, jamais manqués par un abonné
+  décimé). Compile, tests officiels `duck-ipc-proto` (+1), `robotd`, `robotctl` passent. Débloque la caresse audio
+  officielle et les sons pour le cerveau (le micro est mono-client et `robotd` l'occupe). Le cerveau le lit déjà.
+- **Défauts trouvés par les tests** : arrêté pendant une sieste du mode calme, le cerveau laissait le canard assis et le
+  croyait debout au démarrage suivant (chaque `sit_toggle` aurait fait l'inverse) → `arret()` relève toujours, et le
+  premier tick se cale sur `policy == "sit"` ; une demande d'attention était jugée « ignorée » 10 s après (60 s
+  maintenant) ; une course dans un test HA.
+- **Tests d'endurance** (`test_endurance.py`) : 3 × 2 h et 2 × 1 h simulées avec un flux aléatoire de tous les événements,
+  chutes, prises dans les bras et capteurs factices ; invariants à chaque commande : jamais de marche sans capteur de
+  distance, jamais un pas vers un vide, aucune commande de marche dans les bras, aucun son en mode calme hors alarme
+  incendie, jamais laissé assis à l'arrêt.
+
+**À valider d'un coup (PC + `duck-sim`, puis robot)** : tout ce qui est listé dans les journaux du 2026-10-05 ; en
+priorité ce qui touche la sécurité (promenade, aspirateur, poussée de balle, fausse chute, navigation), puis les
+réglages audio (seuils sur le vrai micro), la caresse (amplitude, courant) et `ground_pick`.
+
+### 2026-10-06 — règles d'identité verrouillées, cerveau découpé, suite de la roadmap
+
+**Deux règles décidées par l'utilisateur, désormais vérifiées par des tests (`test_regles.py`)** :
+1. **Le canard ne s'exprime qu'avec ses sons de canard** (banque officielle `SoundTag` : `alarm`, `greet`, `inquire`,
+   `peck`, `chirp`, `coo`, `wheee`) — tout autre son est refusé par `Ctx.sound`, aucune synthèse vocale.
+2. **Tout tourne sur le canard, aucun appareil réseau n'analyse ses données** : `deploy/pi/` supprimé (plus de repli
+   sur un Pi), `canard.py` refuse une caméra lue à distance, seul le pont Home Assistant parle au réseau et n'envoie que
+   des états. Liste exacte des modules embarqués : `deploy/robot/modules.py`.
+
+**Conséquence : quacksat est écarté** (il envoie le son du micro hors du canard et répond par synthèse vocale). Remplacé
+par des **commandes vocales locales** (`commandes.py`) : Vosk hors ligne (modèle français ~40 Mo téléchargé une fois),
+grammaire restreinte, nom du canard obligatoire (« <nom> assis / debout / viens / tourne / on joue / stop / chut /
+réveille-toi / bravo / danse »), réponses en sons de canard, hésitation (« inquire ») s'il n'a pas compris.
+**Micro partagé** : il est mono-client et `robotd` le tient → second patch amont `contrib/robotd-audio-capture.patch`
+(`[audio] capture` séparé du haut-parleur ; tests officiels OK) + `deploy/robot/asound.conf` (`dsnoop`). À noter : la
+caresse officielle (audio) est **désactivée par défaut** dans `robotd` (`[audio] pet_detect = true` à mettre).
+
+- **`brain.py` découpé** (2 300 lignes) : `etats_base.py`, `etats_vie.py`, `etats_jeux.py`, `etats_taquineries.py`,
+  `etats_maison.py` ; `brain.py` garde `Brain`/`run` et réexporte tout (aucun import existant ne change).
+- **Auto-préservation thermique** (`robot.health`) : servo ≥ 60 °C → repos assis sans se relever entre deux siestes, il
+  halète bec entrouvert ; reprise sous 50 °C ; carte ≥ 85 °C → veille caméra en pause. HA : température des servos.
+- **Entendus sur le canard, sans Home Assistant** : l'**alarme incendie** (bips aigus réguliers, motif T3) → alarme
+  prioritaire ; **on frappe à la porte** (chocs graves, distincts des claquements de mains aigus) → réaction sonnette.
+- **Remarque un objet qui n'était pas là avant** (mémoire des cases traversées, 7 jours) : arrêt, regard, « inquire ».
+- **Habitudes sonores** (`habitudes.py`) : silence inhabituel à une heure d'habitude animée → petit tour pour aller voir ;
+  rythme semaine / week-end (`bonjour_weekend`).
+- `microduck-brain` : **164 tests** (dont endurance et règles).
+
+### 2026-10-06, suite — personnalité, jeu de balle autonome, M9 complet
+
+- **Personnalité qui évolue** (`personnalite.py`) : curiosité, sociabilité, espièglerie, prudence. Tempérament de base
+  tiré une fois (chaque canard est unique), sauvegardé sur le canard ; façonné par sa vie (caresses, accueils, objets
+  nouveaux, taquineries, « stop », chutes, demandes ignorées), retour lent vers la base (moitié en 3 jours). Module
+  l'envie de se promener, de taquiner, la patience avant de chercher de la compagnie. HA : trait dominant.
+- **Jeu de balle autonome dans le cerveau** (M9 *BallPlay*, projet prioritaire n°1) : `approach.py` est devenu pilotable
+  trame par trame (`etape`), sans changer `run()` ; état `balle` : approche + tir avec vision, fête si la balle part,
+  **dépit comique puis regain de motivation** si elle reste là (3 essais max). Sécurité ajoutée : un vide devant annule
+  la commande du contrôleur. Lancé par la voix (« la balle »), un bouton HA, ou de lui-même quand il voit sa balle.
+- **Cache-cache lancé par le canard** (avec indices sonores « peck » ; trouvé par la voix, une caresse, une main ou de
+  près ; il sort seul après 5 min).
+- **M9 complet** : *Zoomies* (petite folle course, 80 cm libres exigés, jamais avec le chat) et *GroundPick* spontané.
+  Les 16 états de la machine M9 de Pollen ont leur équivalent.
+- `microduck-brain` : **179 tests**.
+
+### 2026-10-06, soir — banc de validation groupée, revue de code
+
+- **`valider_sim.py`** (banc de la validation groupée, à lancer en premier sur le PC contre `duck-sim`) : scénarios
+  `promenade`, `main_fantome`, `coin_sieste`, `jeu_balle`, `soleil`, `aspirateur`, `cascades`, `pousse_balle`. Il utilise
+  la vérité terrain du fork (`truth.py`) pour MESURER seulement, et donne un verdict par scénario.
+- **Revue de code** du cerveau : **10 défauts réels corrigés**, dont plusieurs touchaient à la sécurité.
+  - Vide vérifié à chaque trame pendant « pousse la balle ».
+  - Tête baissée pendant les Zoomies, pour que le ToF voie le sol.
+  - Assis/debout resynchronisé après une chute (en mode calme, il retourne s'asseoir).
+  - Verdict du tir fondé sur une image prise après le tir.
+  - `fin_jeu` arrête le jeu de balle et le cache-cache.
+  - Sons « une fois » indépendants de la cadence des trames.
+  - Verrou sur les prises HA.
+  - Le joker HA ignore le retour d'`unavailable`.
+  - Caméra distante refusée.
+  - Le micro ne s'entend plus lui-même (`VoixPropre`).
+  - `test_revue.py` verrouille chaque correction.
+- **Rythme visible** : sur de la musique, avec une caméra, le canard regarde d'abord 4 s sans bouger. Si quelqu'un
+  bouge en rythme devant lui, il danse avec cette personne : un « wheee » et des hochements plus amples. Sinon, il
+  danse seul.
+  - Méthode : `mouvement.rythme_correspond`, autocorrélation de la différence d'images à un battement.
+  - À valider sur le robot : le seuil de 0,4 et la cadence de 10 images/s.
+- `microduck-brain` : **197 tests**. Ce qui reste dans la roadmap demande le robot ou une nouvelle infrastructure :
+  - détection de personne sur le NPU (lot C) ;
+  - UWB pour savoir où sont les habitants ;
+  - micro stéréo pour le cache-cache au son ;
+  - ce que fait vraiment `ground_pick`.
+
+### 2026-10-06, nuit — diagnostic, pistes « vivant », capteurs maison par la caméra
+
+Tout est codé et testé sans robot (232 tests dans `microduck-brain`). Rien n'a été essayé contre `duck-sim` ni sur le
+robot.
+
+- **Diagnostic / auto-surveillance** (`diagnostic.py`, section « à faire plus tard » ci-dessus) :
+  - batterie dans la durée : cycles de décharge, autonomie estimée, santé de la batterie, avis « à remplacer » ;
+  - santé des servos : courant et écart consigne-position au repos, comparés aux 3 premiers jours, et le servo le
+    plus souvent le plus chaud ;
+  - journal des chutes : activité risquée et endroit qui revient ;
+  - **auto-test au premier réveil du jour** (sans bouger les jambes) : robotd, boucle, bus, IMU, ToF, caméra, et la
+    tête qui suit ses consignes.
+  - Tout est publié dans HA. `robot.health` ne donne que le servo le plus chaud, pas la température de chacun.
+- **Pistes « vivant »** :
+  - rythme circadien (opt-in, activé par `canard.py`) ;
+  - petits sons gratuits ;
+  - discrétion au téléphone (`audio.py` : une seule voix coupée de blancs) ;
+  - timidité avec un visiteur inconnu (sonnette puis voix sans habitant qui rentre) ;
+  - jour spécial du calendrier HA (type `calendrier`) ;
+  - bâillement contagieux (`audio.py`) ;
+  - coup d'œil vers un mouvement en périphérie ;
+  - heure des repas (`[cerveau] repas`, lieu appris là où l'on parle à ces heures) ;
+  - tenir compagnie (déclencheur HA `compagnie`, lieu appris là où on le caresse).
+- **Capteurs maison par la caméra** : lumière oubliée (la nuit, maison vide, image lumineuse) et objets nouveaux au
+  sol, publiés dans HA.
+- **À étalonner sur le robot** : seuils audio (téléphone, bâillement), seuil de luminosité 0,25, et le critère de
+  dérive des servos.
+- **Relecture du code de la nuit : 13 défauts réels corrigés**, chacun avec son test dans `test_revue.py`. Le plus
+  important : `robot.state.joints` compte **15** articulations, avec le **bec à l'index 9** (`duck-ipc-proto`
+  `JOINT_NAMES`). Toute la jambe droite était décalée d'un cran dans le suivi des servos.
+  - Autres corrections : sieste possible pendant un appel, l'alarme incendie jamais rendue muette, présence initiale
+    lue dans HA au démarrage, cycle de batterie conservé au redémarrage, résumé HA calculé hors de la boucle à 50 Hz.
+- **Ambiance et maison** :
+  - il se retire dans son coin quand l'ambiance est très bruyante ;
+  - les bips d'un appareil (four, micro-ondes) le rendent curieux ;
+  - avec l'aspirateur, il est méfiant les premières fois, curieux ensuite, puis l'ignore.
+- **Nuances sociales** :
+  - **ton de son nom** : `commandes.py` mesure le niveau et la hauteur du mot, aux instants donnés par Vosk. S'il est
+    grondé, il est penaud, tête basse, sans un son, et ne fait plus de blague un moment. S'il est cajolé, il
+    roucoule.
+  - **visiteur récurrent** (`visiteur:<nom>` depuis HA) : moins timide à chaque visite ;
+  - **batterie entre 25 et 40 %** : il va d'abord voir quelqu'un avant d'aller au chargeur.
+- **Coût du cerveau mesuré** (`bench_cerveau.py`, à relancer SUR le canard à la livraison) : 0,027 ms par trame en
+  moyenne sur PC, 0,09 ms pour 99 % des trames, environ 2 ms au pire, pour un budget de 20 ms.
+  - La sauvegarde de la mémoire est maintenant compacte, environ 1 ms au lieu de 4 ms pour plusieurs mois de mémoire.
+  - Elle est écrite sur le disque dans un fil séparé, sans faire attendre la boucle.
+- **Banc `valider_sim.py` : 13 scénarios**. Les 5 nouveaux :
+  - `autotest` : contre le vrai robotd ;
+  - `bec_index` : vérifie que le bec est bien l'index 9 des articulations ;
+  - `compagnie` ;
+  - `coup_oeil` ;
+  - `gestes_nouveaux`.
+- **Personnalité saisonnière** : l'été, plus vif le matin et ramolli l'après-midi ; l'hiver, siestes plus longues.
+  Elle suit la température extérieure de HA (appareil de type `temperature`), ou le mois à défaut.
+- **Voix personnelle qui évolue** : les petits sons qui font réagir la maison reviennent plus souvent, et tous
+  dérivent un peu chaque jour.
+- **Pétards et feux d'artifice**, distincts du tonnerre : il va s'abriter 10 min.
+- **Deux relectures** (la tienne et une automatique) : tout est corrigé, avec des tests.
+  - Champs `null` de robotd (`battery`, `safety`, `odom`, `frames`) : ils plantaient le tick ou le ToF.
+  - Ton du nom : il écrasait la commande qui le suivait.
+  - Le niveau de référence du ton restait figé.
+  - Des applaudissements forts étaient pris pour des pétards.
+  - Un visiteur sans prénom était mémorisé comme un « être ».
+  - Deux déclencheurs HA sur la même entité s'écrasaient.
+  - Mémoire : arrêt propre sur SIGTERM, avec une dernière sauvegarde.
+  - Scénario `coup_oeil` du banc : impossible à réussir tel quel, corrigé.
+- `ha.exemple.toml` est à jour : toutes les options du cerveau y figurent.
+- **`scripts-wsl/valider-tout.sh`** fait toute la validation groupée en une commande : tests, coût du cerveau, puis
+  les 13 scénarios dans `duck-sim`, scène par scène. Il écrit un rapport daté.
+- **Le canard déclenche des scènes dans la maison** (projet prioritaire n°2, partie qui manquait) : sections
+  `[[action]]` de `ha.toml`.
+  - Déclencheur : un état du canard (accueil, bonjour, sieste…) ou un événement, qui appelle un service HA.
+  - Ou une phrase vocale (« canard, lumière du salon »), reconnue sur le canard ; seule la commande part vers HA.
+  - Une action dont l'entité n'est pas remplie est ignorée : `light.turn_on` sans cible allumerait toutes les
+    lumières.
+- **Mode garde** (opt-in) : maison vide et voix, choc ou coups à la porte → événement HA `microduck_garde`, avec
+  seulement le type de son.
+- **Journal de bord du jour** dans HA (`sensor.microduck_journal`).
+- Le journal des états du cerveau est maintenant borné : il grossissait d'environ 1 Mo par jour.
+- `microduck-brain` : **277 tests**.
+
+### 2026-10-06, fin de soirée — application Microduck, diagnostic à la main, deux relectures
+
+- **Application Microduck** (téléphone, servie par le canard, sans HA) : v1 faite, voir la section « Application
+  Microduck » plus haut.
+- **Diagnostic lancé à la main** (appli ou bouton HA) : il se joue au prochain moment de repos, batterie comprise
+  (niveau, tension, santé, autonomie).
+- **Deux relectures corrigées** :
+  - actions HA : une action sans cible est refusée ; une plage horaire mal écrite ne fait plus planter le canard ; pas
+    de double appel ; le « oui » n'arrive que si l'action est vraiment partie ;
+  - mode garde : il ne s'entend plus lui-même, et une présence inconnue ne compte plus comme maison vide ;
+  - journal du jour : remis à zéro à minuit, et gardé en mémoire ;
+  - batterie : le rebond de tension est filtré ;
+  - auto-test : fonctionne aussi à 10 Hz.
+- `microduck-brain` : **295 tests**.
+
+### 2026-10-06, nuit (suite) — une application complète, avec ou sans Home Assistant (APK 1.0)
+
+- **Lot 1, sans Home Assistant** : installation depuis le téléphone au premier démarrage (30 min, réseau local, une
+  seule fois) ; `configuration.json` remplace `ha.toml` section par section (secrets jamais relus par l'appli, fichier
+  600) ; HA devient facultatif ; profil **enfant** (jouer, regarder, le retrouver ; ni réglages ni sauvegarde) ;
+  imprimantes suivies **en direct** sur le réseau local : Prusa (PrusaLink) et Elegoo Saturn (SDCP par WebSocket).
+- **Lot 2, vivre avec lui** : studio de chorégraphies (tête, sons de canard, gestes, pauses ; programmables en
+  routine), comportements de `robotd` à essayer et installer, curseurs de caractère (joueur / bavard / taquin),
+  statistiques du jeu de balle, télécommande au doigt et regard au pavé tactile.
+- **Lot 3, entretien** : mise à jour du cerveau depuis l'appli (`deploy/robot/mettre_a_jour.sh`, retour arrière
+  possible), rapport de diagnostic sans donnée personnelle, plusieurs canards dans l'APK, aide intégrée.
+- **Lot 4, partage** : appli et APK en anglais (langue du téléphone), publication de l'APK par GitHub Actions
+  (étiquettes `apk-v*`, clé de signature en secret GitHub, jamais dans le dépôt). Catalogue : guide de contribution,
+  formulaire « proposer une pièce », modèle de PR (`microduck-catalogue`).
+- `microduck-brain` : **334 tests**. APK 1.0 : `android/microduck.apk` de la branche.
+- **À valider sur le robot** : noms des requêtes `robotd` des politiques (`robot.policies`, `policy.search`,
+  `policy.install`), codes d'état SDCP de la Saturn 4 Ultra, clé PrusaLink de la MK4S.
+- **Après fusion dans `main`** : passer l'adresse de mise à jour (`Accueil.DEPOT`, `BRANCHE` de `connexions.js`) sur
+  `main`.
+
+### 2026-10-06, fin de nuit — application 1.1 (lots 5 à 8) et clé de signature à toi
+
+- **Clé de l'APK** : `android/creer_cle.sh` (une commande dans WSL) crée TA clé, la sauvegarde dans Documents et la
+  donne à GitHub (secrets). Ensuite, GitHub publie l'APK tout seul à chaque version (`apk.yml`, release
+  `apk-v<version>`). Guide : `android/CLE_DE_SIGNATURE.md`. Il faudra désinstaller une fois la 1.0/1.1.
+- **Lot 5, au quotidien** :
+  - messages laissés au canard, signalés en sons de canard au retour de la personne ;
+  - mode vacances (calme + garde, nouvelles chaque soir à 20 h) ;
+  - « où l'a-t-il vu ? » (chat, balle par la caméra, objet) ;
+  - journal photo **opt-in**, gardé sur le canard 7 jours ;
+  - corrigé : l'arrivée par le téléphone ne déclenchait pas l'accueil.
+- **Lot 6, jeux** : balle guidée et parcours chronométré (points posés sur sa carte, records), mode photo avec pose.
+- **Lot 7, santé** : courbes d'usure des servos, comparaison des batteries, carnet d'entretien. Un servo ou une batterie
+  remplacés repartent d'une mesure neuve.
+- **Lot 8, ouverture** :
+  - codes invités temporaires, avec QR code ;
+  - partage des chorégraphies (fichier, texte, QR, rubrique du catalogue) ;
+  - G-code du catalogue envoyé à la Prusa par PrusaLink : le téléphone télécharge, le canard dépose ;
+  - photo de fin d'impression.
+- `microduck-brain` : **357 tests**. Catalogue : `[[fichier]]` (G-code par imprimante) et `choregraphies/*.json`.
+- **À valider sur le robot / le matériel** :
+  - nom du stockage PrusaLink (`usb`) et l'en-tête `Print-After-Upload` sur la MK4S ;
+  - la caméra pour les photos (`/frame` de mediad) ;
+  - les parcours dans `duck-sim` (dérive de l'odométrie).
+
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
 Vue d'ensemble du **Chantier actif** (section plus haut) et de la table « Interactions par habitant » (Humains)
@@ -1610,32 +2112,91 @@ autonome / recherche d'attention après ennui, notifications maison (impression 
 (opt-in), suivi du chat avec recul si approche rapide, publication HA (état, énergie, éveil, batterie, position,
 habitants présents, chat vu).
 
-**Prochaines pistes humaines, par ordre d'impact probable :**
+**Prochaines pistes humaines, par ordre d'impact probable** (état au 2026-10-05 soir) :
 
-1. **Caresse (`pet-detect`)** — table Humains : actuellement aucune entrée capteur câblée côté cerveau pour un
-   contact physique (le ToF existant sert à l'évitement, pas au contact). À vérifier à la livraison du robot :
-   le capteur `pet-detect` natif de Pollen (mentionné dans la doc officielle) peut suffire sans vision — c'est
-   probablement la fonctionnalité la plus "vivante" pour l'instant absente (réaction à une caresse = geste
-   content natif déjà prêt côté `brain.py`, juste besoin du déclencheur).
-2. **Main tendue** — suivi de main par ToF pour « venir picorer » : nécessite de regarder `tof.py` (déjà calibré
-   pour l'évitement) et de voir s'il peut aussi fournir une direction de main proche, sans nouvelle caméra.
-3. **Messager physique étendu** — la notification maison existe déjà pour l'impression 3D (`pont_ha.py`) ; le
-   généraliser à "vient te voir là où tu es" (lave-linge, sonnette) suppose une localisation de l'habitant dans
-   la maison (pas encore de UWB/position fiable) — à reporter tant que la navigation-vers-un-point n'existe pas,
-   mais la partie "notification + réaction vocale" peut être étendue à de nouvelles entités HA dès maintenant,
-   sans attendre la navigation.
-4. **Jeux sociaux légers (1-2-3 soleil, cache-cache au son)** — purement comportemental (états + minuterie +
-   son), pas de nouvelle perception nécessaire au-delà de ce qui existe déjà (présence HA, veille chat) ; bon
-   candidat pour une prochaine session courte, dans l'esprit de `JeuSolitaire`/`RechercheAttention` déjà codés.
-5. **Commandes vocales (quacksat)** — le pont existe (`Ecoute` dans `brain.py`, cohabitation documentée dans
-   `QUACKSAT_QUACKNAV.md`) mais n'a jamais été testé en conditions réelles (pas de satellite vocal physique
-   avant la livraison du robot) — à valider dès que possible, pas un chantier de code pur.
-6. **Routine du matin tenant vraiment compte de l'heure** — « heures calmes » est fait (nocturne), mais
-   l'étirement reste déclenché au réveil de sieste, pas à heure fixe le matin ; ajouter un étirement « bonjour »
-   une fois par jour à heure réelle (même mécanisme d'horloge injectable que `heures_calmes`) serait une suite
-   naturelle et rapide.
+1. ~~Caresse~~ — **fait** (détecteur maison sur les servos de tête + événement ouvert à `pet-detect`) ; à valider.
+2. ~~Main tendue~~ — **fait** (ToF) ; à valider (portée et réflectivité de la peau sur le VL53L5CX).
+3. **Messager physique** — **fait côté maison** (sonnette, machines, prise à puissance, message redit au retour).
+   Reste « vient te voir là où tu es » : la navigation vers un point existe maintenant (`navigation.py`), il manque
+   **où est l'habitant** (UWB, ou au moins la pièce via quacknav).
+4. ~~Jeux sociaux légers~~ — **1-2-3 soleil fait**. Cache-cache au son : demande la direction du son (le micro du
+   canard est-il stéréo ? à voir à la livraison) ; sinon cache-cache visuel quand la détection de personne tournera
+   sur le NPU.
+5. ~~Commandes vocales (quacksat)~~ — **quacksat écarté** (2026-10-06) ; commandes vocales **locales** faites
+   (`commandes.py`), à valider avec le vrai micro partagé.
+6. ~~Routine du matin~~ — **fait** (`bonjour`).
 
-**Toujours hors de portée sans nouvelle infrastructure** : détection de ton de voix (boude après réprimande),
-analyse audio (rythme/applaudissements/rire), navigation-vers-un-point (coin favori, messager physique complet) —
-chacun nécessite soit un pipeline micro/FFT, soit une localisation fiable (UWB), ni l'un ni l'autre construits
-à ce jour.
+**Nouvelles pistes ouvertes par cette session** (**toutes faites au 2026-10-06** : rythme visible dans `Danse`, silence
+inhabituel `habitudes.py`, `va_observer`, chargeur appris, `binary_sensor.microduck_veille` + `sensor.microduck_etat`) : rythme visible (« quelqu'un qui bouge en rythme devant lui ») en
+combinant `mouvement.py` et le tempo d'`audio.py` ; « silence inhabituel » (habitudes apprises × niveau sonore) ; coin
+« d'observation » (`coin_favori("chill")`) visité en journée ; apprendre la position du chargeur (là où la batterie
+remonte) pour y aller sur batterie basse ; publier `veille`/`jeu en cours` dans HA.
+
+### Chantier suivant (décidé le 2026-10-05) : « taquiner l'humain »
+
+Après la validation dans `duck-sim` des ajouts du 2026-10-05 : **tout ce qui est taquinerie** (section « Taquineries
+envers les humains » ci-dessus, 35 idées) — déplacer / planquer les objets au sol, imiter l'humain pour s'en moquer, faux
+endormi, photobombe, etc. Triées ci-dessous selon les briques existantes ; on les code dans cet ordre.
+
+**État (2026-10-05, nuit) : socle commun, lot A, lot B, lot C (sauf ce qui demande de voir une personne marcher) et la
+partie sûre du lot D FAITS** (`taquineries.py`, `balle.py`, `audio.py`, états de `brain.py` ; tests dans
+`test_taquineries.py`) ; rien d'essayé contre `duck-sim` (validation groupée plus tard, décision du 2026-10-05).
+
+**Socle commun, à coder en premier** (sans lui, une taquinerie devient une nuisance) — **fait** (4 par heure, 5 min
+d'écart, familiarité ≥ 0,6, stop = bouton HA `button.microduck_stop_taquinerie` ou événement `non`, bloque 30 min ;
+running gag après 5 fois la même blague) :
+- un **budget de malice** : quelques taquineries par heure au plus, jamais la même deux fois de suite, seulement si
+  la familiarité de la personne est élevée (`memoire.py`), jamais en mode calme, la nuit, pendant une conversation
+  vocale ou juste après un accueil ;
+- un **signal « stop »** qui coupe net toute taquinerie en cours et en bloque de nouvelles pendant un moment :
+  « non » vocal (quacksat), main qui l'écarte (ToF), `fin_jeu`, bouton HA ;
+- la **mémoire des blagues** (compteurs par taquinerie et par personne) : sert au « running gag » et au « trophée de
+  malice » (petit air fier qui grandit avec l'historique).
+
+**Lot A — faisable avec ce qui existe déjà (code pur, testable contre `duck-sim`)** — **fait** sauf validation :
+- ~~« Non » théâtral avant d'obéir~~ — **fait** (état `taquin`, 1 fois sur 5 avant 1-2-3 soleil) ;
+- feinte affectueuse (coup de bec dévié + petit bond en arrière) — sur la main tendue (`main_tendue.py`) ;
+- se faire désirer avant la caresse (esquive la main qui approche une fois, accepte la suivante) — ToF ;
+- faux endormi quand on l'appelle / fait mine de ne pas entendre, puis réaction exagérée — sur l'`appel` (audio) ;
+- regard mystérieux vers un point vide — `robot.look` scripté, sans aucune alerte derrière ;
+- bâillement « sarcastique » / faux bâillement d'ennui pendant une longue discussion — geste + son, discussion
+  repérée par le niveau sonore continu (`audio.py`) ;
+- « toujours le dernier mot » — petit son dans les silences d'une conversation (parole puis silence, `audio.py`) ;
+- fausse feinte avant un tir — tête vers une direction, tir dans l'autre (`approach.py`, Phase 2) ;
+- trophée de malice et running gag — mémoire des blagues ci-dessus.
+
+**Lot B — déplacer / jouer avec les objets au sol** (le cœur de « déplacer les objets ») — **fait** : pousser la balle
+hors de portée, **mime** de vol (`ground_pick` = s'accroupir et piquer le sol, piloté par le robot ; on ne sait pas s'il
+saisit : à requalifier sur le robot), aspirateur (curiosité, barre le chemin, s'écarte toujours avant 30 cm) :
+- pousser un objet léger juste hors de portée — la balle orange existe déjà (vision HSV + approche + tir doux
+  `BallKickPasse` en entraînement) : la pousser quand une main s'en approche (ToF), une ou deux fois seulement ;
+- vol et planque ludique d'un petit objet — skill officiel `ground_pick` (déjà accepté par `robot.do`) ; à étudier :
+  ce que fait vraiment le skill (prendre ? tenir ? lâcher ?), et reconnaître un objet « sans importance » (couleur
+  ou tag NFC, pas de deep learning sur le Pi) ; s'échapper si on approche = recul + rotation (zone morte : pas de
+  fuite fine) ;
+- taquiner le robot aspirateur — son état est dans HA (`vacuum.*` : `cleaning`), le ToF le voit comme un obstacle
+  mobile : lui barrer brièvement le chemin, sans jamais le suivre.
+
+**Lot C — imiter l'humain pour se moquer** (perception à construire) — **fait** : mimer l'intonation, compter les
+éternuements. **Volontairement pas fait** : imiter le « non » de l'humain (« non » est le signal stop des taquineries).
+Restent ceux qui demandent de voir une personne marcher (NPU) :
+- mimer le ton de voix de qui l'appelle — extraire la courbe de hauteur (montante / descendante) au micro, la
+  rejouer en sons de canard (`inquire` monte, à voir quels sons `robot.sound` permet) ;
+- imiter en exagérant un geste qu'on vient de faire (« non » de la tête après qu'on lui a dit non) — le « non »
+  vocal via quacksat ; le geste vu à la caméra demande une détection de personne (NPU) ;
+- compter les éternuements — détecteur audio d'éternuement à construire (motif bref et fort, à étalonner) ;
+- suivre les pas en miroir (copycat), se mettre en travers du chemin, détour dans les jambes, petite course, prendre
+  la place / le siège « juste trop tard » — demandent de **voir une personne marcher et où elle va** : détection de
+  personne sur le NPU du robot (à profiler à la livraison) ; garde-fous forts (jamais près d'un escalier, mains
+  chargées, ni d'une personne âgée ou d'un enfant qui court).
+
+**Lot D — plus tard (perception lourde ou risque)** — **partie sûre faite** : fausse chute comique (dandinement à
+0,25 rad + assis, aucune vraie perte d'équilibre), parodie de notification (deux chirps). Le reste : photobombe / selfie / appel vidéo (détecter un téléphone pointé
+ailleurs), s'installer sur l'objet cherché / le tapis de yoga / l'outil de l'atelier, « superviser » un rangement, air
+mystérieux quand quelqu'un cherche (reconnaissance d'activité) ; parodie sonore de notification (dépend des sons
+qu'accepte `robot.sound`) ; fausse chute comique (à faire avec `robot.pose` + `sit_toggle` sans vraie perte
+d'équilibre, ou en RL — jamais au risque d'une vraie chute) ; ricanement si quelqu'un glisse (garde-fou fort :
+inquiétude au moindre doute, à ne faire qu'avec une détection fiable).
+
+**Toujours hors de portée sans nouvelle infrastructure** : détection de ton de voix (boude après réprimande), rire
+(trop proche de la parole sans modèle), position des habitants (UWB) pour un vrai messager et l'accueil à l'entrée.
