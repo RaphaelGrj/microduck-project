@@ -2019,6 +2019,26 @@ robot.
   - auto-test : fonctionne aussi à 10 Hz.
 - `microduck-brain` : **295 tests**.
 
+### 2026-10-06, nuit (suite) — une application complète, avec ou sans Home Assistant (APK 1.0)
+
+- **Lot 1, sans Home Assistant** : installation depuis le téléphone au premier démarrage (30 min, réseau local, une
+  seule fois) ; `configuration.json` remplace `ha.toml` section par section (secrets jamais relus par l'appli, fichier
+  600) ; HA devient facultatif ; profil **enfant** (jouer, regarder, le retrouver ; ni réglages ni sauvegarde) ;
+  imprimantes suivies **en direct** sur le réseau local : Prusa (PrusaLink) et Elegoo Saturn (SDCP par WebSocket).
+- **Lot 2, vivre avec lui** : studio de chorégraphies (tête, sons de canard, gestes, pauses ; programmables en
+  routine), comportements de `robotd` à essayer et installer, curseurs de caractère (joueur / bavard / taquin),
+  statistiques du jeu de balle, télécommande au doigt et regard au pavé tactile.
+- **Lot 3, entretien** : mise à jour du cerveau depuis l'appli (`deploy/robot/mettre_a_jour.sh`, retour arrière
+  possible), rapport de diagnostic sans donnée personnelle, plusieurs canards dans l'APK, aide intégrée.
+- **Lot 4, partage** : appli et APK en anglais (langue du téléphone), publication de l'APK par GitHub Actions
+  (étiquettes `apk-v*`, clé de signature en secret GitHub, jamais dans le dépôt). Catalogue : guide de contribution,
+  formulaire « proposer une pièce », modèle de PR (`microduck-catalogue`).
+- `microduck-brain` : **334 tests**. APK 1.0 : `android/microduck.apk` de la branche.
+- **À valider sur le robot** : noms des requêtes `robotd` des politiques (`robot.policies`, `policy.search`,
+  `policy.install`), codes d'état SDCP de la Saturn 4 Ultra, clé PrusaLink de la MK4S.
+- **Après fusion dans `main`** : passer l'adresse de mise à jour (`Accueil.DEPOT`, `BRANCHE` de `connexions.js`) sur
+  `main`.
+
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
 Vue d'ensemble du **Chantier actif** (section plus haut) et de la table « Interactions par habitant » (Humains)

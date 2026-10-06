@@ -183,6 +183,10 @@ fin ou à l'échec d'une impression.
   journal du jour dans HA.
 - **Application Microduck** (`appli.py` + `interface/`) : servie par le canard sur le réseau local (port 8090, code
   `[appli]` dans `ha.toml`). 7 sections, dont la télécommande avec garde-fous et le diagnostic à la demande. 295 tests.
+- **Appli complète, avec ou sans HA (APK 1.0, `android/microduck.apk`)** : installation depuis le téléphone,
+  `configuration.json` (prend le dessus sur `ha.toml`), profil enfant, imprimantes en direct (PrusaLink, SDCP), studio de
+  chorégraphies, mises à jour du cerveau, anglais. Catalogue de pièces : dépôt `microduck-catalogue`. 334 tests.
+  Clé de signature de l'APK hors dépôt (secrets GitHub `MICRODUCK_KEYSTORE_*`).
 
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
