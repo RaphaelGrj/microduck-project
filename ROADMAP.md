@@ -1471,12 +1471,38 @@ clair et sombre ; pas encore essayée avec le canard.
   - **Plus tard**, quand la carte sera gardée d'un jour à l'autre (balises UWB, recalage sur le chargeur) : la
     réutiliser pour naviguer dans un lieu connu (coins, chargeur, zones noires).
 
+- **Design space** (icône palette en haut à droite, 2026-10-06) : le vrai Microduck en 3D, à recolorer avant
+  d'imprimer.
+  - Modèle officiel allégé (`outils/modele_3d.py` : 112 000 triangles, 1,3 Mo, 19 groupes de pièces). three.js est
+    embarqué : aucun CDN.
+  - Toucher une pièce, nuancier (« mes filaments » + palette), couleur libre, comparer avec l'origine, schémas
+    nommés gardés sur le canard (`/api/design`).
+  - **STL perso** : dessiné à partir du STL d'origine, dans le même repère, il se pose exactement à sa place
+    (mm ou m détectés).
+- **Marketplace** (icône sac) + dépôt public
+  [`microduck-catalogue`](https://github.com/RaphaelGrj/microduck-catalogue).
+  - Une fiche `fiche.toml` et des photos par pièce, ajoutées depuis github.com.
+  - Un GitHub Action vérifie les fiches et fabrique `catalogue.json`.
+  - L'appli montre les pièces, ouvre Printables/Cults dans le navigateur, et « Essayer sur mon Microduck » pose
+    l'aperçu STL dans le design.
+  - C'est le téléphone qui lit le catalogue, pas le canard.
+- **Alertes et notifications** :
+  - Le canard tient ses alertes (`/api/alertes`) : chute, batterie faible, diagnostic en échec, garde, incendie,
+    impressions et machines.
+  - L'APK les notifie toutes les 15 min en arrière-plan (minimum d'Android), et tout de suite quand l'appli est
+    ouverte.
+- **Ses 3 batteries** : après un échange, l'appli demande laquelle est mise ; cycles, autonomie et santé par batterie.
+- **Réglages → Sa journée** (heures calmes, bonjour, repas, auto-test, rythme) : `reglages.json` prend le dessus sur
+  `ha.toml`, appliqué sans redémarrer.
+- **Sa semaine** (Journal) : historique des jours dans la mémoire (60 jours).
+- **Widget Android** : son état et sa batterie.
+- **Écarté** : l'appairage par QR code. Le canard n'a pas d'écran, et l'appli le trouve déjà seule sur le Wi-Fi ;
+  le code ne se tape qu'une fois.
+
 **Plus tard** :
-- notifications sur le téléphone (alarme, garde, diagnostic en échec) ;
-- éditeur des réglages (`ha.toml`) depuis l'appli ;
-- carte des zones explorées ;
-- vue caméra en option ;
-- appairage par QR code.
+- vue caméra en option (image envoyée au téléphone : à arbitrer avec la règle « rien ne sort du canard ») ;
+- son « look » (schéma actif du design) sur l'image de l'accueil ;
+- notifications instantanées en arrière-plan (service permanent) si 15 min s'avèrent trop longues.
 
 ## Tableau de synthèse
 
