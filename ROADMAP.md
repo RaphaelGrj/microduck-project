@@ -1402,6 +1402,43 @@ physiques » (jouet sonore, tags NFC, station météo, tapis de repos, décor)
 suppose explicitement du matériel ajouté, et reste par construction en
 Phase 4 « plus tard », pas dans le chantier actif.
 
+## Application Microduck (téléphone, sans Home Assistant) — décidé le 2026-10-06
+
+Une **application à part entière pour gérer le canard**, indépendante de Home Assistant (HA reste un complément pour
+la maison). Elle n'a pas de serveur ailleurs : **c'est le canard qui la sert**, sur le réseau local.
+- Sur le téléphone, on l'ouvre une fois dans le navigateur, puis « Ajouter à l'écran d'accueil » : elle s'ouvre alors
+  comme une appli, avec son icône (application web installable, PWA).
+- Rien n'est installé sur le téléphone.
+
+**Règles** :
+- Le téléphone **affiche des états et envoie des commandes**. Il n'analyse rien, et ne reçoit ni image ni son.
+- L'accès est protégé par un **code d'appairage** défini dans `ha.toml` (`[appli]`), et réservé au réseau local.
+- Une vue caméra éventuelle ne viendrait que plus tard, en option explicite (vie privée).
+
+**Sections** :
+
+| Section | Contenu |
+|---|---|
+| Accueil | Ce qu'il fait, son humeur (énergie, éveil), sa batterie, qui est à la maison, son journal du jour |
+| Jouer | Balle, cache-cache, 1-2-3 soleil, fin du jeu ; tours : salut, toupie, assis/debout, danse |
+| Télécommande | Tête ; petits pas guidés (avancer, tourner) passés **par le cerveau**, avec les mêmes garde-fous : capteur de distance obligatoire, jamais vers un vide, pas de recul à l'aveugle ; arrêt immédiat |
+| Maintenance | **Lancer le diagnostic** ; dernier résultat détaillé ; batterie (niveau, tension, santé, autonomie, cycles) ; servos (dérives, servo le plus chaud) ; chutes (7 jours, lieux à risque) ; températures ; version du cerveau |
+| Caractère et mémoire | Traits de personnalité, voix (ses sons préférés), habitants et familiarité, blagues, coins appris |
+| Réglages | Mode calme, mode garde, couper les taquineries |
+| Journal | Les derniers états et événements, pour comprendre ce qu'il a fait |
+
+**État** : v1 en cours (2026-10-06).
+- `appli.py` dans `microduck-brain` : serveur intégré à `canard.py`, sans dépendance nouvelle.
+- `appli/` : l'interface (HTML, CSS, JS sans framework, utilisable hors ligne).
+- À valider avec `duck-sim`, puis sur le robot.
+
+**Plus tard** :
+- notifications sur le téléphone (alarme, garde, diagnostic en échec) ;
+- éditeur des réglages (`ha.toml`) depuis l'appli ;
+- carte des zones explorées ;
+- vue caméra en option ;
+- appairage par QR code.
+
 ## Tableau de synthèse
 
 État au 2026-10-06 (soir). « Codé » = écrit et testé sans robot, à valider dans `duck-sim` puis sur le robot.
