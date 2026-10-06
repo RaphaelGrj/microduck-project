@@ -1825,7 +1825,13 @@ robot.
   - il se retire dans son coin quand l'ambiance est très bruyante ;
   - les bips d'un appareil (four, micro-ondes) le rendent curieux ;
   - avec l'aspirateur, il est méfiant les premières fois, curieux ensuite, puis l'ignore.
-- `microduck-brain` : **249 tests**.
+- **Nuances sociales** :
+  - **ton de son nom** : `commandes.py` mesure le niveau et la hauteur du mot, aux instants donnés par Vosk. S'il est
+    grondé, il est penaud, tête basse, sans un son, et ne fait plus de blague un moment. S'il est cajolé, il
+    roucoule.
+  - **visiteur récurrent** (`visiteur:<nom>` depuis HA) : moins timide à chaque visite ;
+  - **batterie entre 25 et 40 %** : il va d'abord voir quelqu'un avant d'aller au chargeur.
+- `microduck-brain` : **253 tests**.
 
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 

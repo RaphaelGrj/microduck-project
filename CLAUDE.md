@@ -169,7 +169,7 @@ fin ou à l'échec d'une impression.
 - Lumière oubliée et objets au sol publiés dans HA. Retrait au vacarme, bips d'appareil, relation à l'aspirateur.
 - Relecture : 13 défauts corrigés. **Piège** : `robot.state.joints`/`targets`/`currents_ma` = 15 entrées, le **bec à
   l'index 9** (tête 5..8, jambe droite 10..14).
-- 249 tests. Détail dans la ROADMAP.
+- Ton grondeur ou câlin sur son nom, visiteur récurrent, présence avant le chargeur. 253 tests. Détail dans la ROADMAP.
 
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
