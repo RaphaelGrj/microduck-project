@@ -1404,24 +1404,44 @@ Phase 4 « plus tard », pas dans le chantier actif.
 
 ## Tableau de synthèse
 
-| Compétence | Officielle ? | Apport vivant / autonome | Effort |
-|---|---|---|---|
-| Marche + relevé (VelStand Backlash renforcé) | Oui | Socle de l'autonomie | Moyen |
-| Gestes expressifs | Non | ★★★ personnalité | Faible |
-| Regard / suivi de tête | Commande existante | ★★★ présence | Logiciel |
-| Cerveau du foyer (aligné M9) | Non (M9 non porté) | ★★★ autonomie | Élevé |
-| Détection ballon + chat | — | ★★★ perception | Moyen |
-| Balle avec vision + passe douce | Kick oui, vision non | ★★★ jeu (moi + chat) | Élevé |
-| Assis / repos | Oui | ★★ rythme de vie | Nul |
-| Ramassage au sol | Oui | ★★ objets | Faible–moyen |
-| Roulade, rollers | Oui | ★ spectacle | Nul |
+État au 2026-10-06 (soir). « Codé » = écrit et testé sans robot, à valider dans `duck-sim` puis sur le robot.
+
+| Compétence | Officielle ? | Apport vivant / autonome | Effort | État |
+|---|---|---|---|---|
+| Marche + relevé | Oui | Socle de l'autonomie | Moyen | Officiel ; StandUp évalué (~100 %), arrêté : robotd se relève déjà |
+| Gestes expressifs | Non | ★★★ personnalité | Faible | Fait (gestes scriptés, sans RL) |
+| Regard / suivi de tête | Commande existante | ★★★ présence | Logiciel | Fait (`robot.look`, balle, chat) |
+| Cerveau du foyer (aligné M9) | Non (M9 non porté) | ★★★ autonomie | Élevé | Codé : les 16 états M9 ; personnalité, taquineries, diagnostic ; 277 tests |
+| Détection ballon + chat | — | ★★★ perception | Moyen | Fait en simulation (HSV, YOLOv8n) ; NPU du robot à étudier |
+| Balle avec vision + passe douce | Kick oui, vision non | ★★★ jeu (moi + chat) | Élevé | Approche + tir validés en simulation ; tir gauche tolérant et passe douce à finir (GPU) |
+| Home Assistant (dans les deux sens) | Non | ★★★ membre du foyer | Moyen | Codé : événements de la maison, entités du canard, scènes déclenchées par le canard, voix locale |
+| Assis / repos | Oui | ★★ rythme de vie | Nul | Fait (`sit_toggle`) |
+| Ramassage au sol | Oui | ★★ objets | Faible–moyen | Utilisé en mime (`ground_pick`) ; ce qu'il saisit vraiment est à voir sur le robot |
+| Roulade, rollers | Oui | ★ spectacle | Nul | Disponible (`robot.do`) |
 
 ## Prochaines actions
 
-1. Relancer l'entraînement Velocity-Flat en arrière-plan (GPU).
-2. Installer et lancer `duck-sim` (scène apartment + caméra).
-3. Inventaire de l'API `robotd` utile au cerveau.
-4. Puis : `VelStand-Rough-Backlash` renforcé, premier geste (« non »).
+État au 2026-10-06 (soir) : tout ce qui pouvait être codé sans robot ni simulateur l'est. La suite demande le PC (WSL)
+puis le robot.
+
+1. **Validation groupée sur le PC** : `git pull` de la branche dans `~/microduck-brain`, puis
+   `setsid bash ~/microduck-brain/scripts-wsl/valider-tout.sh > /dev/null 2>&1 < /dev/null &` (~45 min). Il lance les
+   tests, le banc de coût et 13 scénarios dans `duck-sim`, en commençant par `bec_index`. Renvoyer le rapport
+   `~/validation-*.txt` à Claude.
+2. **Home Assistant** :
+   - reporter dans `ha.toml` les nouvelles sections de `ha.exemple.toml` : `[[action]]`, calendrier, température,
+     visiteur, compagnie, repas, garde ;
+   - vérifier avec `pont_ha.py ha.toml --verifier` ;
+   - installer Mosquitto si tu veux le MQTT ;
+   - installer l'intégration PrusaLink pour les Prusa.
+3. **GPU, quand le PC est libre** : finir le tir tolérant du pied gauche (depuis 1 750), puis la passe douce
+   (`~/kick_reprise.txt`).
+4. **À la livraison du robot** :
+   - lancer `bench_cerveau.py` sur le robot ;
+   - appliquer les patchs `contrib/robotd-audio-*.patch` (micro partagé) ;
+   - déployer avec `deploy/robot/` ;
+   - étudier le NPU (détection de personnes) ;
+   - étalonner les seuils audio et la caresse.
 
 ### Phase 2 — état de clôture (2026-10-03, fin de session)
 - **Visée** (`approach.py`, `cap_vise`) : le canard se place derrière la balle sur la ligne de tir voulue

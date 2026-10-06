@@ -1,7 +1,7 @@
 # Progression — Projet Microduck
 
 > Vue d'ensemble rapide. Détails complets : `ROADMAP.md`. Contexte technique : `CLAUDE.md`.
-> Dernière mise à jour : 2026-10-05.
+> Dernière mise à jour : 2026-10-06 (soir).
 
 ## Fait
 
@@ -59,23 +59,65 @@
   l'énergie) et les habitants qu'il sait présents (`sensor.microduck_habitants_presents`). Tout testé
   (27 tests automatisés), rien côté entraînement RL/GPU.
 
-## En cours — l'apprentissage (arrêté ce soir, reprise possible)
+- **2026-10-05 soir → 2026-10-06, sessions cloud (sans PC ni GPU)** : tout ce qui pouvait être écrit sans robot ni
+  simulateur l'a été, dans `microduck-brain`. **Rien n'a encore été essayé dans `duck-sim`**, la validation est groupée.
+  - **Deux règles d'identité, vérifiées par des tests** :
+    - le canard ne s'exprime qu'avec ses 7 sons de canard, jamais de mots ;
+    - tout est analysé sur le canard lui-même ; seul Home Assistant reçoit des états. D'où l'abandon de quacksat
+      au profit de commandes vocales hors ligne (Vosk).
+  - **Toute la vie de M9** (les 16 états du modèle Pollen) :
+    - personnalité qui évolue avec la vie du canard, saisons, rythme de la journée ;
+    - voix personnelle qui change doucement ;
+    - jeu de balle autonome, cache-cache, 1-2-3 soleil, danse au rythme (avec toi s'il te voit bouger en rythme).
+  - **Il te remarque et réagit** :
+    - accueil, main tendue, caresse ;
+    - ton grondeur ou câlin quand on dit son nom ;
+    - timidité avec un visiteur, discrétion pendant un appel ;
+    - bâillement contagieux, retrait quand c'est trop bruyant, abri pendant les pétards.
+  - **Taquineries** avec un budget, un signal « stop » et une mémoire des blagues.
+  - **Il surveille sa propre santé** :
+    - batterie dans la durée, usure des servos, journal des chutes ;
+    - auto-test chaque matin ;
+    - tout est publié dans Home Assistant.
+  - **Home Assistant dans les deux sens** :
+    - la maison lui parle : impressions, sonnette, machines, météo, calendrier, fumée ;
+    - lui déclenche des scènes : allumer l'entrée quand tu rentres, scène « nuit » à sa sieste du soir, « canard,
+      lumière du salon » à la voix ;
+    - mode garde quand la maison est vide, journal de bord du jour.
+  - **Qualité** :
+    - 277 tests automatiques ;
+    - quatre relectures du code, dont la tienne : une quarantaine de défauts réels corrigés, plusieurs touchant à la
+      sécurité (vides, alarme incendie, plantages sur données manquantes) ;
+    - coût mesuré : 0,03 ms par trame pour un budget de 20 ms.
+  - **Validation préparée** : une seule commande sur le PC (`valider-tout.sh`) lance les tests, le banc de coût et
+    13 scénarios dans `duck-sim`, puis écrit un rapport.
+
+## En cours — l'apprentissage (en pause, reprise possible)
 
 - **Tir tolérant du pied gauche** : arrêté à l'itération 1 750 sur 3 000 (point de reprise conservé).
 - **Passe douce** (balle à 0,5 m/s pour le chat ou toi) : préparée, à entraîner ensuite (accord donné).
 
 ## À faire
 
-- Finir le pied gauche tolérant, entraîner la passe douce, puis rejouer avec le chat et dans l'appartement.
-- Mieux mesurer et compenser l'angle de départ de la passe ; détection du chat sur le côté (affiche vue de biais).
-- Intégrer le jeu dans le cerveau (proposer de jouer rarement, seulement si le chat est d'humeur).
-- **Toi, côté Home Assistant** : intégration PrusaLink (les Prusa ne sont pas dans HA) ; une entrée Interrupteur
-  `microduck_calme` ; Mosquitto si tu veux le MQTT.
-- À la livraison du robot : voix (quacksat) et carte de la maison (quacknav), puis tout revalider sur le vrai matériel.
+1. **Sur ton PC** :
+   - `git pull` de la branche dans `~/microduck-brain` ;
+   - lancer la validation groupée : `setsid bash ~/microduck-brain/scripts-wsl/valider-tout.sh > /dev/null 2>&1 < /dev/null &` ;
+   - me renvoyer le rapport `~/validation-*.txt`. Je corrige d'après les vrais résultats.
+2. **Côté Home Assistant** :
+   - reporter dans `ha.toml` ce qui t'intéresse dans `ha.exemple.toml` : scènes déclenchées par le canard, calendrier,
+     température extérieure, visiteur, compagnie, repas, mode garde ;
+   - PrusaLink pour les Prusa ;
+   - Mosquitto si tu veux le MQTT.
+3. **GPU** : finir le pied gauche tolérant, entraîner la passe douce, puis rejouer avec le chat et dans l'appartement.
+4. **À la livraison du robot** :
+   - `bench_cerveau.py` sur le robot ;
+   - patchs du micro partagé, déploiement `deploy/robot/` ;
+   - étude du NPU (détection de personnes) ;
+   - étalonnage des seuils audio et de la caresse.
 
-## Pour reprendre demain (tout est arrêté ce soir)
-- **Simulateur** (WSL) : `bash ~/run-scene.sh arena_chat` (≈ 1,5 min ; autres scènes : `arena`, `testball`, `marche`, `apartment`).
-- **Tests sans simulateur** : `bash ~/run-brain.sh test_ha.py` (pont Home Assistant), `test_chat.py` (veille du chat).
-- **Démos / bancs** : `jeu_eval.py` (jeu avec le chat), `approach_eval.py` (balle), `essai_vide.py` (marches), `diag_pose.py`.
+## Pour reprendre
+- **Validation complète** : `bash ~/microduck-brain/scripts-wsl/valider-tout.sh` (ou quelques scénarios : `... valider-tout.sh bec_index autotest`).
+- **Simulateur seul** (WSL) : `bash ~/run-scene.sh arena` (autres scènes : `arena_chat`, `testball`, `apartment`).
+- **Tests sans simulateur** : `cd ~/microduck-brain && uv run --with pytest pytest -q $(ls test_*.py | grep -v test_chat_affiche)`.
 - **Entraînements** : consignes de reprise dans `~/kick_reprise.txt` (WSL) : tir tolérant gauche depuis 1 750, puis passe douce.
-- **Home Assistant** : `ha.toml` rempli (IP, jeton, entités) ; vérification : `bash ~/run-brain.sh pont_ha.py ha.toml --verifier`.
+- **Home Assistant** : `bash ~/run-brain.sh pont_ha.py ha.toml --verifier`.
