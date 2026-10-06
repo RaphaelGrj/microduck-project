@@ -1789,6 +1789,34 @@ caresse officielle (audio) est **désactivée par défaut** dans `robotd` (`[aud
   - micro stéréo pour le cache-cache au son ;
   - ce que fait vraiment `ground_pick`.
 
+### 2026-10-06, nuit — diagnostic, pistes « vivant », capteurs maison par la caméra
+
+Tout est codé et testé sans robot (232 tests dans `microduck-brain`). Rien n'a été essayé contre `duck-sim` ni sur le
+robot.
+
+- **Diagnostic / auto-surveillance** (`diagnostic.py`, section « à faire plus tard » ci-dessus) :
+  - batterie dans la durée : cycles de décharge, autonomie estimée, santé de la batterie, avis « à remplacer » ;
+  - santé des servos : courant et écart consigne-position au repos, comparés aux 3 premiers jours, et le servo le
+    plus souvent le plus chaud ;
+  - journal des chutes : activité risquée et endroit qui revient ;
+  - **auto-test au premier réveil du jour** (sans bouger les jambes) : robotd, boucle, bus, IMU, ToF, caméra, et la
+    tête qui suit ses consignes.
+  - Tout est publié dans HA. `robot.health` ne donne que le servo le plus chaud, pas la température de chacun.
+- **Pistes « vivant »** :
+  - rythme circadien (opt-in, activé par `canard.py`) ;
+  - petits sons gratuits ;
+  - discrétion au téléphone (`audio.py` : une seule voix coupée de blancs) ;
+  - timidité avec un visiteur inconnu (sonnette puis voix sans habitant qui rentre) ;
+  - jour spécial du calendrier HA (type `calendrier`) ;
+  - bâillement contagieux (`audio.py`) ;
+  - coup d'œil vers un mouvement en périphérie ;
+  - heure des repas (`[cerveau] repas`, lieu appris là où l'on parle à ces heures) ;
+  - tenir compagnie (déclencheur HA `compagnie`, lieu appris là où on le caresse).
+- **Capteurs maison par la caméra** : lumière oubliée (la nuit, maison vide, image lumineuse) et objets nouveaux au
+  sol, publiés dans HA.
+- **À étalonner sur le robot** : seuils audio (téléphone, bâillement), seuil de luminosité 0,25, et le critère de
+  dérive des servos.
+
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
 Vue d'ensemble du **Chantier actif** (section plus haut) et de la table « Interactions par habitant » (Humains)

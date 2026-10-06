@@ -161,6 +161,13 @@ fin ou à l'échec d'une impression.
 - Revue de code : 10 défauts corrigés (vide vérifié à chaque trame, micro sourd à sa propre voix, caméra distante
   refusée...), voir ROADMAP. 191 tests.
 
+## État d'avancement (2026-10-06, nuit)
+- `diagnostic.py` : batterie dans la durée, dérive des servos, journal des chutes, auto-test au réveil, publiés dans
+  HA.
+- Pistes « vivant » : circadien, sons gratuits, téléphone, visiteur, calendrier, bâillement, coup d'œil, repas,
+  compagnie.
+- Lumière oubliée et objets au sol publiés dans HA. 232 tests. Détail dans la ROADMAP.
+
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
 Transport : socket Unix, JSON-RPC 2.0 / NDJSON (`/run/robotd.sock` sur un vrai
