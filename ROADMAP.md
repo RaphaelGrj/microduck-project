@@ -1745,6 +1745,22 @@ caresse officielle (audio) est **désactivée par défaut** dans `robotd` (`[aud
   rythme semaine / week-end (`bonjour_weekend`).
 - `microduck-brain` : **164 tests** (dont endurance et règles).
 
+### 2026-10-06, suite — personnalité, jeu de balle autonome, M9 complet
+
+- **Personnalité qui évolue** (`personnalite.py`) : curiosité, sociabilité, espièglerie, prudence. Tempérament de base
+  tiré une fois (chaque canard est unique), sauvegardé sur le canard ; façonné par sa vie (caresses, accueils, objets
+  nouveaux, taquineries, « stop », chutes, demandes ignorées), retour lent vers la base (moitié en 3 jours). Module
+  l'envie de se promener, de taquiner, la patience avant de chercher de la compagnie. HA : trait dominant.
+- **Jeu de balle autonome dans le cerveau** (M9 *BallPlay*, projet prioritaire n°1) : `approach.py` est devenu pilotable
+  trame par trame (`etape`), sans changer `run()` ; état `balle` : approche + tir avec vision, fête si la balle part,
+  **dépit comique puis regain de motivation** si elle reste là (3 essais max). Sécurité ajoutée : un vide devant annule
+  la commande du contrôleur. Lancé par la voix (« la balle »), un bouton HA, ou de lui-même quand il voit sa balle.
+- **Cache-cache lancé par le canard** (avec indices sonores « peck » ; trouvé par la voix, une caresse, une main ou de
+  près ; il sort seul après 5 min).
+- **M9 complet** : *Zoomies* (petite folle course, 80 cm libres exigés, jamais avec le chat) et *GroundPick* spontané.
+  Les 16 états de la machine M9 de Pollen ont leur équivalent.
+- `microduck-brain` : **179 tests**.
+
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
 Vue d'ensemble du **Chantier actif** (section plus haut) et de la table « Interactions par habitant » (Humains)

@@ -302,5 +302,9 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   (`commandes.py`, Vosk hors ligne). Micro mono-client tenu par `robotd` → patches `contrib/robotd-audio-*.patch` +
   `deploy/robot/asound.conf` (dsnoop). `brain.py` découpé en `etats_*.py`.
 
+## État d'avancement (2026-10-06)
+- Personnalité évolutive (`personnalite.py`), jeu de balle autonome intégré au cerveau (état `balle`, `approach.py`
+  pilotable par `etape`), cache-cache lancé par le canard, Zoomies/GroundPick : **M9 complet**. 179 tests.
+
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.
