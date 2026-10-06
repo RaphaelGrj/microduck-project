@@ -171,7 +171,9 @@ fin ou à l'échec d'une impression.
   l'index 9** (tête 5..8, jambe droite 10..14).
 - Ton grondeur ou câlin sur son nom, visiteur récurrent, présence avant le chargeur. Détail dans la ROADMAP.
 - **À la livraison** : lancer `microduck-brain/bench_cerveau.py` sur le robot. Sur PC, une trame prend 0,03 ms en
-  moyenne, 2 ms au pire (budget 20 ms). 254 tests.
+  moyenne, 2 ms au pire (budget 20 ms).
+- `valider_sim.py` : 13 scénarios, dont `bec_index` (hypothèse du bec à l'index 9 à confirmer en premier). Saisons,
+  voix personnelle, pétards. 260 tests.
 
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 

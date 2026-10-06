@@ -1835,7 +1835,18 @@ robot.
   moyenne sur PC, 0,09 ms pour 99 % des trames, environ 2 ms au pire, pour un budget de 20 ms.
   - La sauvegarde de la mémoire est maintenant compacte, environ 1 ms au lieu de 4 ms pour plusieurs mois de mémoire.
   - Elle est écrite sur le disque dans un fil séparé, sans faire attendre la boucle.
-- `microduck-brain` : **254 tests**.
+- **Banc `valider_sim.py` : 13 scénarios**. Les 5 nouveaux :
+  - `autotest` : contre le vrai robotd ;
+  - `bec_index` : vérifie que le bec est bien l'index 9 des articulations ;
+  - `compagnie` ;
+  - `coup_oeil` ;
+  - `gestes_nouveaux`.
+- **Personnalité saisonnière** : l'été, plus vif le matin et ramolli l'après-midi ; l'hiver, siestes plus longues.
+  Elle suit la température extérieure de HA (appareil de type `temperature`), ou le mois à défaut.
+- **Voix personnelle qui évolue** : les petits sons qui font réagir la maison reviennent plus souvent, et tous
+  dérivent un peu chaque jour.
+- **Pétards et feux d'artifice**, distincts du tonnerre : il va s'abriter 10 min.
+- `microduck-brain` : **260 tests**.
 
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
