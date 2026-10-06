@@ -189,7 +189,10 @@ fin ou à l'échec d'une impression.
   Clé de signature de l'APK hors dépôt (secrets GitHub `MICRODUCK_KEYSTORE_*`).
 - **APK 1.1 (lots 5-8)** : messages, vacances, journal/mode photo (opt-in, sur le canard), parcours et balle guidée sur
   la carte, usure des servos, carnet d'entretien, invités (QR), partage de chorégraphies, G-code → Prusa. 357 tests.
-  Clé de l'utilisateur : `android/creer_cle.sh` (pas encore lancé) ; ensuite GitHub publie l'APK à chaque version.
+  Clé de l'utilisateur créée (`android/creer_cle.sh`, sauvegarde sur la carte SD du laptop) : GitHub publie l'APK à chaque
+  version (`releases/latest`) ; plus d'APK dans le dépôt.
+- **Appli ordinateur** (`microduck-brain/ordinateur/`, Electron, release `ordinateur-v*`) et **iPhone** (web, Safari →
+  écran d'accueil). Design : code couleur, couleurs gardées, schémas partagés (`microduck-catalogue/schemas/`).
 
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 

@@ -30,7 +30,12 @@ dans `duck-sim` (le cloud n'y a pas accès). C'est la prochaine étape, elle ne 
    - `bench_cerveau.py` prêt ;
    - contributions amont à Pollen (patches `contrib/robotd-audio-*`, machine M9).
 5. **Contenu** : vraies pièces dans le catalogue (coques, G-code), chorégraphies partagées.
-6. **Versions de l'appli pour ordinateur et iPhone** (demandées le 2026-10-07).
+6. ~~Versions de l'appli pour ordinateur et iPhone~~ **faites** (2026-10-07) :
+   - ordinateur : `ordinateur/` (Electron), construite par GitHub pour Windows, macOS et Linux ;
+   - iPhone : l'appli web installée depuis Safari.
+
+   Le design gagne le code couleur, « Mes couleurs » et le partage des schémas (fichier, QR, `schemas/` du catalogue).
+   L'APK (1.2) est maintenant publié par GitHub avec la clé de l'utilisateur.
 
 Au-delà, le travail sans robot s'épuise : les réglages fins (seuils, gestes, caresse, index du bec) demandent le vrai
 canard.
