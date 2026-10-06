@@ -2,7 +2,44 @@
 
 > Objectif : faire de Microduck un membre actif et autonome du foyer (présence,
 > personnalité, jeu avec moi et avec le chat), pas un gadget de démo.
-> Dernière mise à jour : 2026-10-05 (soir).
+> Dernière mise à jour : 2026-10-07 (branches fusionnées dans `main`).
+
+## Où on en est (2026-10-07) — à lire en premier
+
+**Fait, sans robot.**
+- **Cerveau** (`microduck-brain`) : machine à états M9 complète, personnalité, jeu de balle avec vision (`approach.py`),
+  le chat, taquineries, vie de la maison, diagnostic, Home Assistant facultatif. 357 tests.
+- **Application** (APK 1.1, servie par le canard, anglais compris) : tout le pilotage, les réglages, la santé, le
+  design 3D, la marketplace (`microduck-catalogue`), les invités, etc.
+- **RL** (fork `microduck_rl`) : marche, StandUp (abandonné, robotd se relève seul), tir tolérant droit fini.
+- Les trois dépôts sont fusionnés dans `main` (`develop` pour `microduck_rl`).
+
+**Pas encore validé : presque tout le comportemental depuis le 2026-10-05.** Ce code n'a tourné que dans les tests, pas
+dans `duck-sim` (le cloud n'y a pas accès). C'est la prochaine étape, elle ne demande ni GPU ni robot.
+
+**Ce qu'on peut encore faire SANS GPU (hors RL)**, par ordre d'utilité :
+1. **Validation groupée dans `duck-sim`** sur le PC : `scripts-wsl/valider-tout.sh` (~45 min, CPU), puis corriger ce
+   qui casse. C'est le plus important : des semaines de code jamais exécuté contre de vrais daemons.
+2. **Essais sur le vrai matériel de la maison**, sans le canard :
+   - imprimantes : PrusaLink de la MK4S (lecture, envoi d'un G-code), SDCP de la Saturn 4 Ultra ;
+   - Home Assistant réel : pont, MQTT discovery avec Mosquitto, actions `[[action]]` ;
+   - l'APK sur le téléphone : démo, présence par le Wi-Fi, widget, notifications.
+3. **Clé de signature et publication** : `android/creer_cle.sh`, puis la première release GitHub.
+4. **Préparer la livraison** :
+   - étude du NPU du RK3566 (conversion RKNN du détecteur du chat) ;
+   - `bench_cerveau.py` prêt ;
+   - contributions amont à Pollen (patches `contrib/robotd-audio-*`, machine M9).
+5. **Contenu** : vraies pièces dans le catalogue (coques, G-code), chorégraphies partagées.
+6. **Versions de l'appli pour ordinateur et iPhone** (demandées le 2026-10-07).
+
+Au-delà, le travail sans robot s'épuise : les réglages fins (seuils, gestes, caresse, index du bec) demandent le vrai
+canard.
+
+**Ce qui demande le GPU (RL)** :
+- tir réentraîné avec une randomisation de position large (fenêtre de tir actuelle : 3–4 cm) ;
+- tir gauche et passe douce (`~/kick_reprise.txt`) ;
+- à terme, une politique de balle qui voit vraiment (objectif n°1 du projet), et des gestes épisodiques entraînés
+  (Phase 1).
 
 ## Principes directeurs
 
