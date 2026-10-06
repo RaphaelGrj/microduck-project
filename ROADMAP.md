@@ -1831,7 +1831,11 @@ robot.
     roucoule.
   - **visiteur récurrent** (`visiteur:<nom>` depuis HA) : moins timide à chaque visite ;
   - **batterie entre 25 et 40 %** : il va d'abord voir quelqu'un avant d'aller au chargeur.
-- `microduck-brain` : **253 tests**.
+- **Coût du cerveau mesuré** (`bench_cerveau.py`, à relancer SUR le canard à la livraison) : 0,027 ms par trame en
+  moyenne sur PC, 0,09 ms pour 99 % des trames, environ 2 ms au pire, pour un budget de 20 ms.
+  - La sauvegarde de la mémoire est maintenant compacte, environ 1 ms au lieu de 4 ms pour plusieurs mois de mémoire.
+  - Elle est écrite sur le disque dans un fil séparé, sans faire attendre la boucle.
+- `microduck-brain` : **254 tests**.
 
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
