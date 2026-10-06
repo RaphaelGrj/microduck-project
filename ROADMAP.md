@@ -1454,12 +1454,22 @@ clair et sombre ; pas encore essayée avec le canard.
   - Limites : odométrie seule, donc la carte **repart de zéro à chaque démarrage** et dérive avec la distance. Ce
     n'est pas un SLAM.
   - Bouton « Effacer sa carte » (Réglages) : meubles déplacés, autre pièce.
-- **À faire quand la carte sera gardée d'un jour à l'autre** (balises UWB, ou recalage sur le chargeur) : des
-  **lieux**.
-  - Une carte par lieu (« Maison », « Chez mamie »…), avec ses coins, son chargeur et ses zones noires.
-  - Dans l'appli : choisir le lieu actuel, en créer un nouveau (déménagement, vacances), en supprimer un.
-  - Lieu reconnu automatiquement si possible (réseau Wi-Fi, balises UWB présentes), sinon demandé dans l'appli au
-    démarrage.
+- **Lieux** (`lieux.py`, APK 0.3, fait le 2026-10-06) : le canard reconnaît où il est **par son Wi-Fi**.
+  - Le Wi-Fi est lu sur le canard (`iwgetid`, `wpa_cli` ou `nmcli`), toutes les 30 s, dans un fil à part.
+  - Réseau inconnu vu 2 fois de suite → « Nouveau lieu » : il le crée, y bascule, et devient curieux. Retour sur un
+    réseau connu → il y rebascule et s'étire. Pas de Wi-Fi → il ne bouge pas.
+  - Chaque changement de lieu : nouvelle carte. La dernière carte du lieu quitté est gardée pour être regardée dans
+    l'appli.
+  - Dans l'appli (Réglages → Lieux) :
+    - « Y aller », renommer, nouveau lieu ;
+    - lier le Wi-Fi actuel à un lieu (répéteur, ou un lieu créé à la main) ;
+    - bascule automatique oui/non par lieu (non : il le propose au lieu d'y aller) ;
+    - archiver (rangé, mais reconnu s'il y retourne), restaurer, supprimer.
+  - Fichier local `lieux.json` à côté de la mémoire ; `lieux = false` dans `[cerveau]` pour couper.
+  - **À valider sur le robot** : quel outil lit le Wi-Fi sur son système (iwgetid, wpa_cli, nmcli…). Il faudra
+    aussi lui donner le Wi-Fi des parents avant d'y aller.
+  - **Plus tard**, quand la carte sera gardée d'un jour à l'autre (balises UWB, recalage sur le chargeur) : la
+    réutiliser pour naviguer dans un lieu connu (coins, chargeur, zones noires).
 
 **Plus tard** :
 - notifications sur le téléphone (alarme, garde, diagnostic en échec) ;
