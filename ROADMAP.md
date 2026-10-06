@@ -1445,6 +1445,21 @@ clair et sombre ; pas encore essayée avec le canard.
     `apksigner`…). Clé de signature hors du dépôt (`~/.microduck-android/`).
   - Logo de l'appli : `outils/logo.png` → `outils/icone_logo.py`.
   - À tester sur le téléphone : la démo d'abord, puis contre le canard.
+- **Carte des zones** (accueil, APK 0.2) : dessinée **par le canard lui-même**, sur le robot, à partir de sa mémoire
+  d'exploration (`exploration.py`).
+  - Odométrie de `robotd` → cases de 25 cm traversées.
+  - ToF → obstacles ; chutes → zones noires.
+  - Coins favoris (sieste, repos, repas), chargeur appris, objets remarqués.
+  - `GET /api/carte`, recalculée toutes les 3 s.
+  - Limites : odométrie seule, donc la carte **repart de zéro à chaque démarrage** et dérive avec la distance. Ce
+    n'est pas un SLAM.
+  - Bouton « Effacer sa carte » (Réglages) : meubles déplacés, autre pièce.
+- **À faire quand la carte sera gardée d'un jour à l'autre** (balises UWB, ou recalage sur le chargeur) : des
+  **lieux**.
+  - Une carte par lieu (« Maison », « Chez mamie »…), avec ses coins, son chargeur et ses zones noires.
+  - Dans l'appli : choisir le lieu actuel, en créer un nouveau (déménagement, vacances), en supprimer un.
+  - Lieu reconnu automatiquement si possible (réseau Wi-Fi, balises UWB présentes), sinon demandé dans l'appli au
+    démarrage.
 
 **Plus tard** :
 - notifications sur le téléphone (alarme, garde, diagnostic en échec) ;
