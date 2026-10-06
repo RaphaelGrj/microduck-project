@@ -1761,6 +1761,25 @@ caresse officielle (audio) est **désactivée par défaut** dans `robotd` (`[aud
   Les 16 états de la machine M9 de Pollen ont leur équivalent.
 - `microduck-brain` : **179 tests**.
 
+### 2026-10-06, soir — banc de validation groupée, revue de code
+
+- **`valider_sim.py`** (banc de la validation groupée, à lancer en premier sur le PC contre `duck-sim`) : scénarios
+  `promenade`, `main_fantome`, `coin_sieste`, `jeu_balle`, `soleil`, `aspirateur`, `cascades`, `pousse_balle`. Il utilise
+  la vérité terrain du fork (`truth.py`) pour MESURER seulement, et donne un verdict par scénario.
+- **Revue de code** du cerveau : **10 défauts réels corrigés**, dont plusieurs touchaient à la sécurité.
+  - Vide vérifié à chaque trame pendant « pousse la balle ».
+  - Tête baissée pendant les Zoomies, pour que le ToF voie le sol.
+  - Assis/debout resynchronisé après une chute (en mode calme, il retourne s'asseoir).
+  - Verdict du tir fondé sur une image prise après le tir.
+  - `fin_jeu` arrête le jeu de balle et le cache-cache.
+  - Sons « une fois » indépendants de la cadence des trames.
+  - Verrou sur les prises HA.
+  - Le joker HA ignore le retour d'`unavailable`.
+  - Caméra distante refusée.
+  - Le micro ne s'entend plus lui-même (`VoixPropre`).
+  - `test_revue.py` verrouille chaque correction.
+- `microduck-brain` : **191 tests**.
+
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
 Vue d'ensemble du **Chantier actif** (section plus haut) et de la table « Interactions par habitant » (Humains)

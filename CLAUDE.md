@@ -155,6 +155,12 @@ fin ou à l'échec d'une impression.
 - Pièges : `pgrep/pkill -f` se reconnaît lui-même si le motif est dans sa propre ligne de commande ; l'outil d'édition
   fait perdre le bit exécutable d'un script WSL.
 
+## État d'avancement (2026-10-06, soir)
+- **Validation groupée** : lancer `microduck-brain/valider_sim.py` contre `duck-sim`. Il couvre 8 scénarios et donne un
+  verdict par scénario.
+- Revue de code : 10 défauts corrigés (vide vérifié à chaque trame, micro sourd à sa propre voix, caméra distante
+  refusée...), voir ROADMAP. 191 tests.
+
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
 Transport : socket Unix, JSON-RPC 2.0 / NDJSON (`/run/robotd.sock` sur un vrai
