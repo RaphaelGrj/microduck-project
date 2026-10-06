@@ -1856,6 +1856,8 @@ robot.
   - Mémoire : arrêt propre sur SIGTERM, avec une dernière sauvegarde.
   - Scénario `coup_oeil` du banc : impossible à réussir tel quel, corrigé.
 - `ha.exemple.toml` est à jour : toutes les options du cerveau y figurent.
+- **`scripts-wsl/valider-tout.sh`** fait toute la validation groupée en une commande : tests, coût du cerveau, puis
+  les 13 scénarios dans `duck-sim`, scène par scène. Il écrit un rapport daté.
 - `microduck-brain` : **272 tests**.
 
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine

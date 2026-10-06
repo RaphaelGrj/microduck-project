@@ -176,6 +176,9 @@ fin ou à l'échec d'une impression.
   voix personnelle, pétards.
 - Deux relectures corrigées (champs `null` de robotd, ton du nom, pétarades, déclencheurs HA fusionnés, SIGTERM).
   `ha.exemple.toml` complet. 272 tests.
+- **Validation groupée en une commande** (WSL, après `git pull` de la branche) :
+  `setsid bash ~/microduck-brain/scripts-wsl/valider-tout.sh > /dev/null 2>&1 < /dev/null &`
+  Durée ~45 min. Rapport `~/validation-AAAA-MM-JJ_HHMM.txt`, à renvoyer à Claude.
 
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
