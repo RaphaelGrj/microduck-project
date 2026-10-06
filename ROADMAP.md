@@ -1778,7 +1778,16 @@ caresse officielle (audio) est **désactivée par défaut** dans `robotd` (`[aud
   - Caméra distante refusée.
   - Le micro ne s'entend plus lui-même (`VoixPropre`).
   - `test_revue.py` verrouille chaque correction.
-- `microduck-brain` : **191 tests**.
+- **Rythme visible** : sur de la musique, avec une caméra, le canard regarde d'abord 4 s sans bouger. Si quelqu'un
+  bouge en rythme devant lui, il danse avec cette personne : un « wheee » et des hochements plus amples. Sinon, il
+  danse seul.
+  - Méthode : `mouvement.rythme_correspond`, autocorrélation de la différence d'images à un battement.
+  - À valider sur le robot : le seuil de 0,4 et la cadence de 10 images/s.
+- `microduck-brain` : **197 tests**. Ce qui reste dans la roadmap demande le robot ou une nouvelle infrastructure :
+  - détection de personne sur le NPU (lot C) ;
+  - UWB pour savoir où sont les habitants ;
+  - micro stéréo pour le cache-cache au son ;
+  - ce que fait vraiment `ground_pick`.
 
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
@@ -1805,7 +1814,8 @@ habitants présents, chat vu).
    (`commandes.py`), à valider avec le vrai micro partagé.
 6. ~~Routine du matin~~ — **fait** (`bonjour`).
 
-**Nouvelles pistes ouvertes par cette session** : rythme visible (« quelqu'un qui bouge en rythme devant lui ») en
+**Nouvelles pistes ouvertes par cette session** (**toutes faites au 2026-10-06** : rythme visible dans `Danse`, silence
+inhabituel `habitudes.py`, `va_observer`, chargeur appris, `binary_sensor.microduck_veille` + `sensor.microduck_etat`) : rythme visible (« quelqu'un qui bouge en rythme devant lui ») en
 combinant `mouvement.py` et le tempo d'`audio.py` ; « silence inhabituel » (habitudes apprises × niveau sonore) ; coin
 « d'observation » (`coin_favori("chill")`) visité en journée ; apprendre la position du chargeur (là où la batterie
 remonte) pour y aller sur batterie basse ; publier `veille`/`jeu en cours` dans HA.
