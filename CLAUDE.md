@@ -187,6 +187,9 @@ fin ou à l'échec d'une impression.
   `configuration.json` (prend le dessus sur `ha.toml`), profil enfant, imprimantes en direct (PrusaLink, SDCP), studio de
   chorégraphies, mises à jour du cerveau, anglais. Catalogue de pièces : dépôt `microduck-catalogue`. 334 tests.
   Clé de signature de l'APK hors dépôt (secrets GitHub `MICRODUCK_KEYSTORE_*`).
+- **APK 1.1 (lots 5-8)** : messages, vacances, journal/mode photo (opt-in, sur le canard), parcours et balle guidée sur
+  la carte, usure des servos, carnet d'entretien, invités (QR), partage de chorégraphies, G-code → Prusa. 357 tests.
+  Clé de l'utilisateur : `android/creer_cle.sh` (pas encore lancé) ; ensuite GitHub publie l'APK à chaque version.
 
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 

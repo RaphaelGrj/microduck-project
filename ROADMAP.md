@@ -2039,6 +2039,31 @@ robot.
 - **Après fusion dans `main`** : passer l'adresse de mise à jour (`Accueil.DEPOT`, `BRANCHE` de `connexions.js`) sur
   `main`.
 
+### 2026-10-06, fin de nuit — application 1.1 (lots 5 à 8) et clé de signature à toi
+
+- **Clé de l'APK** : `android/creer_cle.sh` (une commande dans WSL) crée TA clé, la sauvegarde dans Documents et la
+  donne à GitHub (secrets). Ensuite, GitHub publie l'APK tout seul à chaque version (`apk.yml`, release
+  `apk-v<version>`). Guide : `android/CLE_DE_SIGNATURE.md`. Il faudra désinstaller une fois la 1.0/1.1.
+- **Lot 5, au quotidien** :
+  - messages laissés au canard, signalés en sons de canard au retour de la personne ;
+  - mode vacances (calme + garde, nouvelles chaque soir à 20 h) ;
+  - « où l'a-t-il vu ? » (chat, balle par la caméra, objet) ;
+  - journal photo **opt-in**, gardé sur le canard 7 jours ;
+  - corrigé : l'arrivée par le téléphone ne déclenchait pas l'accueil.
+- **Lot 6, jeux** : balle guidée et parcours chronométré (points posés sur sa carte, records), mode photo avec pose.
+- **Lot 7, santé** : courbes d'usure des servos, comparaison des batteries, carnet d'entretien. Un servo ou une batterie
+  remplacés repartent d'une mesure neuve.
+- **Lot 8, ouverture** :
+  - codes invités temporaires, avec QR code ;
+  - partage des chorégraphies (fichier, texte, QR, rubrique du catalogue) ;
+  - G-code du catalogue envoyé à la Prusa par PrusaLink : le téléphone télécharge, le canard dépose ;
+  - photo de fin d'impression.
+- `microduck-brain` : **357 tests**. Catalogue : `[[fichier]]` (G-code par imprimante) et `choregraphies/*.json`.
+- **À valider sur le robot / le matériel** :
+  - nom du stockage PrusaLink (`usb`) et l'en-tête `Print-After-Upload` sur la MK4S ;
+  - la caméra pour les photos (`/frame` de mediad) ;
+  - les parcours dans `duck-sim` (dérive de l'odométrie).
+
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
 Vue d'ensemble du **Chantier actif** (section plus haut) et de la table « Interactions par habitant » (Humains)
