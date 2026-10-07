@@ -2196,6 +2196,55 @@ Douze comportements de plus, codés et testés (396 tests), **aucun validé dans
 le tour de victoire, le bain de soleil (la scène appartement a-t-elle des taches lumineuses ?). Audio (rires, voix
 tendues, rythme) : à étalonner avec le vrai micro à la livraison.
 
+### 2026-10-07, soir — vivant III (APK 1.7)
+
+Six comportements de plus (403 tests), **non validés dans `duck-sim`** :
+- **Goûts musicaux** : goût de base par tranche de 20 BPM, tiré de sa date de naissance (propre à CE canard) ; une
+  musique qu'il n'aime pas le laisse froid ; les bons moments vécus en dansant (caresse, rire, quelqu'un qui danse
+  avec lui) sont notés au tempo près → « sa chanson » (il y danse avec entrain, même s'il vient de danser).
+- **Humeur du jour** : normal / joueur / paresseux / collant, tirée chaque jour, stable dans la journée ; agit sur les
+  promenades, les taquineries, la patience seul et la durée des siestes. Visible dans l'appli (Personnalité).
+- **Besoin de solitude** : ~30 sollicitations en 30 min (selon sa sociabilité) → il s'isole 3-6 min dans son coin ; un
+  appel ou une caresse → un « coo », il reste.
+- **Rêves de la journée** : les tressaillements de la sieste reprennent ce qu'il a vécu (balle, caresses, accueils,
+  danses), d'après le journal du jour.
+- **Anniversaire** : une fête par an (date de première mise en route) + `binary_sensor.microduck_anniversaire`.
+- **Le chat comme modèle** : chat immobile depuis 90 s → sieste à 60 cm de lui ; chat qui joue → il s'anime.
+
+### Étude — carte définitive de la maison (Meta Quest 3) et localisation (2026-10-07)
+
+**Verdict : jouable**, en trois briques indépendantes. La carte vient du Quest ; la localisation se fait SUR le canard
+(règle d'identité respectée : seule la carte, une donnée de la maison, est transférée une fois du PC au canard).
+
+1. **Scanner** (Quest 3, « Space Setup ») : murs, sol, meubles étiquetés (canapé, table, lit, porte, fenêtre...) et
+   maillage 3D de la pièce. Ces données ne s'exportent pas depuis l'interface du casque : il faut une petite appli
+   Unity avec le **Mixed Reality Utility Kit** de Meta, qui lit la scène et l'écrit en JSON (+ maillage OBJ). Dans
+   cette appli, on pointe aussi avec la manette 2-3 repères (le chargeur = origine, un coin de porte...) pour caler la
+   carte sur le canard. À compiler sur le PC (Unity + kit Meta) ; pièce par pièce, à recoller si besoin.
+2. **Convertir** (`carte_quest.py`, à écrire) : JSON → grille d'occupation 2D à 2 cm, coupée à la hauteur du canard
+   (2-30 cm : pieds de meubles, plinthes) + couche sémantique (« canapé », « porte d'entrée », « fenêtre ») + zones
+   nommées. Limite : le maillage du Quest rate les petits objets bas (câbles, pieds fins) — le ToF du canard reste la
+   sécurité, et sa couche « obstacles récents » garde ce qui bouge.
+3. **Se situer** (`localisation.py`, à écrire, sur le canard) : filtre particulaire (localisation Monte-Carlo) —
+   l'odométrie prédit le déplacement, les 64 rayons du ToF sont comparés à la carte. Départ connu (sur son chargeur)
+   = convergence immédiate ; sinon relocalisation globale, plus lente (champ du ToF étroit). Renfort conseillé :
+   quelques **marqueurs AprilTag** imprimés collés en bas des murs, vus par la caméra → position absolue, la dérive
+   repart à zéro. Coût estimé : quelques ms par mise à jour à 10 Hz sur le RK3566 (à mesurer).
+
+**Ce que ça débloque** : coins favoris, chargeur, zones noires, souvenirs de lieux **gardés d'un redémarrage à
+l'autre** (aujourd'hui l'odométrie repart de zéro à chaque démarrage) ; navigation avec contournement (A* sur la
+grille au lieu de la ligne droite) ; « va au canapé » ; attente à la VRAIE porte ; bain de soleil près des fenêtres ;
+la pièce où il est publiée dans Home Assistant ; le vrai plan dans l'appli.
+
+**Testable avant la livraison** : la scène appartement du simulateur (`apartment.xml`, 93 géométries) sert de « faux
+scan » → grille → filtre particulaire contre la vérité terrain (`DUCK_SIM_GROUNDTRUTH`) : mesure de l'erreur de
+position avant d'avoir le robot. **À surveiller** : Pollen a ajouté une scène de banc SLAM visuel
+(`vslam_room.xml`, commit `2b581c6` du 2026-09-08 dans `microduck_rl`) — une localisation officielle par caméra
+pourrait arriver ; notre carte Quest resterait utile comme plan sémantique (pièces, meubles nommés) par-dessus.
+
+**Ordre proposé** : (a) grille + filtre particulaire sur la scène appartement, mesurés dans `duck-sim` ; (b) script
+Unity d'export du Quest + conversion ; (c) marqueurs AprilTag ; (d) brancher coins/chargeur/navigation sur la carte.
+
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
 Vue d'ensemble du **Chantier actif** (section plus haut) et de la table « Interactions par habitant » (Humains)
