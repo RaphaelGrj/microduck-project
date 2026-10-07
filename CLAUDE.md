@@ -236,6 +236,20 @@ fin ou à l'échec d'une impression.
   `/api/casque` (état via en-tête `X-Microduck-Casque`, adresses, actions balle/chargeur/scène), `scripts-wsl/jumeau.sh`
   (boucle duck-sim + cerveau, `MICRODUCK_JUMEAU=1`, sans HA par défaut), `/api/design-apercu` (« Voir dans le casque »).
 
+## État d'avancement (2026-10-07, nuit — sur la tour)
+- **Validation `duck-sim` complète** (`valider_sim.py`, 13 scénarios) : tout passe, sauf `bec_index` = N/A (duck-sim n'a
+  pas de servo de bec : 14 servos ; à vérifier sur le vrai canard).
+- **Casque** : projet Unity sur Windows (`MicroduckScan`, hors dépôt), Meta XR SDK **207** (menu *Meta* réduit : Project
+  Setup Tool dans *Project Settings → Meta XR*, Building Blocks dans *Preferences → Meta XR → Building Blocks* ; le bloc
+  MRUK s'ajoute via un bloc « Scene »), **OpenXR** obligatoire. Les scripts ont compilé du premier coup. Le clavier
+  système ne s'affiche pas → appairage **par découverte Wi-Fi + accord dans l'appli** (`/api/casque-demande`).
+- **Pièges de la tour** : `su - raphael` perd `DISPLAY` (la caméra MuJoCo plante) → ouvrir Ubuntu directement (utilisateur
+  par défaut = raphael) ; `develop` du fork suivait l'amont Pollen → `git branch -u origin/develop` ; WSL joignable du
+  Wi-Fi = `networkingMode=mirrored` + règle **Hyper-V** (`New-NetFirewallHyperVRule … -LocalPorts 8090`) ; deux
+  validations lancées en même temps se battent pour duck-sim (une seule à la fois).
+- **APK 1.13** : `ACCESS_NETWORK_STATE` (Android 14 : JobScheduler avec réseau) — plantait en boucle sinon.
+- **Reste** : canard jumeau à réessayer sur la scène `arena` (il était tombé dans l'appartement) ; puis RL.
+
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
 Transport : socket Unix, JSON-RPC 2.0 / NDJSON (`/run/robotd.sock` sur un vrai
