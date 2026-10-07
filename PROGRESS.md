@@ -1,38 +1,24 @@
 # Progression — Projet Microduck
 
 > Vue d'ensemble rapide. Détails complets : `ROADMAP.md`. Contexte technique : `CLAUDE.md`.
-> Dernière mise à jour : 2026-10-07 soir (Plan II : le plan au service de sa vie).
+> Dernière mise à jour : 2026-10-07 nuit (validation duck-sim, premier essai du casque).
 
-## Ce soir (2026-10-07) — sur le PC
+## Prochaine session — reprendre ici
 
-1. **Validation `duck-sim`** (en premier, elle tourne seule ~45 min) :
-   ```
-   cd ~/microduck-brain && git checkout main && git pull
-   setsid bash ~/microduck-brain/scripts-wsl/valider-tout.sh > /dev/null 2>&1 < /dev/null &
-   ```
-   Renvoyer le rapport `~/validation-AAAA-MM-JJ_HHMM.txt` à Claude. Les scénarios couvrent le code d'avant le Plan II :
-   les 10 nouveautés du Plan II n'y sont pas encore.
-2. **Unity, en parallèle** : installer Unity Hub + Unity 6 LTS (module Android Build Support, avec OpenJDK et Android
-   SDK & NDK), puis suivre `microduck-brain/quest/README.md` §1 (projet `MicroduckScan`, Meta XR All-in-One SDK, copie de
-   `quest/Assets/Microduck/`). Donner l'accès à Claude : il corrige les erreurs de compilation des scripts (jamais
-   compilés dans Unity ; ils passent une vérification hors Unity, `quest/verif`). Scan de la maison : plutôt ce week-end.
-   - **Nouveau : le canard jumeau** (mode Jumeau, 7e composant `ModeJumeau`) : le canard de `duck-sim` dans ta pièce,
-     piloté par le vrai cerveau, balle lancée à la main, couleurs de l'appli en direct et peintes en RA. Mise en route
-     (réseau WSL → Quest, une fois) : `microduck-brain/quest/README.md`, « Le canard jumeau ». Penser à
-     `cp ~/microduck-brain/scripts-wsl/*.sh ~/` après le `git pull` (scène `maison`, poses à 30 Hz) et à mettre à jour
-     le fork : `cd ~/microduck_rl && git pull` (branche `develop`).
-   - **Lancement en une commande** : `bash ~/jumeau.sh testball` (ou `maison` après le scan). Dans Unity, cocher
-     *Requires System Keyboard* (OVR Manager) ; adresse et code se tapent dans le casque (joystick gauche), affichés
-     par l'appli : *Réglages → Casque (Meta Quest)*. Même carte : lancer la balle, remettre au chargeur, changer de
-     scène. Design space : « 👓 Voir dans le casque ».
-3. **Ensuite, RL** (GPU, un entraînement à la fois) :
-   - finir le tir tolérant du pied gauche (arrêté à 1 750 / 3 000 ; commande dans `~/kick_reprise.txt`) ;
-   - puis la passe douce (`Mjlab-BallKickPasse-*`) ;
-   - puis le tir à randomisation de position large.
-
-   Liste complète : ROADMAP, « RL — ce qu'il reste à apprendre ».
+- **Canard jumeau en RA (à finir)** : appli Microduck XR compilée et installée dans le Quest (Unity 6, Meta XR SDK 207,
+  OpenXR), appairage automatique OK (le casque trouve le PC sur le Wi-Fi, accord dans l'appli). Reste : le canard
+  s'affichait « de travers et immobile » — il était **tombé** dans la scène appartement (murs invisibles en RA).
+  Relancer `bash ~/jumeau.sh arena`, puis capture du casque si les pièces restent mal placées.
+- **APK 1.13** (corrige le plantage Android 14) : désinstaller l'ancienne, installer
+  `https://github.com/RaphaelGrj/microduck-brain/releases/latest/download/microduck.apk`.
+- **Ensuite : RL** (tir gauche depuis 1 750, passe douce, tir à DR large) — ROADMAP « RL — ce qu'il reste à apprendre ».
 
 ## Fait
+
+- **Soirée du 2026-10-07 sur la tour** : validation `duck-sim` **complète** (12 scénarios OK après correction de 3 bancs
+  d'essai ; `bec_index` non mesurable en simulation, à faire sur le vrai canard) ; projet Unity monté, appli du casque
+  compilée sans erreur du premier coup et installée ; appairage casque ↔ PC sans clavier ; réseau WSL → Wi-Fi
+  (mirrored + pare-feu Hyper-V) ; APK 1.13 (plantage Android 14 corrigé).
 
 - **Canard jumeau en RA (2026-10-07 soir, APK 1.11, 435 tests, non essayé dans le casque)** : le canard simulé dessiné
   dans la vraie pièce (Quest), scène MuJoCo générée depuis le plan scanné, balle lancée à la main, caresse, schéma de
