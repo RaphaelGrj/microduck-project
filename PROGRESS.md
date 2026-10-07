@@ -1,9 +1,14 @@
 # Progression — Projet Microduck
 
 > Vue d'ensemble rapide. Détails complets : `ROADMAP.md`. Contexte technique : `CLAUDE.md`.
-> Dernière mise à jour : 2026-10-07 (canard plus vivant).
+> Dernière mise à jour : 2026-10-07 soir (Plan II : le plan au service de sa vie).
 
 ## Fait
+
+- **Plan II (2026-10-07 soir, APK 1.10, 428 tests, pas encore validé dans `duck-sim`)** : chasse au trésor (marqueur
+  n° 9), vraie cachette derrière un meuble, « va chercher ta balle », il attend à la porte quand HA annonce une arrivée,
+  recharge avant les grands moments, va voir l'imprimante, « emmène-moi à la cuisine », ses places selon l'heure,
+  soleil appris par fenêtre, changements du décor signalés.
 
 - **Environnement de dev opérationnel** : Windows/WSL2/CUDA, synchronisé via GitHub avec
   un laptop Linux (soumission de jobs sur GPU Hugging Face) et avec le robot lui-même à terme.
