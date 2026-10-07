@@ -38,6 +38,14 @@ dans `duck-sim` (le cloud n'y a pas accès). C'est la prochaine étape, elle ne 
    L'APK (1.3) est maintenant publié par GitHub avec la clé de l'utilisateur.
    Démo en ligne : <https://raphaelgrj.github.io/microduck-brain/?demo>, publiée par `pages.yml`. Il reste à régler
    Settings → Pages → Source = « GitHub Actions » (le premier essai a échoué sans ce réglage).
+7. **Lot 9, fait (APK 1.4)** :
+   - minuteurs et rappels à heure fixe (`planning.py`) ; réveil doux (routine « reveil », état `Signal` qui monte
+     doucement et s'arrête d'une caresse) ;
+   - graphique d'humeur sur 7 jours et bilan du mois (image) ;
+   - raccourcis de l'icône Android et sauvegarde automatique chaque semaine ;
+   - carte Home Assistant (`homeassistant/microduck-card.js`).
+
+   **Prochaine discussion : le canard lui-même** (évolutions du robot, pas de l'appli).
 
 Au-delà, le travail sans robot s'épuise : les réglages fins (seuils, gestes, caresse, index du bec) demandent le vrai
 canard.

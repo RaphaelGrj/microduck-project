@@ -105,6 +105,11 @@
   - **Design 3D** : code couleur, couleurs gardées, schémas partagés.
   - **Catalogue** `microduck-catalogue` : pièces (avec G-code pour la Prusa), chorégraphies et schémas de couleurs.
   - Les trois dépôts sont fusionnés dans `main` (`develop` pour `microduck_rl`).
+- **Lot 9 (2026-10-07), APK 1.4.** 365 tests.
+  - **Minuteurs, rappels à heure fixe, réveil doux** : signalés en sons de canard, arrêtés d'une caresse.
+  - **Graphique d'humeur et bilan du mois** : le bilan s'enregistre en image.
+  - **Android** : raccourcis de l'icône, sauvegarde automatique chaque semaine.
+  - **Home Assistant** : carte de tableau de bord `homeassistant/microduck-card.js`.
 
 ## En cours — l'apprentissage (en pause, reprise possible)
 
