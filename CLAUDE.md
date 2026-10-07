@@ -203,6 +203,11 @@ fin ou à l'échec d'une impression.
   blagues ; maladresse inchangée, voulue), suis-moi / je te suis (ToF), excitation balle soulevée. Aléa séparé
   `brain._rng_vie`. Non validé dans `duck-sim`. Gestes du corps RL ajoutés à la file GPU (ROADMAP Phase 1).
 
+- **Son personnage** (`microduck-brain/personnage.py`, APK 1.6, 396 tests) : hoquet, gaffe, nid, fierté/déception
+  (balle), cabotinage (`Succes`, scores en mémoire), rituels par habitant, objet inspecté, doudou, rythme
+  (`motif:`), nom sonore, ambiance (`rire`, `ambiance:tendue`), bain de soleil (`extras["soleil"]`). Non validé dans
+  `duck-sim` ; seuils audio à étalonner.
+
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
 Transport : socket Unix, JSON-RPC 2.0 / NDJSON (`/run/robotd.sock` sur un vrai

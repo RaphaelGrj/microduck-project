@@ -95,7 +95,7 @@
   - **Validation préparée** : une seule commande sur le PC (`valider-tout.sh`) lance les tests, le banc de coût et
     13 scénarios dans `duck-sim`, puis écrit un rapport.
 - **Application Microduck complète (2026-10-07)**, avec ou sans Home Assistant. 358 tests.
-  - **Android** : APK 1.5, publié par GitHub avec ta clé à chaque version.
+  - **Android** : APK 1.6, publié par GitHub avec ta clé à chaque version.
     Lien : <https://github.com/RaphaelGrj/microduck-brain/releases/latest/download/microduck.apk>
   - **Ordinateur** (Windows, Mac, Linux) : release `ordinateur-v*`.
   - **iPhone** : démo en ligne <https://raphaelgrj.github.io/microduck-brain/?demo> (Safari → « Sur l'écran
@@ -118,6 +118,13 @@
     toujours maladroit).
   - Suis-moi / je te suis, et il trépigne quand tu soulèves la balle.
   - Gestes du corps (saut de joie, se gratter, s'allonger) : à entraîner sur le GPU.
+
+- **Son personnage (2026-10-07), APK 1.6.** 396 tests, à valider dans `duck-sim`.
+  - Hoquet, petites gaffes vexées, deux tours avant la sieste, tour de victoire ou tête basse au jeu de balle.
+  - Il refait ce qui vous fait rire, réclame le câlin à l'heure habituelle, picore les objets nouveaux, garde son
+    doudou (la balle).
+  - Il rejoue le rythme que tu tapes, a un « nom » sonore pour chacun, se fait petit quand ça crie, rit avec vous,
+    va prendre le soleil.
 
 ## En cours — l'apprentissage (en pause, reprise possible)
 
