@@ -95,7 +95,7 @@
   - **Validation préparée** : une seule commande sur le PC (`valider-tout.sh`) lance les tests, le banc de coût et
     13 scénarios dans `duck-sim`, puis écrit un rapport.
 - **Application Microduck complète (2026-10-07)**, avec ou sans Home Assistant. 358 tests.
-  - **Android** : APK 1.7, publié par GitHub avec ta clé à chaque version.
+  - **Android** : APK 1.8, publié par GitHub avec ta clé à chaque version.
     Lien : <https://github.com/RaphaelGrj/microduck-brain/releases/latest/download/microduck.apk>
   - **Ordinateur** (Windows, Mac, Linux) : release `ordinateur-v*`.
   - **iPhone** : démo en ligne <https://raphaelgrj.github.io/microduck-brain/?demo> (Safari → « Sur l'écran
@@ -129,8 +129,12 @@
 - **Vivant III (2026-10-07), APK 1.7.** 403 tests, à valider dans `duck-sim`.
   - Ses goûts musicaux et « sa chanson », une humeur différente chaque jour, besoin de solitude après la foule.
   - Des rêves qui rejouent sa journée, son anniversaire, la sieste près du chat.
-- **Étude : carte définitive avec le Meta Quest 3** (ROADMAP) : jouable ; scan Quest → plan → le canard s'y situe
-  avec son capteur de distance (+ marqueurs imprimés). Pas encore commencé.
+- **Plan de la maison (Meta Quest 3), APK 1.8.** 410 tests.
+  - Appli Quest (Unity) et pas-à-pas : `microduck-brain/quest/README.md`.
+  - Un plan par lieu (déménagement = nouveau scan), importé et vu dans l'appli ; aperçu PNG sur le PC.
+  - Le canard s'y situe : 8 cm en moyenne au banc synthétique, s'il part de son chargeur. Marqueurs imprimés pour se
+    retrouver ailleurs.
+  - Pas encore branché dans le cerveau, ni essayé dans `duck-sim`.
 
 ## En cours — l'apprentissage (en pause, reprise possible)
 

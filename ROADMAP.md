@@ -2245,6 +2245,24 @@ pourrait arriver ; notre carte Quest resterait utile comme plan sémantique (pi�
 **Ordre proposé** : (a) grille + filtre particulaire sur la scène appartement, mesurés dans `duck-sim` ; (b) script
 Unity d'export du Quest + conversion ; (c) marqueurs AprilTag ; (d) brancher coins/chargeur/navigation sur la carte.
 
+**Fait le 2026-10-07 (APK 1.8, 410 tests)** — (a), (b) et (c) codés ; reste (d) :
+- `plan.py` (format « microduck-plan-1 », plan de la scène MuJoCo, aperçu PNG), `plan_quest.py` (export Quest → plan :
+  repère chargeur/devant, tables franchissables, portes qui ouvrent les murs, marqueurs calés sur le mur le plus
+  proche), `localisation.py` (filtre particulaire, 800 hypothèses, ~1 ms par mise à jour sur PC), `marqueurs.py`
+  (AprilTag 36h11, 10 cm, ~1 cm et 2° à 1 m sur image synthétique), `quest/` (appli Unity `ExportPlan.cs` + pas-à-pas
+  — **non compilée ici**, à corriger d'après les erreurs d'Unity), `loc_sim.py` (banc `duck-sim`).
+- **Un plan par lieu** (`lieux.py`, rangé dans `lieux.json` donc dans la sauvegarde) : déménager = nouveau lieu (reconnu
+  par le Wi-Fi) + nouveau scan ; appli : importer / voir / exporter / retirer ; la démo montre l'appartement du simulateur.
+- **Mesures (banc synthétique, appartement)** : départ connu + odométrie qui dérive de 6 % → 8 cm en moyenne, 19 cm au
+  pire sur 6 parcours de 4 min (odométrie seule : 3,6 m) ; **départ inconnu : échec** avec le ToF seul (converge vers
+  une mauvaise pièce) → départ depuis le chargeur, ou marqueurs. Réglages appris : ne pas compter les 64 rayons comme
+  indépendants (sinon sur-confiance puis décrochage), pénalités « obstacle / hors plan » progressives (un scan a des
+  bords imparfaits), 800 hypothèses plutôt que 400.
+- **Reste** : (1) `loc_sim.py` dans `duck-sim` (vrais ToF, vraie odométrie) ; (2) brancher la localisation dans le
+  cerveau (fil à part : ~10 ms par mise à jour estimées sur le RK3566), position sur le plan dans l'appli et HA ;
+  (3) détection des marqueurs dans la boucle caméra ; (4) coins/chargeur/souvenirs en coordonnées du plan (gardés d'un
+  redémarrage à l'autre), navigation A* ; (5) scan réel du week-end → corriger `ExportPlan.cs` si besoin.
+
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
 Vue d'ensemble du **Chantier actif** (section plus haut) et de la table « Interactions par habitant » (Humains)
