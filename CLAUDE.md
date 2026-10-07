@@ -211,8 +211,11 @@ fin ou à l'échec d'une impression.
 - **Vivant III** (APK 1.7, 403 tests) : goûts musicaux (`Gouts`), humeur du jour (`perso.jour`), solitude,
   rêves de la journée (`REVES`), anniversaire (`binary_sensor.microduck_anniversaire`), chat comme modèle
   (`ObservateurChat`).
-- **Carte Meta Quest 3** : étude dans la ROADMAP (scan → grille 2D + sémantique → filtre particulaire ToF sur le
-  canard, AprilTag en renfort). Pollen a une scène de banc SLAM visuel (`vslam_room.xml`) : à surveiller.
+- **Plan Meta Quest 3** (APK 1.8, 410 tests) : `plan.py`, `plan_quest.py`, `localisation.py` (MCL ToF, 800 particules),
+  `marqueurs.py` (AprilTag 36h11, 10 cm), plans par lieu dans `lieux.json`, appli Unity `quest/` (non compilée ici),
+  banc `loc_sim.py`. Départ inconnu + ToF seul = échec mesuré → chargeur ou marqueurs. Pas encore branché au cerveau.
+  Pollen travaille aussi la localisation (`vslam_room.xml`, commentaires MCL/RTAB-Map dans `apartment.xml`, station
+  `dock` dans la scène).
 
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
