@@ -2161,6 +2161,41 @@ RL en Phase 1.
 À valider en premier sur le PC : la respiration ne déclenche pas de fausse caresse sur le vrai `robotd`, le
 suis-moi avec le ToF de `duck-sim`, les seuils de l'énoncé avec le vrai micro (à la livraison).
 
+### 2026-10-07, suite — son personnage (`personnage.py`, APK 1.6), session cloud
+
+Douze comportements de plus, codés et testés (396 tests), **aucun validé dans `duck-sim`** :
+1. **Hoquet** : « hic » (peck + tête qui sursaute) toutes les 2-3,5 s pendant 20-45 s ; rare (plus probable après
+   un repas, une fois par 3 h au plus). Une caresse ou une surprise le fait passer (`gueri`).
+2. **Gaffe** : un obstacle vu à moins de 30 cm en promenade (surgi au dernier moment) → sursaut, « non », regard vexé
+   vers l'objet, puis un grand pivot exagéré. Rare (1 sur 3, 10 min d'écart) ; pivots sur place seulement.
+3. **Fierté / déception** (jeu de balle) : tour de victoire sur place (toujours sur un nouveau record de série, une
+   fois sur deux sinon), tête basse 4 s après l'abandon, perplexe (« inquire », regard à gauche et à droite) si la
+   balle n'est plus trouvée.
+4. **Nid** : avant une sieste de fatigue, deux tours sur lui-même puis un « coo » (une fois par heure au plus ; jamais
+   sur batterie basse ni sans capteur de distance).
+5. **Cabotinage** : un « numéro » (taquinerie, gag, geste rare, danse...) joué devant quelqu'un, suivi d'un rire ou
+   d'applaudissements dans les 20 s → il prend un air fier et le refera plus souvent ; sans réaction → un peu moins
+   (scores gardés dans la mémoire).
+6. **Rituels par habitant** : une caresse quand une seule personne est là est notée à l'heure ; 4 jours sur 14 à la
+   même heure → il vient la réclamer (une fois par jour).
+7. **Objet nouveau** : après la remarque existante, une fois sur deux il s'approche à 20 cm et le picore ; habituation
+   quand les nouveautés s'accumulent.
+8. **Doudou** : sa balle après 3 parties ; parfois il va la retrouver (arrêt à 25 cm), la picore (`ground_pick`, mime
+   tant que le skill n'est pas mesuré) et reste posé à côté.
+9. **Rythme** : `audio.py` émet `motif:<écarts ms>` pour 2 à 8 tapes ; pendant une conversation (après un appel...)
+   il le rejoue en coups de bec, parfois avec un coup de trop et un air fier.
+10. **Nom sonore** : 2-3 sons de canard propres à chaque habitant ; dit après un appel (une seule personne familière)
+    et quand il réclame son rituel.
+11. **Ambiance** : `audio.py` émet `rire` (éclats réguliers et détachés) et `ambiance:tendue` (4 énoncés très forts en
+    20 s) → il rit avec vous / se fait tout petit et muet, sans blague pendant 10 min. Seuils à étalonner.
+12. **Bain de soleil** : de 9 h à 19 h, toutes les 10 min au repos, une image : une tache très lumineuse dans la moitié
+    basse (le sol) → il pivote vers elle, avance 2,5 s au plus, s'étire, s'assoit tête levée (40-90 s). L'étirement
+    du corps entier attend le GPU (file Phase 1).
+
+À valider en premier dans `duck-sim` : la gaffe (seuil de 30 cm avec le vrai ToF), le nid (deux tours sans dériver),
+le tour de victoire, le bain de soleil (la scène appartement a-t-elle des taches lumineuses ?). Audio (rires, voix
+tendues, rythme) : à étalonner avec le vrai micro à la livraison.
+
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
 Vue d'ensemble du **Chantier actif** (section plus haut) et de la table « Interactions par habitant » (Humains)
