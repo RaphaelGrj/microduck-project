@@ -50,7 +50,7 @@ dans `duck-sim` (le cloud n'y a pas accès). C'est la prochaine étape, elle ne 
 Au-delà, le travail sans robot s'épuise : les réglages fins (seuils, gestes, caresse, index du bec) demandent le vrai
 canard.
 
-**Ce qui demande le GPU (RL)** :
+**Ce qui demande le GPU (RL)** : inventaire complet dans « RL — ce qu'il reste à apprendre » (plus bas). En bref :
 - tir réentraîné avec une randomisation de position large (fenêtre de tir actuelle : 3–4 cm) ;
 - tir gauche et passe douce (`~/kick_reprise.txt`) ;
 - à terme, une politique de balle qui voit vraiment (objectif n°1 du projet), et des gestes épisodiques entraînés
@@ -2283,6 +2283,52 @@ Fait (rien encore validé dans `duck-sim` ni dans le casque) :
 - **Reste** : compiler l'appli Quest (soirée sur la tour) ; `loc_sim.py` dans `duck-sim` ; vérifier les sens
   (lacet/tangage/roulis) de la danse et du regard sur le vrai canard ; régler l'accostage à la livraison ; une scène
   `duck-sim` avec la station de Pollen (`dock`) pour répéter le retour.
+
+### 2026-10-07, soir — Plan II : le plan au service de sa vie (APK 1.10, 428 tests)
+
+Fait (`plan_vie.py`, `etats_plan.py`, `brain.py` ; rien encore validé dans `duck-sim`) :
+1. **Chasse au trésor** : le marqueur n° 9 (page `marqueurs.py imprimer`) est caché ; il fouille les pièces une à une,
+   tête balayée, et fête la trouvaille (« cherche le trésor », bouton de l'appli et de HA).
+2. **Cache-cache malin** : la cachette est un point du plan hors de vue de l'endroit où on l'a laissé, tout contre un
+   meuble, atteignable ; il pouffe (`chirp`) quand on passe près.
+3. **« Va chercher ta balle »** : la dernière position vue de la balle est notée sur le plan.
+4. **Arrivée anticipée** : déclencheur HA `arrivee_proche` (exemple dans `ha.exemple.toml`) → il va attendre à la vraie
+   porte (repère `entree` du scan).
+5. **Recharge avant les grands moments** : batterie < 50 % et retour prévu dans 15–45 min ou ronde dans l'heure → station.
+6. **Fin d'impression** : il va voir l'imprimante (point nommé `imprimante…` posé au casque, mode Dessin).
+7. **Guide vocal** « emmène-moi à la cuisine » : points nommés et pièces du plan dans la grammaire Vosk ; événement
+   `emmene:<lieu>` (distinct de `guide:`, la télécommande) ; il ouvre la marche et se retourne tous les 2,5 m.
+8. **Ses places selon l'heure** : temps passé au repos par case de 50 cm et par créneau ; il y va parfois de lui-même.
+9. **Soleil appris fenêtre par fenêtre** : chaque tache de soleil vue est attribuée à la fenêtre la plus proche ; après
+   3 jours à la même heure (± 45 min), il y va sans avoir besoin de la voir.
+10. **Changements du décor** : un obstacle durable (≥ 30 min) là où le plan est libre est signalé (HA `changement:x|y`,
+    ❓ sur le plan de l'appli) et il va l'inspecter.
+
+Correctif au passage : les `[[piece]]` HA produisaient `presence_piece:Salon|on:Salon`.
+
+### RL — ce qu'il reste à apprendre (inventaire du 2026-10-07, d'après les trois dépôts)
+
+Le cerveau n'appelle aujourd'hui que des skills existants (`kick_left`/`kick_right`, `ground_pick`, `sit_toggle`,
+`roulade`). Tout le reste est joué avec la tête, `robot.pose` et les sons, en attendant les gestes ci-dessous.
+
+**A. Entraînements commencés, à finir (tâches déjà dans le fork)**
+1. Tir tolérant **pied gauche** (`Mjlab-BallKickTolerant-Flat-Backlash-MicroDuck-Left`) : arrêté à 1 750 / 3 000
+   (`~/kick_reprise.txt`).
+2. **Passe douce** (`Mjlab-BallKickPasse-*`, 0,5 m/s, accord donné) : jamais lancée.
+3. **Tir à randomisation de position large** : fenêtre de tir actuelle 3–4 cm de profondeur, ±3 cm latéral ; c'est la
+   limite principale du jeu de balle (`approach.py`).
+4. (Facultatif) marche `Mjlab-Velocity-Flat-MicroDuck` en pause à 2 000 — la marche officielle sert déjà.
+
+**B. Gestes épisodiques (Phase 1), dans l'ordre décidé, un à la fois** : petit bond de joie ; secousse du corps
+(s'ébrouer) ; salut marqué ; frisson/sursaut ; pirouette ; bonds répétés (= trépigner) ; arrêt théâtral ; tape du
+pied ; étirement sur une jambe (servira au bain de soleil) ; pirouette sautée ; accroupissement curieux ; monter sur un
+support bas ; franchir un petit obstacle ; sprint court ; pas de côté esquive ; dribble au bec ; coup de bec vers une
+jambe ; trébuchement rattrapé. Ajouts du 2026-10-07 : se gratter avec la patte, s'allonger sur le flanc.
+
+**C. L'objectif n° 1 du projet** : une politique de balle qui voit vraiment (la vision est aujourd'hui dans le cerveau,
+`approach.py` ; la politique RL, elle, reste aveugle). À ouvrir après A.3.
+
+**Plus nécessaire** : StandUp (robotd se relève seul, `limp_fall`), VelStand (checkpoint privé Pollen).
 
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 

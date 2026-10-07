@@ -222,6 +222,11 @@ fin ou à l'échec d'une impression.
   `sensor.microduck_piece`, `microduck_ronde`. Appli Quest **Microduck XR** (`quest/Assets/Microduck/`, 6 modes,
   non compilée). Routes `/api/xr`, `/api/verite`, `/api/aller`, `/api/plan-annoter`, `/api/vue` (opt-in photos).
 
+- **Plan II** (APK 1.10, 428 tests, `plan_vie.py`) : trésor (marqueur 9), cachette hors de vue, balle sur le plan,
+  porte sur `arrivee_proche`, recharge anticipée, imprimante, guide vocal (`emmene:<lieu>` — `guide:` = télécommande),
+  lieux selon l'heure, soleil par fenêtre, changements du décor. Non validé dans `duck-sim`. Inventaire RL restant :
+  ROADMAP « RL — ce qu'il reste à apprendre ».
+
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
 Transport : socket Unix, JSON-RPC 2.0 / NDJSON (`/run/robotd.sock` sur un vrai
