@@ -208,6 +208,12 @@ fin ou à l'échec d'une impression.
   (`motif:`), nom sonore, ambiance (`rire`, `ambiance:tendue`), bain de soleil (`extras["soleil"]`). Non validé dans
   `duck-sim` ; seuils audio à étalonner.
 
+- **Vivant III** (APK 1.7, 403 tests) : goûts musicaux (`Gouts`), humeur du jour (`perso.jour`), solitude,
+  rêves de la journée (`REVES`), anniversaire (`binary_sensor.microduck_anniversaire`), chat comme modèle
+  (`ObservateurChat`).
+- **Carte Meta Quest 3** : étude dans la ROADMAP (scan → grille 2D + sémantique → filtre particulaire ToF sur le
+  canard, AprilTag en renfort). Pollen a une scène de banc SLAM visuel (`vslam_room.xml`) : à surveiller.
+
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
 Transport : socket Unix, JSON-RPC 2.0 / NDJSON (`/run/robotd.sock` sur un vrai
