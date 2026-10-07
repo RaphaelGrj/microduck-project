@@ -232,6 +232,9 @@ fin ou à l'échec d'une impression.
   `plan_vers_mjcf.py` (`run-scene.sh maison`), fork : vérité terrain `parts` + `throw`, `DUCK_SIM_GT_HZ`.
   Scripts du casque vérifiables hors Unity : `cd quest/verif && dotnet build` (stubs ; noms MRUK/OVR à confirmer dans
   Unity). Réseau WSL → Quest : `networkingMode=mirrored` + pare-feu 8090.
+- **Casque ↔ appli** (APK 1.12, 438 tests) : appairage au clavier du casque (joystick gauche, PlayerPrefs),
+  `/api/casque` (état via en-tête `X-Microduck-Casque`, adresses, actions balle/chargeur/scène), `scripts-wsl/jumeau.sh`
+  (boucle duck-sim + cerveau, `MICRODUCK_JUMEAU=1`, sans HA par défaut), `/api/design-apercu` (« Voir dans le casque »).
 
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
