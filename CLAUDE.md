@@ -217,6 +217,11 @@ fin ou à l'échec d'une impression.
   Pollen travaille aussi la localisation (`vslam_room.xml`, commentaires MCL/RTAB-Map dans `apartment.xml`, station
   `dock` dans la scène).
 
+- **Sur le plan** (APK 1.9, 418 tests) : `chemins.py` (A*), `position.py` (fil, `extras["position"]`, `bloque_zone`
+  lu par `Ctx.move`), `etats_plan.py` (`va_point`, `va_station`/`accoste`, `ronde`, `va_piece`), HA `[[piece]]`,
+  `sensor.microduck_piece`, `microduck_ronde`. Appli Quest **Microduck XR** (`quest/Assets/Microduck/`, 6 modes,
+  non compilée). Routes `/api/xr`, `/api/verite`, `/api/aller`, `/api/plan-annoter`, `/api/vue` (opt-in photos).
+
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
 Transport : socket Unix, JSON-RPC 2.0 / NDJSON (`/run/robotd.sock` sur un vrai

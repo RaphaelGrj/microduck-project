@@ -2263,6 +2263,27 @@ Unity d'export du Quest + conversion ; (c) marqueurs AprilTag ; (d) brancher coi
   (3) détection des marqueurs dans la boucle caméra ; (4) coins/chargeur/souvenirs en coordonnées du plan (gardés d'un
   redémarrage à l'autre), navigation A* ; (5) scan réel du week-end → corriger `ExportPlan.cs` si besoin.
 
+### 2026-10-07, nuit — sur le plan : station, zones, pièce, ronde ; Microduck XR (APK 1.9, 418 tests)
+
+Fait (rien encore validé dans `duck-sim` ni dans le casque) :
+- **Trajets** `chemins.py` : A* sur le plan (marge 13 cm, ~40 ms par trajet sur PC), zones interdites évitées.
+- **Position en continu** `position.py` : fil à part (localisation + marqueurs), plan du lieu rechargé tout seul,
+  conversions plan ↔ odométrie (la marche reste `navigation.AllerVers`, points reconvertis chaque seconde), pièce.
+- **États** `etats_plan.py` : `va_point` (« va là » depuis l'appli ou le casque), `va_station` + `accoste` (batterie
+  basse ou commande ; accostage = face à la station, 1,2 s de marche, demi-tour, assis — **à régler sur la vraie
+  station Pollen**), `ronde` (mode garde, `[cerveau] ronde = "22:30"` : chaque pièce, lumière mesurée, événement HA
+  `microduck_ronde`, puis la station), `va_piece` (capteurs HA `[[piece]]` : il vient dans la pièce où l'on est).
+- **Zones interdites** : contrôlées dans `Ctx.move`, donc valables pour tous les états (seule la rotation reste
+  permise vers une zone ; s'il y est posé à la main, il peut en sortir).
+- Deux leçons de la simulation : pivoter avant de juger « bloqué » après un point de passage (l'angle du meuble longé
+  bouche le capteur), et ne pas se croire bloqué quand l'obstacle est AU-DELÀ du point visé (station dans un coin).
+- **Appli** : plan vivant (position en direct, zones, points), toucher le plan pour l'y envoyer, station / ronde.
+- **Quest** : Microduck XR (`quest/`, Unity, **non compilé**) — Scan, Atelier, Vérité terrain, Dessin, Danse (avec la
+  tête), Être le canard (image seulement si les photos sont permises). Recalage du plan par l'ancre du sol du scan.
+- **Reste** : compiler l'appli Quest (soirée sur la tour) ; `loc_sim.py` dans `duck-sim` ; vérifier les sens
+  (lacet/tangage/roulis) de la danse et du regard sur le vrai canard ; régler l'accostage à la livraison ; une scène
+  `duck-sim` avec la station de Pollen (`dock`) pour répéter le retour.
+
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
 Vue d'ensemble du **Chantier actif** (section plus haut) et de la table « Interactions par habitant » (Humains)
