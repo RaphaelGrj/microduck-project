@@ -95,7 +95,7 @@
   - **Validation préparée** : une seule commande sur le PC (`valider-tout.sh`) lance les tests, le banc de coût et
     13 scénarios dans `duck-sim`, puis écrit un rapport.
 - **Application Microduck complète (2026-10-07)**, avec ou sans Home Assistant. 358 tests.
-  - **Android** : APK 1.8, publié par GitHub avec ta clé à chaque version.
+  - **Android** : APK 1.9, publié par GitHub avec ta clé à chaque version.
     Lien : <https://github.com/RaphaelGrj/microduck-brain/releases/latest/download/microduck.apk>
   - **Ordinateur** (Windows, Mac, Linux) : release `ordinateur-v*`.
   - **iPhone** : démo en ligne <https://raphaelgrj.github.io/microduck-brain/?demo> (Safari → « Sur l'écran
@@ -135,6 +135,12 @@
   - Le canard s'y situe : 8 cm en moyenne au banc synthétique, s'il part de son chargeur. Marqueurs imprimés pour se
     retrouver ailleurs.
   - Pas encore branché dans le cerveau, ni essayé dans `duck-sim`.
+
+- **Sur le plan + casque (2026-10-07, nuit), APK 1.9.** 418 tests, rien validé dans `duck-sim`.
+  - Il rentre seul à sa station, ne va jamais dans les zones interdites, vient dans la pièce où tu es, fait la ronde
+    du soir (rapport dans HA), et va là où on touche son plan dans l'appli.
+  - Appli Quest « Microduck XR » : voir ce qu'il croit dans ta pièce, mesurer son erreur, dessiner zones et points,
+    lui apprendre une danse avec ta tête, être le canard. À compiler sur la tour.
 
 ## En cours — l'apprentissage (en pause, reprise possible)
 
