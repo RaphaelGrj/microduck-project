@@ -21,6 +21,10 @@
      (réseau WSL → Quest, une fois) : `microduck-brain/quest/README.md`, « Le canard jumeau ». Penser à
      `cp ~/microduck-brain/scripts-wsl/*.sh ~/` après le `git pull` (scène `maison`, poses à 30 Hz) et à mettre à jour
      le fork : `cd ~/microduck_rl && git pull` (branche `develop`).
+   - **Lancement en une commande** : `bash ~/jumeau.sh testball` (ou `maison` après le scan). Dans Unity, cocher
+     *Requires System Keyboard* (OVR Manager) ; adresse et code se tapent dans le casque (joystick gauche), affichés
+     par l'appli : *Réglages → Casque (Meta Quest)*. Même carte : lancer la balle, remettre au chargeur, changer de
+     scène. Design space : « 👓 Voir dans le casque ».
 3. **Ensuite, RL** (GPU, un entraînement à la fois) :
    - finir le tir tolérant du pied gauche (arrêté à 1 750 / 3 000 ; commande dans `~/kick_reprise.txt`) ;
    - puis la passe douce (`Mjlab-BallKickPasse-*`) ;
