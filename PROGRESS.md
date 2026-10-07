@@ -3,6 +3,26 @@
 > Vue d'ensemble rapide. Détails complets : `ROADMAP.md`. Contexte technique : `CLAUDE.md`.
 > Dernière mise à jour : 2026-10-07 soir (Plan II : le plan au service de sa vie).
 
+## Ce soir (2026-10-07) — sur le PC
+
+1. **Validation `duck-sim`** (en premier, elle tourne seule ~45 min) :
+   ```
+   cd ~/microduck-brain && git checkout main && git pull
+   setsid bash ~/microduck-brain/scripts-wsl/valider-tout.sh > /dev/null 2>&1 < /dev/null &
+   ```
+   Renvoyer le rapport `~/validation-AAAA-MM-JJ_HHMM.txt` à Claude. Les scénarios couvrent le code d'avant le Plan II :
+   les 10 nouveautés du Plan II n'y sont pas encore.
+2. **Unity, en parallèle** : installer Unity Hub + Unity 6 LTS (module Android Build Support, avec OpenJDK et Android
+   SDK & NDK), puis suivre `microduck-brain/quest/README.md` §1 (projet `MicroduckScan`, Meta XR All-in-One SDK, copie de
+   `quest/Assets/Microduck/`). Donner l'accès à Claude : il corrige les erreurs de compilation des scripts (jamais
+   compilés jusqu'ici). Scan de la maison : plutôt ce week-end.
+3. **Ensuite, RL** (GPU, un entraînement à la fois) :
+   - finir le tir tolérant du pied gauche (arrêté à 1 750 / 3 000 ; commande dans `~/kick_reprise.txt`) ;
+   - puis la passe douce (`Mjlab-BallKickPasse-*`) ;
+   - puis le tir à randomisation de position large.
+
+   Liste complète : ROADMAP, « RL — ce qu'il reste à apprendre ».
+
 ## Fait
 
 - **Plan II (2026-10-07 soir, APK 1.10, 428 tests, pas encore validé dans `duck-sim`)** : chasse au trésor (marqueur
