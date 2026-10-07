@@ -15,7 +15,12 @@
 2. **Unity, en parallèle** : installer Unity Hub + Unity 6 LTS (module Android Build Support, avec OpenJDK et Android
    SDK & NDK), puis suivre `microduck-brain/quest/README.md` §1 (projet `MicroduckScan`, Meta XR All-in-One SDK, copie de
    `quest/Assets/Microduck/`). Donner l'accès à Claude : il corrige les erreurs de compilation des scripts (jamais
-   compilés jusqu'ici). Scan de la maison : plutôt ce week-end.
+   compilés dans Unity ; ils passent une vérification hors Unity, `quest/verif`). Scan de la maison : plutôt ce week-end.
+   - **Nouveau : le canard jumeau** (mode Jumeau, 7e composant `ModeJumeau`) : le canard de `duck-sim` dans ta pièce,
+     piloté par le vrai cerveau, balle lancée à la main, couleurs de l'appli en direct et peintes en RA. Mise en route
+     (réseau WSL → Quest, une fois) : `microduck-brain/quest/README.md`, « Le canard jumeau ». Penser à
+     `cp ~/microduck-brain/scripts-wsl/*.sh ~/` après le `git pull` (scène `maison`, poses à 30 Hz) et à mettre à jour
+     le fork : `cd ~/microduck_rl && git pull` (branche `develop`).
 3. **Ensuite, RL** (GPU, un entraînement à la fois) :
    - finir le tir tolérant du pied gauche (arrêté à 1 750 / 3 000 ; commande dans `~/kick_reprise.txt`) ;
    - puis la passe douce (`Mjlab-BallKickPasse-*`) ;
@@ -24,6 +29,10 @@
    Liste complète : ROADMAP, « RL — ce qu'il reste à apprendre ».
 
 ## Fait
+
+- **Canard jumeau en RA (2026-10-07 soir, APK 1.11, 435 tests, non essayé dans le casque)** : le canard simulé dessiné
+  dans la vraie pièce (Quest), scène MuJoCo générée depuis le plan scanné, balle lancée à la main, caresse, schéma de
+  couleurs de l'appli appliqué en direct et pièces peintes en réalité augmentée.
 
 - **Plan II (2026-10-07 soir, APK 1.10, 428 tests, pas encore validé dans `duck-sim`)** : chasse au trésor (marqueur
   n° 9), vraie cachette derrière un meuble, « va chercher ta balle », il attend à la porte quand HA annonce une arrivée,

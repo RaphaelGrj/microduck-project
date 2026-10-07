@@ -227,6 +227,12 @@ fin ou à l'échec d'une impression.
   lieux selon l'heure, soleil par fenêtre, changements du décor. Non validé dans `duck-sim`. Inventaire RL restant :
   ROADMAP « RL — ce qu'il reste à apprendre ».
 
+- **Canard jumeau** (APK 1.11, 435 tests) : mode Quest `ModeJumeau` (canard de `duck-sim` en RA, couleurs de l'appli
+  en direct et peintes en RA), `jumeau.py` (`/api/jumeau`, `-balle`, `-caresse`, 404 sans simulateur),
+  `plan_vers_mjcf.py` (`run-scene.sh maison`), fork : vérité terrain `parts` + `throw`, `DUCK_SIM_GT_HZ`.
+  Scripts du casque vérifiables hors Unity : `cd quest/verif && dotnet build` (stubs ; noms MRUK/OVR à confirmer dans
+  Unity). Réseau WSL → Quest : `networkingMode=mirrored` + pare-feu 8090.
+
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
 Transport : socket Unix, JSON-RPC 2.0 / NDJSON (`/run/robotd.sock` sur un vrai
