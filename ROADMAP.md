@@ -302,6 +302,18 @@ code. Ordre proposé, du plus prioritaire au plus accessoire :
     récupération dédiée, différente du `limp_fall` (chute réelle non
     voulue) ; le plus délicat à faire paraître volontaire plutôt que raté.
 
+**Ajouts du 2026-10-07 (gestes du corps demandés par les comportements « vivants »)** — même file d'attente GPU,
+un à la fois :
+- **Trépigner** (piétinement rapide sur place, joie/impatience) : variante de (6)/(8) ; joué par l'état `excite`
+  (balle soulevée) et l'attente à la porte, qui se contentent pour l'instant de la tête, du dandinement `robot.pose` et
+  de sons.
+- **Saut de joie** = (1) ; **s'ébrouer du corps** = (2) (aujourd'hui : tête seule après une longue immobilité).
+- **Se gratter avec la patte** (une jambe levée vers la tête, équilibre sur l'autre) : geste rare au repos ; dépend
+  de l'équilibre sur une jambe acquis en (8)/(9).
+- **S'allonger sur le flanc** pour la sieste (épisodique, pose basse stable + relevé) : la bouderie et la sieste
+  profonde l'utiliseraient ; vérifier d'abord en sim que la pose est un équilibre stable (règle AGENTS.md).
+Chaque geste publié se branche dans le cerveau par `robot.do {"skill": …}` sans autre changement d'architecture.
+
 **À part, hors de cet ordre (exploratoire, pas un geste « gratuit »)** :
 - **Pousser une porte entrouverte avec le poitrail/bec** : physiquement
   utile (autonomie réelle dans la maison) mais demande du contrôle de
@@ -2115,6 +2127,39 @@ robot.
   - nom du stockage PrusaLink (`usb`) et l'en-tête `Print-After-Upload` sur la MK4S ;
   - la caméra pour les photos (`/frame` de mediad) ;
   - les parcours dans `duck-sim` (dérive de l'odométrie).
+
+### 2026-10-07 — le canard plus vivant (`vivant.py`, APK 1.5), session cloud
+
+Dix comportements purement côté robot, codés et testés (379 tests), **aucun validé dans `duck-sim`** :
+1. **Respiration et micro-saccades** au repos (cou ± 0,015 rad sur 4 s, coups d'œil ± 0,035 rad). Un repos sur trois
+   environ est « aux aguets » (tête figée) : c'est là qu'il guette les mouvements. Le détecteur de caresse suit
+   désormais la consigne qui bouge lentement (respiration) au lieu d'une consigne fixe.
+2. **Habituation** : un même bruit isolé, un bip, un mouvement en périphérie qui revient le font réagir de moins en
+   moins ; oublié au bout de quelques heures (demi-vie 30 min). Les vacarmes (série de bruits) ne s'habituent pas
+   (sécurité : pétards, alarme).
+3. **Tour de parole sonore** : après un appel, une caresse, la main tendue, des applaudissements, il « répond » 45 s
+   aux phrases qu'on lui dit (fin montante → `inquire`, descendante → `coo`, courte → `chirp`). Jamais à la télé ni à
+   une conversation qui ne lui est pas adressée. `audio.py` émet `enonce:<durée>|<sens>` (voix voisée seulement).
+4. **Bouderie** après une remontrance ou des appels ignorés (tête détournée 1-2,5 min, regard en coin à l'appel) ;
+   **réconciliation** par une caresse ou la main tendue.
+5. **Jalousie du chat** : chat caressé devant lui (boîtes chat/personne collées sur 3 images) → il vient réclamer.
+6. **Attente à la porte** : heure de retour apprise par habitant (médiane, semaine/week-end, ≥ 4 retours réguliers) ;
+   il va à l'entrée (apprise à l'accueil) 15 min, une fois par jour.
+7. **Souvenirs de lieux** : bons moments (caresse, jeu) et mauvais (bruit, chute) notés à leur position ; parfois il
+   retourne au bon coin (nostalgie), il hésite en passant au mauvais.
+8. **Âge** : jeunesse les 21 premiers jours (plus timide avec les inconnus, un peu moins patient seul), assurance des
+   taquineries qui passe de 0,5 à 1 en 60 jours. **La maladresse ne change pas** (elle fait partie du personnage).
+   Âge affiché dans l'appli (Personnalité).
+9. **Suis-moi** (ToF : la jambe la plus proche devant, 0,2-1,6 m ; pivote, avance au-dessus de la zone morte,
+   abandonne après 3 s perdu) et **je te suis** (il mène quelques pas, se retourne, `wheee` si on le suit). Commandes
+   vocales, boutons de l'appli et de HA.
+10. **Balle soulevée** (> 15 cm) → excitation (dandinement, `wheee`), pas en boucle.
+
+Le 11 (gestes du corps : trépigner, saut de joie, s'ébrouer, se gratter, s'allonger) demande le GPU : file d'attente
+RL en Phase 1.
+
+À valider en premier sur le PC : la respiration ne déclenche pas de fausse caresse sur le vrai `robotd`, le
+suis-moi avec le ToF de `duck-sim`, les seuils de l'énoncé avec le vrai micro (à la livraison).
 
 ### Prochaines étapes — ce qui rend le canard vivant, priorité à l'interaction humaine
 
