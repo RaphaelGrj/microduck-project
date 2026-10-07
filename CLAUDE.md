@@ -196,6 +196,13 @@ fin ou à l'échec d'une impression.
 - **Appli ordinateur** (`microduck-brain/ordinateur/`, Electron, release `ordinateur-v*`) et **iPhone** (web, Safari →
   écran d'accueil). Design : code couleur, couleurs gardées, schémas partagés (`microduck-catalogue/schemas/`).
 
+## État d'avancement (2026-10-07)
+- **Canard plus vivant** (`microduck-brain/vivant.py`, APK 1.5, 379 tests) : respiration/micro-saccades (chill « aux
+  aguets » pour la veille du mouvement), habituation, tour de parole sonore (`enonce:`), bouderie/réconciliation,
+  jalousie du chat (`chat_caresse`), attente à la porte, souvenirs de lieux, âge (timidité de jeunesse, assurance des
+  blagues ; maladresse inchangée, voulue), suis-moi / je te suis (ToF), excitation balle soulevée. Aléa séparé
+  `brain._rng_vie`. Non validé dans `duck-sim`. Gestes du corps RL ajoutés à la file GPU (ROADMAP Phase 1).
+
 ## IPC `robotd` — inventaire pour le futur cerveau (lu dans la doc officielle, 2026-10-01)
 
 Transport : socket Unix, JSON-RPC 2.0 / NDJSON (`/run/robotd.sock` sur un vrai

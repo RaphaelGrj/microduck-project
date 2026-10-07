@@ -1,7 +1,7 @@
 # Progression — Projet Microduck
 
 > Vue d'ensemble rapide. Détails complets : `ROADMAP.md`. Contexte technique : `CLAUDE.md`.
-> Dernière mise à jour : 2026-10-07 (nuit).
+> Dernière mise à jour : 2026-10-07 (canard plus vivant).
 
 ## Fait
 
@@ -95,7 +95,7 @@
   - **Validation préparée** : une seule commande sur le PC (`valider-tout.sh`) lance les tests, le banc de coût et
     13 scénarios dans `duck-sim`, puis écrit un rapport.
 - **Application Microduck complète (2026-10-07)**, avec ou sans Home Assistant. 358 tests.
-  - **Android** : APK 1.3, publié par GitHub avec ta clé à chaque version.
+  - **Android** : APK 1.5, publié par GitHub avec ta clé à chaque version.
     Lien : <https://github.com/RaphaelGrj/microduck-brain/releases/latest/download/microduck.apk>
   - **Ordinateur** (Windows, Mac, Linux) : release `ordinateur-v*`.
   - **iPhone** : démo en ligne <https://raphaelgrj.github.io/microduck-brain/?demo> (Safari → « Sur l'écran
@@ -110,6 +110,14 @@
   - **Graphique d'humeur et bilan du mois** : le bilan s'enregistre en image.
   - **Android** : raccourcis de l'icône, sauvegarde automatique chaque semaine.
   - **Home Assistant** : carte de tableau de bord `homeassistant/microduck-card.js`.
+
+- **Canard plus vivant (2026-10-07), APK 1.5.** 379 tests, à valider dans `duck-sim`.
+  - Il respire et bouge les yeux au repos, s'habitue aux bruits répétés, répond en sons quand on lui parle.
+  - Il boude puis se réconcilie, est jaloux quand on caresse le chat, attend à la porte à l'heure de ton retour.
+  - Il se souvient des bons et mauvais endroits, il vieillit (timide au début, de plus en plus sûr de ses blagues,
+    toujours maladroit).
+  - Suis-moi / je te suis, et il trépigne quand tu soulèves la balle.
+  - Gestes du corps (saut de joie, se gratter, s'allonger) : à entraîner sur le GPU.
 
 ## En cours — l'apprentissage (en pause, reprise possible)
 
