@@ -1,1 +1,11 @@
 Entrer ici ce qui a été fais durant la ou les sessions de ce-jour
+
+- Fait le point sur les 4 dépôts GitHub du projet : découverte que microduck-brain a énormément avancé
+  (appli Android/Electron, casque Meta Quest 3) et qu'un nouveau dépôt microduck-catalogue existe.
+- RL : terminé l'entraînement du tir tolérant pied gauche (succès, comparable au pied droit).
+- RL : lancé l'entraînement de la passe douce pied droit, coupé volontairement à 22h30 pour ne rien laisser
+  tourner sans supervision (aux 3/4 du parcours, reprise prête).
+- Mis en place le Remote Control pour suivre la session depuis le téléphone.
+- Un souci technique Windows/GitHub a été trouvé et contourné (un nom de dossier avec un espace en trop
+  bloquait les mises à jour depuis ce PC) ; à corriger sur GitHub pour que ça ne se reproduise pas.
+- Mis à jour CLAUDE.md et PROGRESS.md avec l'état du jour.

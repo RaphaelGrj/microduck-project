@@ -1,7 +1,7 @@
 # Progression — Projet Microduck
 
 > Vue d'ensemble rapide. Détails complets : `ROADMAP.md`. Contexte technique : `CLAUDE.md`.
-> Dernière mise à jour : 2026-10-07 nuit (validation duck-sim, premier essai du casque).
+> Dernière mise à jour : 2026-10-13 soir (RL : tir gauche fini, passe droite coupée à 22h30).
 
 ## Prochaine session — reprendre ici
 
@@ -11,7 +11,11 @@
   Relancer `bash ~/jumeau.sh arena`, puis capture du casque si les pièces restent mal placées.
 - **APK 1.13** (corrige le plantage Android 14) : désinstaller l'ancienne, installer
   `https://github.com/RaphaelGrj/microduck-brain/releases/latest/download/microduck.apk`.
-- **Ensuite : RL** (tir gauche depuis 1 750, passe douce, tir à DR large) — ROADMAP « RL — ce qu'il reste à apprendre ».
+- **RL** : tir gauche terminé (2026-10-13). Reprendre la passe douce depuis l'itération 2 250 (voir
+  `~/kick_reprise.txt`), puis tir à DR large — ROADMAP « RL — ce qu'il reste à apprendre ».
+- **Git sur ce PC** : `D:\Projet\MICRODUCK` ne peut plus `git pull`/`push` tant que le dossier GitHub
+  `AVANCEMENT ` (espace final dans le nom) n'est pas renommé — Windows refuse ce nom de chemin. Contournement
+  du 2026-10-13 : merge/push fait depuis WSL.
 
 ## Fait
 
@@ -168,8 +172,9 @@
 
 ## En cours — l'apprentissage (en pause, reprise possible)
 
-- **Tir tolérant du pied gauche** : arrêté à l'itération 1 750 sur 3 000 (point de reprise conservé).
-- **Passe douce** (balle à 0,5 m/s pour le chat ou toi) : préparée, à entraîner ensuite (accord donné).
+- **Tir tolérant du pied gauche : terminé** (2026-10-13, repris depuis 1 750 jusqu'à 4 750, checkpoint `model_4749.pt`).
+- **Passe douce** (balle à 0,5 m/s pour le chat ou toi) : lancée le 2026-10-13, coupée volontairement à 22h30 à
+  l'itération 2 358 sur 3 000 (checkpoint `model_2250.pt`, reprise dans `~/kick_reprise.txt`).
 
 ## À faire
 
@@ -196,5 +201,5 @@
 - **Validation complète** : `bash ~/microduck-brain/scripts-wsl/valider-tout.sh` (ou quelques scénarios : `... valider-tout.sh bec_index autotest`).
 - **Simulateur seul** (WSL) : `bash ~/run-scene.sh arena` (autres scènes : `arena_chat`, `testball`, `apartment`).
 - **Tests sans simulateur** : `cd ~/microduck-brain && uv run --with pytest pytest -q $(ls test_*.py | grep -v test_chat_affiche)`.
-- **Entraînements** : consignes de reprise dans `~/kick_reprise.txt` (WSL) : tir tolérant gauche depuis 1 750, puis passe douce.
+- **Entraînements** : consignes de reprise dans `~/kick_reprise.txt` (WSL) : passe douce depuis l'itération 2 250.
 - **Home Assistant** : `bash ~/run-brain.sh pont_ha.py ha.toml --verifier`.

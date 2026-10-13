@@ -401,5 +401,23 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
 - Personnalité évolutive (`personnalite.py`), jeu de balle autonome intégré au cerveau (état `balle`, `approach.py`
   pilotable par `etape`), cache-cache lancé par le canard, Zoomies/GroundPick : **M9 complet**. 179 tests.
 
+## État d'avancement (2026-10-13)
+- **Tir tolérant du pied gauche terminé** : repris depuis l'itération 1 750, entraînement complet jusqu'à 4 750
+  (3 000 itérations de plus, budget standard de la tâche), reward stable ~74,5, ~1 chute sur 5 épisodes
+  (comparable au pied droit). Checkpoint final `model_4749.pt`.
+- **Passe douce (pied droit) lancée puis coupée volontairement à 22h30** (pour ne rien laisser tourner sans
+  supervision) : arrêtée à l'itération 2 358 sur 3 000, dernier checkpoint sauvegardé `model_2250.pt`. Reprise
+  notée dans `~/kick_reprise.txt` (WSL).
+- **Remote Control activé** : la session Claude Code est accessible depuis le téléphone (appli Claude, onglet
+  Code) pour suivre un entraînement à distance.
+- **Piège WSL découvert** : une mise à jour automatique du service WSL (Microsoft Store) a coupé un entraînement
+  en cours en redémarrant le service à chaud — repris sans perte grâce aux checkpoints réguliers, mais à
+  surveiller si ça se reproduit en pleine nuit sans supervision.
+- **Piège Windows découvert** : un dossier créé sur GitHub avec un espace final dans son nom
+  (`AVANCEMENT ` / `CONSIGNE AVANCEMENT`) bloque tout checkout/merge Git sur ce PC (NTFS refuse les noms de
+  chemin finissant par un espace). Contournement utilisé : faire le merge/commit depuis WSL (filesystem Linux)
+  puis pousser sur GitHub depuis là. À corriger durablement en renommant ce dossier sur GitHub (retirer l'espace
+  final) pour que `D:\Projet\MICRODUCK` puisse de nouveau `git pull`/`push` normalement.
+
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.
