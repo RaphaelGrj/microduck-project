@@ -1,0 +1,10 @@
+Entrer ici ce qui a été fais durant la ou les sessions de ce-jour
+
+- RL : repris et terminé l'entraînement de la passe douce pied droit (depuis l'itération 2 358, coupée la
+  veille, jusqu'à la fin réelle du run). Résultat positif (reward en hausse), checkpoint final et export ONNX
+  prêts.
+- Rien d'autre lancé côté GPU ; session coupée à la demande de l'utilisateur sans lancer l'évaluation dans le
+  simulateur (prévue pour la prochaine session).
+- Mis en place un suivi en direct de l'entraînement (notifications automatiques par jalons, affinées en cours
+  de route pour ne pas spammer).
+- Mis à jour CLAUDE.md, PROGRESS.md et les notes de reprise avec l'état du jour.

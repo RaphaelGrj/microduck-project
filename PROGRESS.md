@@ -1,7 +1,7 @@
 # Progression — Projet Microduck
 
 > Vue d'ensemble rapide. Détails complets : `ROADMAP.md`. Contexte technique : `CLAUDE.md`.
-> Dernière mise à jour : 2026-10-13 soir (RL : tir gauche fini, passe droite coupée à 22h30).
+> Dernière mise à jour : 2026-10-14 soir (RL : passe droite terminée).
 
 ## Prochaine session — reprendre ici
 
@@ -11,13 +11,15 @@
   Relancer `bash ~/jumeau.sh arena`, puis capture du casque si les pièces restent mal placées.
 - **APK 1.13** (corrige le plantage Android 14) : désinstaller l'ancienne, installer
   `https://github.com/RaphaelGrj/microduck-brain/releases/latest/download/microduck.apk`.
-- **RL** : tir gauche terminé (2026-10-13). Reprendre la passe douce depuis l'itération 2 250 (voir
-  `~/kick_reprise.txt`), puis tir à DR large — ROADMAP « RL — ce qu'il reste à apprendre ».
-- **Git sur ce PC** : `D:\Projet\MICRODUCK` ne peut plus `git pull`/`push` tant que le dossier GitHub
-  `AVANCEMENT ` (espace final dans le nom) n'est pas renommé — Windows refuse ce nom de chemin. Contournement
-  du 2026-10-13 : merge/push fait depuis WSL.
+- **RL** : passe douce pied droit terminée (2026-10-14, `model_5249.pt`, reward ~58,5, ONNX déjà exporté). Reste
+  à **évaluer la passe dans `duck-sim`** (scène `arena`, sur le modèle de `kick_tol_eval.sh`/`kick_sweep.py` en
+  ajustant le seuil de succès pour une passe douce et non un tir), puis tir à DR large — ROADMAP « RL — ce qu'il
+  reste à apprendre ».
 
 ## Fait
+
+- **2026-10-14 soir** : reprise et fin de l'entraînement de la passe douce pied droit (depuis l'itération 2 358,
+  coupée la veille), reward en hausse (~54 → ~58,5). Évaluation dans `duck-sim` pas encore faite.
 
 - **Soirée du 2026-10-07 sur la tour** : validation `duck-sim` **complète** (12 scénarios OK après correction de 3 bancs
   d'essai ; `bec_index` non mesurable en simulation, à faire sur le vrai canard) ; projet Unity monté, appli du casque

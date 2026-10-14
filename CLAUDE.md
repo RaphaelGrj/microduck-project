@@ -419,5 +419,22 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   puis pousser sur GitHub depuis là. À corriger durablement en renommant ce dossier sur GitHub (retirer l'espace
   final) pour que `D:\Projet\MICRODUCK` puisse de nouveau `git pull`/`push` normalement.
 
+## État d'avancement (2026-10-14, soir)
+- **Passe douce pied droit terminée** : reprise depuis l'itération 2 358 (coupée la veille à 22h30) jusqu'à la fin
+  réelle du run (5249/5250 itérations ; le run avait en réalité 5250 itérations au total, pas 3000 comme annoncé
+  initialement). Checkpoint final `model_5249.pt`, reward moyen ~58,5 (vs ~54 à la reprise), chute ~8 % des
+  épisodes. ONNX déjà exporté automatiquement par le run :
+  `~/microduck_rl/logs/rsl_rl/ball_kick_passe_right/2026-10-14_20-09-31_ball_kick_passe_right/2026-10-14_20-09-31_ball_kick_passe_right.onnx`.
+  Session coupée à la demande de l'utilisateur **avant** l'évaluation dans `duck-sim` : rien ne tourne sur le GPU/WSL.
+- **À faire en priorité** : évaluer la passe droite dans `duck-sim` (scène `arena`), sur le modèle de
+  `kick_tol_eval.sh` / `kick_sweep.py` / `bilan_kick.py`, en adaptant le seuil de succès (`kick_sweep.py` vise par
+  défaut un TIR à 0,4 m/s minimum et un cap à moins de 35°, une passe douce cible ~0,5 m/s mais plus contrôlée —
+  à rejuger). Vérifier d'abord si `BallKickPasse` a été entraînée avec tolérance de position de balle (DR) ou
+  position fixe (si fixe, tester `kick_sweep.py right 1 nominal` avant un balayage dx/dy). Charger l'ONNX via
+  `charge_politique.py kick_right <chemin>`, remettre `officielle` après.
+- **Piège découvert** : un filtre `grep -E` de jalons type `5[0-2][0-9][0-9]` pour repérer « toutes les 50
+  itérations » matche en fait toute la plage 5000-5299 → préférer un filtre du type `[0-9]*(00|50)/<total>`,
+  robuste quel que soit le nombre total d'itérations.
+
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.
