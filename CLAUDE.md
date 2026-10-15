@@ -436,5 +436,49 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   itérations » matche en fait toute la plage 5000-5299 → préférer un filtre du type `[0-9]*(00|50)/<total>`,
   robuste quel que soit le nombre total d'itérations.
 
+## État d'avancement (2026-10-15, soir)
+- **Bug trouvé et corrigé sur `BallKickPasse`** : l'évaluation dans `duck-sim` (scène `arena`, `kick_sweep.py`) des
+  deux passes douces terminées (droite le 14/10, gauche terminée le 15/10 à midi) a révélé que le pied **gauche**
+  ne touchait plus jamais la balle (vmax 0,00 m/s sur toute une grille dx/dy), alors que le policy s'activait bien
+  (`robot.state.policy` passait à `kick_left`) et que le reward d'entraînement était comparable au droit (~56,8 vs
+  58,5). Comparaison avec un checkpoint intermédiaire (itération 1 500 : tapait encore à 0,35 m/s) → **effondrement
+  en fin d'entraînement**, pas un bug d'export/pipeline. Cause : dans `microduck_ball_kick_env_cfg.py`, le poids de
+  la récompense `ball_forward_velocity` restait figé à 12.0 alors que la cible de vitesse de la passe est divisée
+  par 2 (0,5 m/s au lieu de 1,0 pour le tir normal/tolérant) ; cette récompense étant plafonnée à la cible, le gain
+  maximal au point visé tombait à 6 au lieu de 12, alors que le coût du mouvement de jambe (anti-hop du pied
+  d'appui, déviation de pose) restait identique à celui d'un tir plein → la marge qui rend le tir « rentable »
+  s'effondre, le pied droit survivait de justesse (vmax ~0,29 m/s, sous la cible) mais le gauche a complètement
+  dérivé vers « ne plus taper ». **Fix** : nouveau paramètre `forward_velocity_weight` (défaut 12.0, inchangé pour
+  les tâches existantes), mis à `12.0/PASSE_TARGET_SPEED = 24.0` pour la passe (restaure le payoff à 12 au point
+  visé) et `PASSE_OVERSHOOT_WEIGHT` rescalé à `-8.0` (même ratio -1/3 que l'original -4/12). Modifs dans
+  `microduck_ball_kick_env_cfg.py` et `tasks/__init__.py` du fork `microduck_rl`, à pousser.
+- **Passe droite corrigée terminée** (3000/3000 itérations) : run
+  `~/microduck_rl/logs/rsl_rl/ball_kick_passe_right/2026-10-15_19-27-50_ball_kick_passe_right/`, `model_2999.pt`,
+  ONNX exporté au même endroit. Reward final **79,8** (vs 58,5 avant le fix), `ball_forward_velocity` reward
+  11,175 sur 12 possibles, overshoot -0,384 (bien maîtrisé), **0 chute**. Fix validé empiriquement par les courbes
+  — reste à confirmer en évaluation `duck-sim` (pas faite cette session, voir plus bas).
+- **Passe gauche corrigée interrompue à la demande de l'utilisateur** (fin de session 22h45) : arrêtée
+  proprement (`SIGTERM`, pas `kill -9`) à l'itération **502/3000**, checkpoint `model_500.pt` intact, run
+  `~/microduck_rl/logs/rsl_rl/ball_kick_passe_left/2026-10-15_22-01-02_ball_kick_passe_left/`. Reprise notée dans
+  `~/kick_reprise.txt` (WSL) :
+  ```
+  cd ~/microduck_rl
+  uv run train Mjlab-BallKickPasse-Flat-Backlash-MicroDuck-Left --env.scene.num-envs 4096 \
+      --agent.logger tensorboard --agent.resume True \
+      --agent.load-run 2026-10-15_22-01-02_ball_kick_passe_left
+  ```
+- **À faire ensuite** : une fois la passe gauche corrigée terminée, évaluer **les deux** passes corrigées dans
+  `duck-sim` (comme pour les versions buguées, qui ont révélé le problème) avant de considérer la passe comme
+  acquise — le succès sur les courbes d'entraînement ne garantit pas l'inférence réelle (c'est exactement ce qui
+  s'est passé pour le pied gauche bugué).
+- **Bouton bureau "GPU Power Toggle"** créé (`D:\Projet\MICRODUCK\gpu_power_toggle.ps1`, raccourci sur le Bureau
+  Windows, pas dans le repo) pour limiter la conso pendant les trainings sans toucher aux sessions de jeu : bascule
+  la limite de puissance (300 W normal / 250 W économie — 250 W est le plancher matériel de cette RTX 5070 Ti,
+  `nvidia-smi` ne permet pas de descendre plus bas) **et** l'horloge graphique (`nvidia-smi -lgc`, bridée à
+  1 800 MHz en mode économie — mécanisme officiel NVIDIA, pas de survoltage, aucun risque matériel ; palier choisi
+  prudent, à valider par l'utilisateur avant d'aller plus bas). Le script s'auto-élève (une confirmation UAC par
+  clic) — la piste des tâches planifiées (`schtasks /ru SYSTEM`) pour éviter toute élévation a été abandonnée :
+  Windows bloquait leur déclenchement même sans admin apparent.
+
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.
