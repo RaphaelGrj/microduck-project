@@ -1,9 +1,15 @@
 # Progression — Projet Microduck
 
 > Vue d'ensemble rapide. Détails complets : `ROADMAP.md`. Contexte technique : `CLAUDE.md`.
-> Dernière mise à jour : 2026-10-14 soir (RL : passe droite terminée).
+> Dernière mise à jour : 2026-10-16 soir (passes évaluées, Atelier + APK 1.15, tâche Hop en cours).
 
 ## Prochaine session — reprendre ici
+
+- **RL Hop (bond de joie)** : v3 écrite dans le fork, jamais essayée. Arrêter `duck-sim`, puis
+  `setsid bash ~/hop_pilote.sh` (400 it., 2048 envs, ~15 min), `bash ~/courbes_hop.sh`, `bash ~/lance_eval_hop.sh`.
+  Run complet (3000 it., ~2 h) seulement si le tronc dépasse 12,5 cm pieds en l'air. Détail : `CLAUDE.md` (2026-10-16).
+- **Appli** : installer l'APK 1.15 et vérifier que l'Atelier (3D) s'affiche dans la WebView ; tester le suivi en direct
+  avec `jumeau.sh arena` ; idées : blocs « si… alors ».
 
 - **Canard jumeau en RA (à finir)** : appli Microduck XR compilée et installée dans le Quest (Unity 6, Meta XR SDK 207,
   OpenXR), appairage automatique OK (le casque trouve le PC sur le Wi-Fi, accord dans l'appli). Reste : le canard

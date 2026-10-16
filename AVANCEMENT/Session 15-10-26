@@ -1,0 +1,7 @@
+- RL : bug trouvé sur la passe douce. Les deux premières passes terminées avaient un poids de récompense mal
+  réglé : le pied gauche ne touchait plus jamais la balle en simulateur malgré de bonnes courbes d'entraînement.
+  Corrigé dans le fork (poids de vitesse doublé pour la passe). Passe droite refaite en entier avec succès ;
+  passe gauche relancée puis coupée à la demande de l'utilisateur (reprise notée).
+- Leçon : un bon score d'entraînement ne suffit pas, il faut évaluer dans le simulateur.
+- Bouton bureau « GPU Power Toggle » pour limiter la consommation du GPU pendant les entraînements.
+- Mis à jour CLAUDE.md et les notes de reprise.

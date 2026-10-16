@@ -1,0 +1,15 @@
+- RL : passe gauche corrigée terminée. Les deux passes douces sont évaluées dans le simulateur : le pied gauche
+  retouche la balle, les deux envoient la balle à ~0,5 m en 1 s, sans chute. Fenêtre de tir mesurée
+  (de -2 à +3 cm en profondeur, ±2,5 cm de côté) ; profil `passe` du cerveau mis à jour.
+- Validation groupée dans le simulateur : 12 scénarios sur 12 réussis (le bec reste à vérifier sur le vrai
+  canard), 449 tests, coût du cerveau négligeable.
+- Application : nouvel « Atelier » (canard en 3D pilotable + programmation par blocs façon Scratch, compilée
+  et bornée par le canard : aucun code exécuté sur le robot), traduit en anglais. APK 1.15 publié sur GitHub.
+  Pas encore testé dans l'appli Android réelle.
+- Projet partageable : guide d'installation, installateur en une commande, licence Apache-2.0, tests
+  automatiques sur GitHub, historique vérifié sans secret.
+- RL, nouveau geste : écriture de la tâche « petit bond de joie » (Hop). Premier essai : la politique a
+  trouvé une faille (se laisser tomber sur le ventre). Corrigée ; deuxième essai : le canard s'accroupit
+  mais ne saute pas. Ajout d'un signal d'élan, pas encore essayé. Run complet pas lancé.
+- Pièges notés : 4096 environnements plantent sur ce type de tâche (2048 passent) ; le simulateur doit être
+  arrêté avant un entraînement.

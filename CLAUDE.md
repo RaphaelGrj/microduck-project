@@ -480,5 +480,27 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   clic) — la piste des tâches planifiées (`schtasks /ru SYSTEM`) pour éviter toute élévation a été abandonnée :
   Windows bloquait leur déclenchement même sans admin apparent.
 
+## État d'avancement (2026-10-16, soir)
+- **Passes douces évaluées dans `duck-sim`** (`microduck-brain/scripts-wsl/passe_eval.sh right 2999 | left 3499`,
+  `KICK_VMIN`/`KICK_VMAX` surchargeables) : le correctif du poids `ball_forward_velocity` est confirmé (le gauche touche
+  de nouveau la balle). Les deux envoient la balle à ~0,5 m en 1 s (pointe ~0,28 m/s, d'où `KICK_VMIN=0.22`), cap
+  < 35°, 0 chute. Fenêtre de succès mesurée : dx −2 à +3 cm, dy ±2,5 cm ; `PROFILS_TIR["passe"]` gardé tel quel
+  (`MICRODUCK_TIR`/`profil_tir = "passe"`). Politiques officielles remises dans `robotd`.
+- **Validation groupée** `duck-sim` : 12/12 (`bec_index` N/A), 449 tests. Rapport `~/validation-2026-10-16_2136.txt`.
+- **Appli** : Atelier (canard 3D pilotable + blocs compilés côté canard par `blocs.py`, `/api/atelier`, `atelier.js`),
+  anglais, **APK 1.15 publié** (release `apk-v1.15`). Données du jumeau vérifiées par API ; rendu 3D en direct et
+  WebView Android non testés. Licence Apache-2.0, `INSTALLER.md`, `deploy/robot/installer.sh`, CI `tests.yml`.
+- **RL — tâche Hop (petit bond de joie)** : `Mjlab-Hop-Flat-Backlash-MicroDuck` dans le fork
+  (`microduck_hop_env_cfg.py`, commande de phase de 2,4 s, `scripts/eval_hop.py` pour rejouer un checkpoint). Pilote v1 :
+  faille « ventre au sol pieds repliés » (z=0,036, capteur de contact trompé) → hop_air exige le tronc ≥ 10,5 cm +
+  `hop_low_penalty`. Pilote v2 : le canard s'accroupit (9,4 cm) mais ne saute pas (hop_air = 0). v3 écrit, NON essayé :
+  `hop_launch` (vitesse verticale montante), `HOP_DZ` = 2 cm. **À faire** : pilote de 400 it. (~15 min) puis
+  `eval_hop.py` ; si le tronc dépasse 12,5 cm avec les pieds en l'air → run complet 3000 it. (~2 h).
+- **Pièges** : 4096 envs plantent sur les tâches de type sitstand (`nconmax=200`, CUDA error 600) → **2048** ;
+  `duck-sim`/`jumeau.sh` doivent être ARRÊTÉS avant un entraînement (même erreur CUDA 600) ; `jumeau.sh` veut `uv` dans
+  le PATH ; `pkill -f` se reconnaît lui-même (écrire `jum[e]au`) ; `gh` absent (API publique GitHub pour les releases).
+  Scripts d'aide dans `~` (WSL) : `tout_valider.sh`, `lance_jumeau.sh`, `hop_pilote.sh`, `courbes_hop.sh`,
+  `lance_eval_hop.sh`, `pousser_brain.sh`, `stop_sim.sh`.
+
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.
