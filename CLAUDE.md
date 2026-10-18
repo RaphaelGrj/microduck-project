@@ -502,5 +502,21 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   Scripts d'aide dans `~` (WSL) : `tout_valider.sh`, `lance_jumeau.sh`, `hop_pilote.sh`, `courbes_hop.sh`,
   `lance_eval_hop.sh`, `pousser_brain.sh`, `stop_sim.sh`.
 
+## État d'avancement (2026-10-18)
+- **RL — tâche Hop terminée (v4)** : `Mjlab-Hop-Flat-Backlash-MicroDuck` (fork `microduck_rl`, commit `f14b4568`).
+  v3 (pilote 400 it. puis run 3000 it.) : le canard saute pour de vrai (tronc 15,6 cm pour 11,5 debout, 27 pas/120 pieds
+  en l'air) mais corps très penché en vol (`gravite_z` −0,44) et double rebond. v4 : ajout de `hop_tilt_penalty` (poids 5)
+  et `hop_mid_contact_penalty` (poids 3) → vol continu, inclinaison un peu moindre (−0,58), saut un peu plus bas (14,5 cm),
+  repos encore un peu affaissé (10,8 cm). Run `logs/rsl_rl/microduck_hop/2026-10-18_14-47-38_microduck_hop`, `model_2999.pt`
+  + ONNX. Plafond de reward dès ~750 it. : les 2250 suivantes n'apportent rien.
+- **Hop dans `duck-sim`** : joué via le slot `ground_pick` (seule politique à phase gérée par `robotd`) avec
+  `ground_pick_period = 2.4` : 3 essais sans chute, accroupi 7 cm, sommet 13 cm, retour debout. Décollage des pieds non
+  vérifié (vérité terrain à utiliser). Pour l'avoir EN PLUS du ground_pick : le publier comme skill (Hub/manifest).
+- **Pièges** : `duck-sim` réécrit `robotd-duck-a.toml` à chaque démarrage → charger via `robot.loadPolicy`
+  (`charge_politique.py`) APRÈS le démarrage, ajouter la période, `robot.reloadPolicies`, et **remettre l'officiel**
+  ensuite ; `lance_eval_hop.sh` triait les checkpoints en ordre lexical (`model_750` > `model_2999`), corrigé (`sort -V`).
+- **Idées suite** : renforcer `hop_rest_height`/`hop_land_upright` (affaissement après réception), baisser le poids de
+  l'inclinaison si la hauteur compte.
+
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.
