@@ -515,8 +515,30 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
 - **Pièges** : `duck-sim` réécrit `robotd-duck-a.toml` à chaque démarrage → charger via `robot.loadPolicy`
   (`charge_politique.py`) APRÈS le démarrage, ajouter la période, `robot.reloadPolicies`, et **remettre l'officiel**
   ensuite ; `lance_eval_hop.sh` triait les checkpoints en ordre lexical (`model_750` > `model_2999`), corrigé (`sort -V`).
-- **Idées suite** : renforcer `hop_rest_height`/`hop_land_upright` (affaissement après réception), baisser le poids de
-  l'inclinaison si la hauteur compte.
+- **Décollage du Hop vérifié (vérité terrain `duck-sim`)** : chevilles +5 à +11 cm, les deux pieds > 1 cm pendant ~0,5 s
+  (3 essais). Script `~/hop_decollage.py` (WSL, `PYTHONPATH=~/microduck-brain`).
+- **Hop v5 (pilote 400 it., non retenu)** : `hop_rest_height` std 1 cm poids 3, `hop_land_upright` poids 4 → repos 11,2 cm
+  (v4 : 10,8) mais rebond revenu et inclinaison inchangée (−0,87). **La v4 (`model_2999`) reste la référence.** Les
+  réglages v5 sont dans le code (commit `c58b63fe`) : Shake en hérite ; pour retrouver exactement la v4, remettre std 0,02
+  / poids 2 et 3.
+- **RL — tâche Shake (s'ébrouer) terminée** : `Mjlab-Shake-Flat-Backlash-MicroDuck` (`microduck_shake_env_cfg.py`, fork).
+  Cycle 2 s, secousse de lacet dans la fenêtre phi 0,15–0,65 qui suit une vitesse CIBLE sinusoïdale (3 allers-retours,
+  3 rad/s ; somme nulle, sinon la politique tourne en continu), pieds au sol, sans dérive ; hérite des récompenses de
+  repos/inclinaison du Hop. Pilote 400 it. puis run 2000 it. (`logs/rsl_rl/microduck_shake/2026-10-18_19-20-13_microduck_shake`,
+  `model_1999.pt` + ONNX). Plateau dès le pilote. Éval (`scripts/eval_shake.py`, `~/lance_eval_shake.sh`) : |wz| max
+  3,3 rad/s, 3 oscillations nettes, pied levé 6,6 pas/100 (13 au pilote), dérive 3,4 cm. **Défauts** : amplitude de lacet
+  ±14° au lieu de ±9° prévus, et ~24° de rotation résiduelle en fin de cycle (le canard ne revient pas dans son axe).
+  **Non essayé dans `duck-sim`** (même méthode que le Hop : slot `ground_pick` + `ground_pick_period = 2.0`).
+- **Reprise demain** (GPU libre, rien ne tourne, `ground_pick` officiel remis, `duck-sim` arrêté) :
+  1. Essayer le Shake dans `duck-sim` (voir pièges ci-dessus, période 2,0 s).
+  2. Corriger la rotation résiduelle : récompense de retour au cap initial en fin de cycle (garder le yaw initial dans
+     l'env), puis pilote 400 it. (~18 min).
+  3. Geste suivant de l'inventaire ROADMAP (B) : salut marqué, frisson/sursaut, pirouette…
+  Scripts d'aide nouveaux dans `~` (WSL) : `hop_complet.sh`, `shake_pilote.sh`, `shake_complet.sh`,
+  `lance_eval_shake.sh`, `hop_sim.py`, `hop_decollage.py`.
+- **Pièges** : un `bash -lc '…'` appelé depuis le shell Windows casse sur une apostrophe dans le texte (« l'air ») →
+  écrire le script avec l'outil de fichier ; `PYTHONPATH=~/microduck-brain` nécessaire pour lancer un script hors de ce
+  dossier via `run-brain.sh`.
 
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.

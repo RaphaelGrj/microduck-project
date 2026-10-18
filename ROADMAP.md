@@ -2319,8 +2319,9 @@ Le cerveau n'appelle aujourd'hui que des skills existants (`kick_left`/`kick_rig
    limite principale du jeu de balle (`approach.py`).
 4. (Facultatif) marche `Mjlab-Velocity-Flat-MicroDuck` en pause à 2 000 — la marche officielle sert déjà.
 
-**B. Gestes épisodiques (Phase 1), dans l'ordre décidé, un à la fois** : petit bond de joie ; secousse du corps
-(s'ébrouer) ; salut marqué ; frisson/sursaut ; pirouette ; bonds répétés (= trépigner) ; arrêt théâtral ; tape du
+**B. Gestes épisodiques (Phase 1), dans l'ordre décidé, un à la fois** — **faits (2026-10-18, politiques entraînées,
+Hop essayé dans `duck-sim`, Shake pas encore)** : petit bond de joie (`Mjlab-Hop-…`, v4) ; secousse du corps
+(`Mjlab-Shake-…`, rotation résiduelle à corriger). **Restent** : salut marqué ; frisson/sursaut ; pirouette ; bonds répétés (= trépigner) ; arrêt théâtral ; tape du
 pied ; étirement sur une jambe (servira au bain de soleil) ; pirouette sautée ; accroupissement curieux ; monter sur un
 support bas ; franchir un petit obstacle ; sprint court ; pas de côté esquive ; dribble au bec ; coup de bec vers une
 jambe ; trébuchement rattrapé. Ajouts du 2026-10-07 : se gratter avec la patte, s'allonger sur le flanc.
