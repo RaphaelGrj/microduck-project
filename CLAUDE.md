@@ -540,5 +540,30 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   écrire le script avec l'outil de fichier ; `PYTHONPATH=~/microduck-brain` nécessaire pour lancer un script hors de ce
   dossier via `run-brain.sh`.
 
+## État d'avancement (2026-10-21)
+- **Shake v1 essayé dans `duck-sim`** (scène `arena`, slot `ground_pick` + `ground_pick_period = 2.0`, script `~/shake_sim.py`
+  qui mesure l'amplitude et la rotation résiduelle de lacet sur la vérité terrain) : 0 chute sur 3 essais, mais amplitude
+  ±23-48° (visé ±9°) et rotation résiduelle 8-49° en fin de cycle.
+- **Tentative de correction de la rotation résiduelle** (fork `microduck_rl`) : nouvelle commande `ShakePhaseCommand`
+  (`mdp.py`, mémorise le cap au reset) + `ShakePhaseCommandCfg` dédié + récompense `shake_yaw_lock` (poids 3.0, active hors
+  fenêtre de secousse, gaussienne sur l'écart de cap au cap de départ). **Piège** : `GroundPickPhaseCommandCfg.build()`
+  instancie `GroundPickPhaseCommand` EN DUR et ignore le champ `class_type` — changer `class_type` sur une instance ne
+  fait rien, il faut une sous-classe de Cfg qui surcharge `build()` (sinon `AttributeError: ... no attribute 'yaw0'`).
+  Pensez aussi à purger `__pycache__` après édition de code lancé via `uv run train`.
+- **Réglage** : `std` de `shake_yaw_lock` 0,2 → 0,6 rad (le 1er pilote restait plat à 0,07-0,15 : gaussienne trop étroite
+  face à une dérive de 0,4-0,8 rad, gradient quasi nul). Pilote 400 it. : yaw_lock 0,02 → 0,33, 0 chute.
+- **Run complet** (2000 it., 2048 envs, `logs/rsl_rl/microduck_shake/2026-10-21_20-43-32_microduck_shake`, `model_1999.pt` +
+  ONNX) : reward ~45,6, shake_track 1,85, feet_penalty -0,07, drift 0,65, yaw_lock ~0,25, aucune chute ; plateau dès
+  ~500 it. (yaw_lock n'a pas progressé après le pilote).
+- **Évaluation `duck-sim` du run complet : le correctif N'A PAS amélioré le comportement** — rotation résiduelle +64°/+49°/+30°
+  (3 essais, avant le fix : 8-49°), amplitude ±20-37°, 0 chute. La récompense seule ne suffit pas.
+  **À essayer ensuite** : poids de `shake_yaw_lock` bien plus fort (10+) ou pénalité d'écart de cap active pendant toute la
+  secousse ; réduire `SHAKE_WZ` (amplitude trop grande) ; vérifier que la récompense mesure bien le cap en fin de cycle
+  (phase 0,65-1,0) — ou accepter le défaut (geste cosmétique, dérive de quelques dizaines de degrés).
+- **Piège de mesure** : après `charge_politique.py` + `robot.reloadPolicies`, attendre quelques secondes et vérifier que
+  `robot.subscribe` affiche bien l'ONNX voulu pour `ground_pick` avant de mesurer (un 1er essai a tourné avec l'ancienne
+  politique : `policies vues` sans `stand`, résultat à jeter). Politique officielle `ground_pick` remise, `duck-sim` arrêté,
+  GPU libre.
+
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.
