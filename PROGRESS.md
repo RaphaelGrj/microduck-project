@@ -1,13 +1,15 @@
 # Progression — Projet Microduck
 
 > Vue d'ensemble rapide. Détails complets : `ROADMAP.md`. Contexte technique : `CLAUDE.md`.
-> Dernière mise à jour : 2026-10-16 soir (passes évaluées, Atelier + APK 1.15, tâche Hop en cours).
+> Dernière mise à jour : 2026-10-22 soir (Bow validé dans duck-sim, Shake abandonné, run Bow en pause).
 
 ## Prochaine session — reprendre ici
 
-- **RL Hop (bond de joie)** : v3 écrite dans le fork, jamais essayée. Arrêter `duck-sim`, puis
-  `setsid bash ~/hop_pilote.sh` (400 it., 2048 envs, ~15 min), `bash ~/courbes_hop.sh`, `bash ~/lance_eval_hop.sh`.
-  Run complet (3000 it., ~2 h) seulement si le tronc dépasse 12,5 cm pieds en l'air. Détail : `CLAUDE.md` (2026-10-16).
+- **RL Bow (salut marqué)** : pilote v2 validé dans `duck-sim`. Run complet en pause à ~1 068/2 399
+  (`model_1000.pt`, dossier `2026-10-22_21-59-35_microduck_bow`) ; commande de reprise dans `CLAUDE.md` (2026-10-22).
+  Le comparer au pilote (`2026-10-21…21-40-34`) dans `duck-sim` (`~/bow_sim.py`) avant de le préférer.
+- **RL ensuite** : publier Hop et Bow comme skills `robotd` ; puis geste suivant (frisson/sursaut, pirouette, trépigner).
+  Shake abandonné (v1 du 18/10 gardée).
 - **Appli** : installer l'APK 1.15 et vérifier que l'Atelier (3D) s'affiche dans la WebView ; tester le suivi en direct
   avec `jumeau.sh arena` ; idées : blocs « si… alors ».
 
@@ -23,6 +25,9 @@
   reste à apprendre ».
 
 ## Fait
+
+- **2026-10-22** : Shake v3 en échec dans `duck-sim` (abandonné) ; salut marqué (Bow) écrit, corrigé et validé dans `duck-sim`
+  (max 26°, retour à la verticale, 0 chute) ; journaux 18/21/22 rédigés ; run Bow arrêté proprement pour reprise.
 
 - **2026-10-14 soir** : reprise et fin de l'entraînement de la passe douce pied droit (depuis l'itération 2 358,
   coupée la veille), reward en hausse (~54 → ~58,5). Évaluation dans `duck-sim` pas encore faite.

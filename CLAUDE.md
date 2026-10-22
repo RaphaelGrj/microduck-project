@@ -576,6 +576,23 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   tangage visé 0,40 rad (sin de la gravité projetée x), rampe/plateau/rampe sur la fenêtre 0,15-0,65, pénalités pieds/roulis,
   `hop_tilt_penalty` retirée. Seulement construite et enregistrée (test CPU), **jamais entraînée**.
   Prêt : `~/bow_pilote.sh` (400 it., ~15 min), `~/lance_eval_bow.sh` + `scripts/eval_bow.py`.
+- **Shake v3 : ÉCHEC dans `duck-sim`** (run complet 2000 it., `…/microduck_shake/2026-10-22_19-22-58_microduck_shake`) : rotation
+  résiduelle +53/+59/+160°, amplitude ±33 à ±83°, 0 chute — pire que la v2, alors que le banc d'entraînement montrait +5°
+  (la correction ne transfère pas au simulateur). **Décision : abandonner**, garder la v1 du 18/10 (8-49°), geste cosmétique.
+- **Bow VALIDÉ dans `duck-sim`** (commit `efde7ccc`) : v1 (pilote) restait à 31° sans se redresser ; v2 = `bow_rest_upright`
+  poids 8, std 0,3 → pilote 400 it. : max 24,9°, final +4,7° au banc ; `duck-sim` (`~/bow_sim.py`, slot `ground_pick`
+  + `ground_pick_period = 2.4`) : max 26°, final -5 à +2°, 0 chute sur 3 essais. Meilleur run (pilote v2) :
+  `logs/rsl_rl/microduck_bow/2026-10-22_21-40-34_microduck_bow` (ONNX dedans, copie dans `~/.cache/duck-sim/policies/bow2/bow.onnx`).
+- **Run complet Bow arrêté proprement à 22h28** (SIGTERM) à l'itération ~1 068/2 399, dossier
+  `logs/rsl_rl/microduck_bow/2026-10-22_21-59-35_microduck_bow`, dernier checkpoint `model_1000.pt`. Reprise :
+  ```
+  cd ~/microduck_rl
+  uv run train Mjlab-Bow-Flat-Backlash-MicroDuck --env.scene.num-envs 2048 --agent.logger tensorboard       --agent.resume True --agent.load-run 2026-10-22_21-59-35_microduck_bow
+  ```
+  (écrit dans un NOUVEAU dossier). Le pilote v2 suffit déjà : le run complet n'est qu'un renforcement, à comparer au pilote
+  dans `duck-sim` avant de le préférer. Rien ne tourne, `duck-sim` arrêté, `ground_pick` officiel remis.
+- **RL validé dans `duck-sim` à ce jour** : tir tolérant (D/G), passes douces (D/G), Hop (v4), Bow. Échec/abandon : Shake.
+  Reste : publier Hop/Bow comme skills (aujourd'hui via le slot `ground_pick`), puis geste suivant (frisson, pirouette, trépigner).
 - **Piège** : un `python3 - <<EOF` passé par `bash -c '…'` depuis le shell Windows casse sur une apostrophe dans le texte
   (même cause que `bash -lc`) → écrire le script avec l'outil de fichier.
 
