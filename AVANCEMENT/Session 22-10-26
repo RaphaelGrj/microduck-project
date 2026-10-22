@@ -1,2 +1,6 @@
 - Reprise : tout était synchronisé avec GitHub, GPU libre ; les journaux des 18 et 21 manquaient, rédigés.
-- Shake v3 : retour au cap actif sur tout le cycle (poids 8) et suivi plus serré ; pilote de 400 itérations lancé.
+- Shake v3 : retour au cap actif sur tout le cycle (poids 8) et suivi de la secousse plus serré. Pilote de
+  400 itérations : rotation résiduelle ramenée à ~18° (contre 30-64°), amplitude encore trop grande (~27°).
+  Run complet de 2000 itérations lancé ; évaluation dans le simulateur à faire ensuite.
+- RL, nouveau geste « salut marqué » (Bow) : tâche écrite (inclinaison de ~23° vers l'avant puis redressement,
+  pieds au sol), script d'évaluation prêt. Vérifiée seulement à la construction (pas encore entraînée).

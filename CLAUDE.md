@@ -565,5 +565,19 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   politique : `policies vues` sans `stand`, résultat à jeter). Politique officielle `ground_pick` remise, `duck-sim` arrêté,
   GPU libre.
 
+## État d'avancement (2026-10-22)
+- **Journaux manquants rédigés** (`AVANCEMENT/Session 18-10-26`, `21-10-26`, `22-10-26`) : le dossier s'arrêtait au 16.
+- **Shake v3** (fork, commit `c79c0312`) : `shake_yaw_lock` actif sur TOUT le cycle (poids 8, std 0,5), `shake_track` std 1,0.
+  Pilote 400 it. : `yaw_lock` ~1,0 dès le début ; banc `eval_shake.py` : rotation finale ~-18° (v2 : +30 à +64° en `duck-sim`),
+  amplitude 27° (visé ±9°), pas de chute. Run complet 2000 it. lancé (`~/shake_complet3.sh`, log `~/shake_complet3.log`).
+  **À faire** : l'évaluer dans `duck-sim` (`~/shake_sim.py`, période 2,0 s, vérifier l'ONNX via `robot.subscribe`).
+  Si la rotation résiduelle reste > 15° : réduire `SHAKE_WZ`, sinon accepter le défaut (geste cosmétique).
+- **Salut marqué (Bow)** : `Mjlab-Bow-Flat-Backlash-MicroDuck` (`microduck_bow_env_cfg.py`, commit `21a9865c`), hérite du Hop ;
+  tangage visé 0,40 rad (sin de la gravité projetée x), rampe/plateau/rampe sur la fenêtre 0,15-0,65, pénalités pieds/roulis,
+  `hop_tilt_penalty` retirée. Seulement construite et enregistrée (test CPU), **jamais entraînée**.
+  Prêt : `~/bow_pilote.sh` (400 it., ~15 min), `~/lance_eval_bow.sh` + `scripts/eval_bow.py`.
+- **Piège** : un `python3 - <<EOF` passé par `bash -c '…'` depuis le shell Windows casse sur une apostrophe dans le texte
+  (même cause que `bash -lc`) → écrire le script avec l'outil de fichier.
+
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.
