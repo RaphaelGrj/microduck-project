@@ -1,0 +1,7 @@
+- Shake essayé dans le simulateur : 0 chute, mais amplitude ±23-48° (visé ±9°) et rotation résiduelle de 8 à 49°
+  en fin de cycle.
+- Tentative de correction (récompense de retour au cap) : un bug de construction de la commande a été trouvé et
+  corrigé, pilote puis run complet de 2000 itérations réalisés. Échec : la rotation résiduelle n'est pas améliorée
+  (30 à 64°). La récompense seule ne suffit pas.
+- Piège noté : charger la bonne politique et attendre sa prise en compte avant de mesurer, sinon la mesure est
+  faussée.

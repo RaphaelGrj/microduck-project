@@ -1,0 +1,8 @@
+- RL, geste « petit bond de joie » (Hop) terminé : le canard saute pour de vrai (tronc à ~15 cm, pieds décollés
+  ~0,5 s, vérifié en simulation sur 3 essais sans chute). Défauts restants : corps un peu penché en vol et repos
+  légèrement affaissé. Une v5 testée n'a rien amélioré : la v4 reste la référence.
+- RL, nouveau geste « s'ébrouer » (Shake) : tâche écrite et entraînée jusqu'au bout (3 secousses nettes, pieds au
+  sol). Défauts : amplitude trop grande (±14° au lieu de ±9°) et rotation résiduelle en fin de cycle. Pas encore
+  essayé dans le simulateur.
+- Pièges notés : décalage des périodes de politique dans `duck-sim` (recharger après démarrage, remettre
+  l'officiel ensuite), tri des checkpoints dans l'ordre naturel.
