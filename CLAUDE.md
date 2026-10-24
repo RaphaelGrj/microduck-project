@@ -647,3 +647,11 @@ CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, S
   écartés** (le canard s'effondre après le coup de pied dans le rendu — à comprendre : artefact du rendu ou vrai défaut ?).
   Script générique `scripts/render_geste.py <tache> <checkpoint> <sortie.mp4>` (`--secondes`, `--azimut`, `--distance`).
 - **Gestes publiables** : sursaut, frisson, trépigner, pirouette (+ tirs, passes). Inventaire des gestes terminé.
+
+- **Tirs tolérants : « l'effondrement » du rendu vidéo EXPLIQUÉ** (`scripts/eval_chute.py <tache> <checkpoint> --envs 16`, fork) :
+  0 chute (seuil 60°) sur 64 épisodes, config play comme entraînement — mais le tir droit tolérant **se recroqueville et RESTE bas** :
+  tronc à 5,6 cm au minimum ET en fin d'épisode (debout : ~11 cm), inclinaison 1° (assis à plat, pas renversé). Le tir gauche descend
+  à 7,2 cm puis se relève (10,1 cm en fin). La passe reste debout (10,1 cm min, 13° max). Cause probable : la récompense de tir
+  tolérant ne paie pas le retour debout après le coup. Conséquence : après un tir droit, le canard est accroupi et doit se relever
+  (`robotd` : `limp_fall` / marche) ; non gênant tant que le tir est enchaîné par le cerveau, mais pas présentable en vidéo.
+  **Piste** (non lancée) : réentraîner `...Tolerant...-Right` avec une récompense de hauteur/pose debout en fin d'épisode.
