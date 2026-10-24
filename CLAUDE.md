@@ -602,6 +602,7 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
   commit `fef56da5`). Pilotes v1 : les deux tombent ; v2 (inclinaison + hauteur pénalisées) entraînés, **non évalués**.
   Reprise détaillée : `AVANCEMENT/Session 24-10-26`. Rien ne tourne, GPU libre.
 
+## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.
 
 ## État d'avancement (2026-10-24)
