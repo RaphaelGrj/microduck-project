@@ -672,3 +672,16 @@ CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, S
   (std 2 cm) a un gradient nul à 6 cm d'écart (e⁻⁹) — toujours une rampe linéaire en plus.
 - Pièges : `ls -d …/*/ | tail -1` prend `2026-10-24_warm…` avant `2026-10-24_17-…` (ordre lexical) ; le dossier de `--dry-run` s'appelle
   `publish-<nom sans « microduck- »>/`.
+
+## État d'avancement (2026-10-24, nuit) — GESTES II PUBLIÉS
+- **Trois gestes de plus** (fork : `microduck_gestes2_env_cfg.py`, tâches `Mjlab-Tap|Crouch|Sidestep-Flat-Backlash-MicroDuck`, pilotes
+  de 400 it., scripts `eval_gestes2.py`, `~/gestes2_sim.py`, `~/publier_gestes2.sh`) : **tape du pied** (`microduck-tape`, épisodique
+  1,6 s, ~7 coups, 0 chute), **accroupissement curieux** (`microduck-curieux`, épisodique 1,3 s, descend à ~8 cm puis remonte, 0 chute ;
+  la politique n'a pas d'horloge, au-delà de 1,3 s elle recommence un cycle), **pas de côté** (`microduck-pas-de-cote`, `perpetual`
+  `--hold 0.8`, `unwind_s 0.8`, `idle [1,0,0]` comme la pirouette ; 12-30 cm à gauche selon les essais, 0 chute). Hugging Face privés
+  tag `v1` avec vidéo + copies `policies/tape|curieux|pas-de-cote/` (md5 vérifiés).
+- **Piège** : dans `duck-sim`, enchaîner plusieurs `robot.setSkill` / `removeSkill` SANS relancer la sim → le 2e skill est refusé
+  (« no skill named … ») ; relancer `run-scene.sh arena` entre deux gestes.
+- **Gestes publiés à ce jour** : sursaut, frisson, trépigner, pirouette, tape du pied, accroupissement curieux, pas de côté + tirs
+  (4) + passes. Restent à l'inventaire RL : arrêt théâtral, étirement sur une jambe, coup de bec vers une jambe (bec à confirmer),
+  puis les difficiles / aveugles (voir ROADMAP) et la politique de balle qui voit.

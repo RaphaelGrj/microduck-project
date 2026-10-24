@@ -1,0 +1,36 @@
+{
+  "schema_version": 2,
+  "model_api": 1,
+  "obs_len": 61,
+  "action_len": 14,
+  "robot": {
+    "model": "microduck",
+    "hw_rev": 1,
+    "servos": "xl330",
+    "control_hz": 50
+  },
+  "name": "tape",
+  "kind": "episodic",
+  "entry_pose": "standing",
+  "description": "Tape du pied : un pied frappe le sol a repetition, l'autre reste pose (environ 7 coups en 1,6 s). Valide dans duck-sim (sans chute), simulation uniquement.",
+  "command": {
+    "encoding": "constant",
+    "idle": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "twist": "unused (zeros)",
+    "head": "unused (zeros)",
+    "body": "unused (zeros)"
+  },
+  "duration_s": 1.6,
+  "chain": false,
+  "training": {
+    "repo": "pollen-robotics/microduck_rl",
+    "commit": "cbbf51d49",
+    "branch": "develop",
+    "dirty": true,
+    "source_file": "tap.onnx"
+  }
+}

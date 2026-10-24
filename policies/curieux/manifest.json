@@ -1,0 +1,36 @@
+{
+  "schema_version": 2,
+  "model_api": 1,
+  "obs_len": 61,
+  "action_len": 14,
+  "robot": {
+    "model": "microduck",
+    "hw_rev": 1,
+    "servos": "xl330",
+    "control_hz": 50
+  },
+  "name": "curieux",
+  "kind": "episodic",
+  "entry_pose": "standing",
+  "description": "Accroupissement curieux : le tronc descend a environ 8 cm, tient la pose puis remonte (1,3 s, pieds au sol, sur place). La politique n'a pas d'horloge : au-dela de 1,3 s elle recommencerait un cycle. Valide dans duck-sim (sans chute), simulation uniquement.",
+  "command": {
+    "encoding": "constant",
+    "idle": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "twist": "unused (zeros)",
+    "head": "unused (zeros)",
+    "body": "unused (zeros)"
+  },
+  "duration_s": 1.3,
+  "chain": false,
+  "training": {
+    "repo": "pollen-robotics/microduck_rl",
+    "commit": "cbbf51d49",
+    "branch": "develop",
+    "dirty": true,
+    "source_file": "crouch.onnx"
+  }
+}
