@@ -631,3 +631,19 @@ CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, S
   maintien max 0,13 s, déplacement 2 cm. duck-sim : roulis ≤ 2,4°, déplacement 5-6 cm, 0 chute. Hugging Face
   `RaphaelGrj/microduck-trepigner` (privé, v1, vidéo) + copie `policies/trepigner/`. Scripts : `eval_stomp.py`, `render_stomp.py`,
   `~/stomp_sim.py`. **Gestes publiables à ce jour** : sursaut, frisson, trépigner (+ tirs, passes). Reste à l'inventaire : pirouette.
+
+- **Pirouette (`Mjlab-Pirouette-Flat-Backlash-MicroDuck`, fork) VALIDÉE et publiée** — avec un signal d'arrêt. v1 (commande
+  nulle, tour à ~3 rad/s) tournait bien mais le canard TOMBAIT à la remise de main (2 essais sur 3 dans duck-sim : la politique n'a
+  ni horloge ni cap, elle tourne encore à pleine vitesse quand le démon rend la main). v2 : le skill est déclaré avec un
+  **`unwind`** (le démon envoie le twist `idle` pendant `unwind_s` avant de rendre la main) et la politique apprend que ce twist
+  `[1,0,0]` veut dire « freine » (nouvelle commande `SpinStopCommand` dans `mdp.py` : zéros pendant `period`, puis drapeau).
+  Entraînement : tour 2,1 s puis retour 1,0 s (épisode 3,1 s), vitesse ~4 rad/s, arrêt en < 0,5 s après le drapeau (banc : vitesse
+  finale 0,1-0,2 rad/s). duck-sim (4 essais, `robot.setSkill` avec `duration 2.1`, `unwind [1,0,0]`, `unwind_s 1.0`) : 0 chute,
+  tourne 270-390° (moy. ~340°), déplacement 3-13 cm. **Publication** : `publish` refuse `unwind_s` pour un épisodique → publié
+  en `kind: perpetual` + `--unwind-s 1.0 --idle 1 0 0` ; installation sur le robot : `robotctl policy add pirouette
+  RaphaelGrj/microduck-pirouette --hold 2.1`. Hugging Face `RaphaelGrj/microduck-pirouette` (privé, v1, vidéo) + copie
+  `policies/pirouette/`. **Non vérifié** : `robotctl policy add` réel (seul `robot.setSkill` simulé a été essayé).
+- **Vidéos de gestes** (`media/`) : passes D/G propres ; hop et bow fidèles mais très penchés (défaut connu de Hop) ; **tirs tolérants
+  écartés** (le canard s'effondre après le coup de pied dans le rendu — à comprendre : artefact du rendu ou vrai défaut ?).
+  Script générique `scripts/render_geste.py <tache> <checkpoint> <sortie.mp4>` (`--secondes`, `--azimut`, `--distance`).
+- **Gestes publiables** : sursaut, frisson, trépigner, pirouette (+ tirs, passes). Inventaire des gestes terminé.
