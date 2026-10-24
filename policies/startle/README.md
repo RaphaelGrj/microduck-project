@@ -28,5 +28,5 @@ The observation normalizer is baked into `policy.onnx`; feed raw observations.
 
 - **repo**: `pollen-robotics/microduck_rl`
 - **branch**: `develop`
-- **commit**: `6b63907a6`
+- **commit**: `bd29ca2af`
 - exported from a checkout with uncommitted changes

@@ -616,3 +616,11 @@ CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, S
   50 cm) → s'arrêter 2 pas avant la fin ; `robot.setSkill` écrit la config de robotd → toujours `robot.removeSkill` après un essai ;
   un `python3 - <<EOF` passé par `bash -lc '…'` casse sur les apostrophes → utiliser l'outil d'édition sur le chemin `\wsl.localhost`.
 - Scripts WSL nouveaux : `~/startle_pilote.sh`, `~/lance_eval_startle.sh`, `~/startle_sim.py`, `scripts/eval_startle.py` (fork).
+
+- **Frisson (`Mjlab-Shiver-Flat-Backlash-MicroDuck`, fork) VALIDÉ et publié** : tremblement de roulis (±6°, ~5,7 Hz), commande
+  constante, `duration_s` 1,3 (la politique n'a pas d'horloge : c'est la remise de main du démon qui l'arrête). duck-sim : roulis
+  3-6°, déplacement 0,1 cm, 0 chute. Pilote 400 it. (`logs/rsl_rl/microduck_shiver/…`), pénalités héritées retirées
+  (`body_ang_vel`, `angular_momentum`, `action_rate_l2` réduit). Hugging Face `RaphaelGrj/microduck-frisson` (privé, v1, vidéo,
+  caméra azimut 340) + copie `policies/frisson/`. Scripts : `scripts/eval_shiver.py`, `render_shiver.py`, `~/shiver_sim.py`.
+- **Piège** : `publish-<nom>/` dans le fork est un reste d'essai à blanc, PAS la version publiée : pour copier sur GitHub,
+  refaire un `--dry-run` avec le bon ONNX et comparer les `md5sum`. (La 1re copie GitHub du Sursaut contenait la v1 — corrigée.)

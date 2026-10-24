@@ -28,7 +28,7 @@
   "chain": false,
   "training": {
     "repo": "pollen-robotics/microduck_rl",
-    "commit": "6b63907a6",
+    "commit": "bd29ca2af",
     "branch": "develop",
     "dirty": true,
     "source_file": "startle.onnx"
