@@ -23,3 +23,62 @@ REPRISE DEMAIN (dans l'ordre) :
 3. Si ça tombe encore : pilote supplémentaire avec poids d'inclinaison plus forts ; sinon abandonner ce geste (cosmétique).
 4. Ensuite : coup de bec (bec index 9 à confirmer sur le vrai canard), puis jeu de balle avec caméra / Home Assistant,
    brancher les gestes dans le cerveau, politique de balle qui voit (objectif n° 1).
+
+==================================================================================================
+POINT SYNTHÉTIQUE — MOUVEMENTS À APPRENDRE (liste ROADMAP depuis le début, état au 2026-10-24)
+Légende : FAIT = entraîné, validé en duck-sim, publié | PARTIEL = entraîné/validé mais limité | EN COURS | À FAIRE
+==================================================================================================
+Gestes épisodiques (ROADMAP Phase 1, ordre d'origine)
+ 1. Bond de joie (Hop)             PARTIEL  validé duck-sim (v4), mais joué seulement via le slot `ground_pick` (phase) ; penché en vol
+ 2. Secousse du corps (Shake)      PARTIEL  v1 gardée, rotation résiduelle 8-49° jamais corrigée ; abandonné (cosmétique)
+ 3. Salut marqué (Bow)             PARTIEL  validé duck-sim (0 chute), via `ground_pick` seulement
+ 4. Frisson / sursaut              FAIT     publiés : microduck-frisson, microduck-startle
+ 5. Pirouette sur place            FAIT     publiée (avec signal d'arrêt) : microduck-pirouette
+ 6. Bonds répétés = trépigner      FAIT     publié : microduck-trepigner (pieds levés à tour de rôle, pas de vrais sauts)
+ 7. Arrêt théâtral                 EN COURS pilote v2 entraîné, non évalué
+ 8. Tape du pied                   FAIT     publié : microduck-tape
+ 9. Étirement sur une jambe        EN COURS pilote v2 entraîné, non évalué
+10. Pirouette sautée               À FAIRE
+11. Accroupissement curieux        FAIT     publié : microduck-curieux
+12. Monter sur un support bas      À FAIRE
+13. Franchir un petit obstacle     À FAIRE
+14. Sprint court                   À FAIRE
+15. Pas de côté esquive            FAIT     publié : microduck-pas-de-cote
+16. Dribble au bec                 À FAIRE  (dépend de la politique de balle)
+17. Coup de bec vers une jambe     À FAIRE  (bec index 9 à confirmer sur le vrai canard, absent de duck-sim)
+18. Trébuchement rattrapé          À FAIRE  (le plus délicat)
+Ajouts du 2026-10-07
+    Trépigner                      FAIT (= n° 6)
+    Saut de joie / s'ébrouer       = n° 1 / n° 2
+    Se gratter avec la patte       À FAIRE  (dépend de l'équilibre sur une jambe, n° 8/9)
+    S'allonger sur le flanc        À FAIRE  (vérifier d'abord que la pose est un équilibre stable)
+Hors liste, déjà faits
+    Tirs tolérants D/G + passes douces D/G   FAIT publiés (passes = choix calme ; tirs violents, simulation seulement)
+    Se relever (StandUp)           FAIT mais inutile : `robotd` se relève déjà seul (`limp_fall`)
+    Gestes sans RL (tête/tronc : Non, Oui, Curieux, Content, étirement/ébouriffe/lissage/éternuement scriptés)   FAIT
+Bilan : 7 gestes publiés + 4 tirs/passes ; 3 partiels ; 2 en cours ; 8 à faire.
+Rappel : tout est validé EN SIMULATION uniquement ; `robotctl policy add` jamais essayé sur robot réel ; dépôts HF privés.
+
+==================================================================================================
+POINT SYNTHÉTIQUE — ENSEMBLE DU PROJET (robot non livré : délai annoncé 4-6 mois depuis fin août 2026)
+==================================================================================================
+Phase 0  Pipeline RL (entraîner, exporter ONNX, publier)         FAIT
+Phase 0b duck-sim (vrais daemons contre MuJoCo, caméra, ToF)      FAIT (sauf bec : pas de servo de bec en sim)
+Phase 1  Gestes expressifs                                        EN COURS : voir liste ci-dessus
+Phase 2  Perception + jeu de balle avec vision
+         - Fait : détection balle (HSV), position 3D (0,5-2 cm), approche + tir en arène 19/20, visée 11/12,
+           détecteur de chat YOLOv8n, tirs tolérants et passes publiés
+         - Limites : fenêtre de tir étroite (3-4 cm), jeu avec un joueur 3/8 (affiche du chat), appartement non concluant
+         - À FAIRE (objectif n° 1) : politique RL de balle qui VOIT (référence laya-vision-microduck-kick), gros chantier
+Phase 3  Cerveau du foyer (`microduck-brain`, sans RL)            TRÈS AVANCÉ, 449 tests, validation duck-sim 12/12
+         - Fait : états/personnalité/mémoire, « vivant », taquineries, jeu de balle autonome, plan de la maison + localisation,
+           diagnostic, commandes vocales locales (Vosk), règles d'identité (sons de canard seulement, tout sur le canard)
+         - Fait : application Microduck (APK 1.15, ordinateur Electron, iPhone web), démo en ligne, plan Meta Quest 3 / jumeau
+         - Fait : Home Assistant réel connecté (HA 2026.8.3 sur Pi 3B+), pont, actions, appareils
+         - À FAIRE : MQTT (attend Mosquitto), notifications d'impression 3D (Prusa MK3S/MK4S, Saturn 4 Ultra), déploiement
+           SUR le canard (`deploy/robot/`, jamais testé), brancher les gestes publiés dans le cerveau (aucun n'y est utilisé)
+Phase 4  Plus tard : NFC, balises UWB, sac à dos ESP32, vision sur le NPU du robot, personnalité transverse
+Deux priorités du CLAUDE.md : (1) jeu de balle avec caméra = Phase 2 ci-dessus ; (2) Home Assistant = en cours (reste MQTT, impression 3D)
+À la livraison : `bench_cerveau.py`, confirmer le bec (index 9), `valider-tout.sh`, essayer `robotctl policy add` et les gestes
+Risques / dette : rien validé sur matériel réel ; Hop/Bow/Shake non publiables comme skills ; sécurité = `robotd` sans anti-chute
+(vide détecté par ToF) ; dépôts privés à ouvrir quand vous voulez partager.
