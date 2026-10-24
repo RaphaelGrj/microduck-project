@@ -1,0 +1,25 @@
+- Reprise : Hop/Bow comme vrais skills impossibles (`robotd` ne charge pas une politique à commande de phase). Recette
+  retenue : politiques à commande CONSTANTE, profil temporel par `episode_length_buf`, épisode court = `duration_s`.
+- Gestes publiés (Hugging Face privés, v1, avec vidéo, + copies GitHub `policies/<nom>/`, md5 vérifiés) : sursaut (v2),
+  frisson, trépigner, pirouette (avec signal d'arrêt `unwind`, `kind: perpetual`), tape du pied, accroupissement curieux,
+  pas de côté. Tous validés en `duck-sim` (0 chute), jamais sur robot réel.
+- Tirs publiés : passes D/G (choix calme) et tirs tolérants D/G (violents, simulation uniquement). Piste « tir droit
+  accroupi » = fausse piste (l'accroupissement n'existe que dans l'épisode d'entraînement de 5 s) : ne pas refaire.
+- Vidéos : `scripts/render_geste.py` (fork), fichiers dans `media/`.
+- Gestes III (soir) : tâches `Mjlab-LegStretch-…` (étirement sur une jambe, 2,0 s) et `Mjlab-StopTheatre-…` (arrêt
+  théâtral, perpetual, hold 0,8 s, unwind 0,9 s) écrites (`microduck_gestes3_env_cfg.py`, commit fork `fef56da5`).
+  Pilotes v1 (400 it.) : les DEUX tombent au banc (inclinaison 95-101°, lacet 130-143°). Pilotes v2 (pénalité
+  d'inclinaison `hop_tilt_penalty`, récompense de hauteur, vitesse de course 0,4 → 0,3) terminés, **NON évalués**
+  (arrêt de session demandé).
+- Fin de session : GPU libre, `duck-sim` arrêté, tout poussé.
+
+REPRISE DEMAIN (dans l'ordre) :
+1. Évaluer les pilotes v2 : `cd ~/microduck_rl && uv run python scripts/eval_gestes3.py <LegStretch|StopTheatre> <ckpt> --envs 16`
+   (checkpoints `logs/rsl_rl/microduck_legstretch|stoptheatre/2026-10-24_2*/model_399.pt` ; prendre le dossier le plus
+   récent, tri `sort`, pas `tail -1` sur un dossier `_warm`). Critères : inclinaison max < 40°, lacet < 30°, 0 chute.
+2. Si OK : `~/gestes2_sim.py` dans `duck-sim` (sim fraîche par geste, `run-scene.sh arena`, `removeSkill` ensuite),
+   vidéo `render_geste.py`, publication sur le modèle de `~/publier_gestes2.sh` (dry-run + md5), copies `policies/`.
+   Stop : `--kind perpetual --unwind-s 0.9 --idle 1 0 0`, install `--hold 0.8`.
+3. Si ça tombe encore : pilote supplémentaire avec poids d'inclinaison plus forts ; sinon abandonner ce geste (cosmétique).
+4. Ensuite : coup de bec (bec index 9 à confirmer sur le vrai canard), puis jeu de balle avec caméra / Home Assistant,
+   brancher les gestes dans le cerveau, politique de balle qui voit (objectif n° 1).

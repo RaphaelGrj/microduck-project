@@ -2321,8 +2321,7 @@ Le cerveau n'appelle aujourd'hui que des skills existants (`kick_left`/`kick_rig
 
 **B. Gestes épisodiques (Phase 1), dans l'ordre décidé, un à la fois** — **faits (2026-10-18, politiques entraînées,
 Hop essayé dans `duck-sim`, Shake pas encore)** : petit bond de joie (`Mjlab-Hop-…`, v4) ; secousse du corps
-(`Mjlab-Shake-…`, rotation résiduelle à corriger). **Restent** : salut marqué ; frisson/sursaut ; pirouette ; bonds répétés (= trépigner) ; arrêt théâtral ; tape du
-pied ; étirement sur une jambe (servira au bain de soleil) ; pirouette sautée ; accroupissement curieux ; monter sur un
+(`Mjlab-Shake-…`, rotation résiduelle à corriger). **Mise à jour 2026-10-24** : publiés (HF privés + `policies/`) : salut (Bow, via `ground_pick` seulement), sursaut, frisson, trépigner, pirouette, tape du pied, accroupissement curieux, pas de côté, passes et tirs D/G. **En cours** : étirement sur une jambe et arrêt théâtral (tâches `Mjlab-LegStretch-…`/`StopTheatre-…`, pilotes v2 entraînés, à évaluer — voir `AVANCEMENT/Session 24-10-26`). **Restent** : pirouette sautée ; monter sur un
 support bas ; franchir un petit obstacle ; sprint court ; pas de côté esquive ; dribble au bec ; coup de bec vers une
 jambe ; trébuchement rattrapé. Ajouts du 2026-10-07 : se gratter avec la patte, s'allonger sur le flanc.
 
