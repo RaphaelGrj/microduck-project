@@ -1,0 +1,36 @@
+{
+  "schema_version": 2,
+  "model_api": 1,
+  "obs_len": 61,
+  "action_len": 14,
+  "robot": {
+    "model": "microduck",
+    "hw_rev": 1,
+    "servos": "xl330",
+    "control_hz": 50
+  },
+  "name": "passe-gauche",
+  "kind": "episodic",
+  "entry_pose": "standing",
+  "description": "Passe douce du pied gauche (balle a 0,5 m/s environ, cap a moins de 35 degres). Fenetre de succes mesuree dans duck-sim : balle de 5 a 10 cm en avant du tronc, plus ou moins 2,5 cm lateralement. Validee en simulation uniquement.",
+  "command": {
+    "encoding": "constant",
+    "idle": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "twist": "unused (zeros)",
+    "head": "unused (zeros)",
+    "body": "unused (zeros)"
+  },
+  "duration_s": 0.5,
+  "chain": false,
+  "training": {
+    "repo": "pollen-robotics/microduck_rl",
+    "commit": "bcaf8d47c",
+    "branch": "develop",
+    "dirty": true,
+    "source_file": "kick_passe_left_3499.onnx"
+  }
+}

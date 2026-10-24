@@ -655,3 +655,20 @@ CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, S
   tolérant ne paie pas le retour debout après le coup. Conséquence : après un tir droit, le canard est accroupi et doit se relever
   (`robotd` : `limp_fall` / marche) ; non gênant tant que le tir est enchaîné par le cerveau, mais pas présentable en vidéo.
   **Piste** (non lancée) : réentraîner `...Tolerant...-Right` avec une récompense de hauteur/pose debout en fin d'épisode.
+
+## État d'avancement (2026-10-24, soir) — TIRS TERMINÉS ET PUBLIÉS
+- **Quatre tirs publiés** (Hugging Face privés, tag `v1`, épisodiques, `duration_s` 0,5 = durée des tirs officiels, avec vidéo ;
+  copies `policies/passe-droite|passe-gauche|tir-droit|tir-gauche/` sur GitHub, md5 vérifiés) : `RaphaelGrj/microduck-passe-droite`
+  (model_2999), `-passe-gauche` (3499), `-tir-droit` (tol. 2999), `-tir-gauche` (tol. 4749). Installation :
+  `robotctl policy add <nom> RaphaelGrj/microduck-<nom>` (crée un skill ; la validation duck-sim a été faite en remplaçant les
+  slots `kick_left/right`, même durée 0,5 s, même commande nulle). Script : `~/publier_tirs.sh`.
+- **Validation duck-sim (balayage, 0 chute)** : tir droit tol. dx −2..+3 cm (tous dy) ; tir gauche tol. dx −2..+4 cm pour dy 0 et
+  +2, **échec à dy −2** ; passes D/G : voir 2026-10-16. Les **passes sont le choix calme** ; les tirs tolérants sont violents
+  (le canard plonge dans le coup de pied, repris par le gait après 0,5 s : vidéo 0,7 s, à essayer avec prudence sur le vrai robot).
+- **« Tir droit accroupi » : fausse piste, ne PAS refaire** — l'accroupissement (5,6 cm) n'existe que dans l'épisode
+  d'entraînement de 5 s ; sur le robot le skill ne dure que 0,5 s puis `robotd` reprend (0 chute et canard prêt à chaque essai dans le
+  balayage). Le réentraînement `Mjlab-BallKickTolerantUp-*` (récompense `kick_stand_end`, 1 200 it., ~1 h 20 de GPU) n'a gagné que
+  1 cm (6,7 cm) et n'a pas été retenu (tâches gardées dans le fork, inutilisées). Piège de conception : une gaussienne étroite
+  (std 2 cm) a un gradient nul à 6 cm d'écart (e⁻⁹) — toujours une rampe linéaire en plus.
+- Pièges : `ls -d …/*/ | tail -1` prend `2026-10-24_warm…` avant `2026-10-24_17-…` (ordre lexical) ; le dossier de `--dry-run` s'appelle
+  `publish-<nom sans « microduck- »>/`.
