@@ -608,7 +608,10 @@ CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, S
   (3 essais). Commande constante, épisode 1,2 s = `duration_s`, profil temporel (pas de phase). Pilote v2 de 400 it.
   (`logs/rsl_rl/microduck_startle/2026-10-24_13-16-36_microduck_startle`, ONNX dedans, copie dans
   `~/.cache/duck-sim/policies/startle/startle.onnx`). v1 : dérive/pieds en l'air → pénalité de déplacement cumulé + poids pieds 6.
-  **Reste** : publier sur le Hub (`uv run publish --onnx … --kind episodic --duration-s 1.2`, **repo non créé**, à confirmer).
+  **v3 (cou au neutre) = version publiée** : la v2 laissait la tête s'affaisser (vu sur le rendu vidéo, invisible aux mesures de
+  tangage) → `startle_neck_home` (poids 3) ; duck-sim v3 : cabrage 15-16°, déplacement 0,5-0,7 cm, 0 chute.
+  **Publié** : Hugging Face `RaphaelGrj/microduck-startle` (privé, tag `v2`, avec vidéo) + copie GitHub `policies/startle/`
+  (`policy.onnx`, `manifest.json`, `preview.mp4`). Vidéo : `scripts/render_startle.py` (fork, caméra de profil, ralenti ×0,5).
 - **Pièges** : le banc d'éval d'un épisode de durée exacte mesure la position APRÈS la remise à zéro (fausse « dérive » de
   50 cm) → s'arrêter 2 pas avant la fin ; `robot.setSkill` écrit la config de robotd → toujours `robot.removeSkill` après un essai ;
   un `python3 - <<EOF` passé par `bash -lc '…'` casse sur les apostrophes → utiliser l'outil d'édition sur le chemin `\wsl.localhost`.
