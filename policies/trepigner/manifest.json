@@ -1,0 +1,36 @@
+{
+  "schema_version": 2,
+  "model_api": 1,
+  "obs_len": 61,
+  "action_len": 14,
+  "robot": {
+    "model": "microduck",
+    "hw_rev": 1,
+    "servos": "xl330",
+    "control_hz": 50
+  },
+  "name": "trepigner",
+  "kind": "episodic",
+  "entry_pose": "standing",
+  "description": "Trepignement : les pieds se levent a tour de role, sur place, tronc droit.",
+  "command": {
+    "encoding": "constant",
+    "idle": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "twist": "unused (zeros)",
+    "head": "unused (zeros)",
+    "body": "unused (zeros)"
+  },
+  "duration_s": 2.0,
+  "chain": false,
+  "training": {
+    "repo": "pollen-robotics/microduck_rl",
+    "commit": "7b1709769",
+    "branch": "develop",
+    "dirty": true,
+    "source_file": "stomp.onnx"
+  }
+}

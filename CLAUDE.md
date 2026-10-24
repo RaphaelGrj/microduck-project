@@ -624,3 +624,10 @@ CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, S
   caméra azimut 340) + copie `policies/frisson/`. Scripts : `scripts/eval_shiver.py`, `render_shiver.py`, `~/shiver_sim.py`.
 - **Piège** : `publish-<nom>/` dans le fork est un reste d'essai à blanc, PAS la version publiée : pour copier sur GitHub,
   refaire un `--dry-run` avec le bon ONNX et comparer les `md5sum`. (La 1re copie GitHub du Sursaut contenait la v1 — corrigée.)
+
+- **Trépignement (`Mjlab-Stomp-Flat-Backlash-MicroDuck`, fork) VALIDÉ et publié** : pieds levés à tour de rôle sur place,
+  commande constante, `duration_s` 2,0. Récompenses : appui monopode payé, pied tenu > 0,3 s puni (pas de flamant), deux pieds en
+  l'air punis (pas un saut), repose après décollage payée (état suivi dans `env._stomp_air`). Banc : 16 pas en 2 s, monopode 89/98,
+  maintien max 0,13 s, déplacement 2 cm. duck-sim : roulis ≤ 2,4°, déplacement 5-6 cm, 0 chute. Hugging Face
+  `RaphaelGrj/microduck-trepigner` (privé, v1, vidéo) + copie `policies/trepigner/`. Scripts : `eval_stomp.py`, `render_stomp.py`,
+  `~/stomp_sim.py`. **Gestes publiables à ce jour** : sursaut, frisson, trépigner (+ tirs, passes). Reste à l'inventaire : pirouette.
