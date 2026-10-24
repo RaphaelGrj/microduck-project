@@ -598,3 +598,18 @@ cerveau pourra parler à un robot réel, simulé, ou distant sans changer de cod
 
 ## Mon niveau
 CNC (Haas TM-2P, filetage NPT), impression 3D (Klipper & Prusa MK3S), Blender, Solidworks, développement web. Familier avec ESP32/Python/Rust en hobbyiste (projets Lumi et rover). Travaille actuellement sous Windows, avec Claude Code installé pour ce projet.
+
+## État d'avancement (2026-10-24)
+- **Hop/Bow comme skills : impossible aujourd'hui** (doc `policy-channel-design.md` §10.2) : `robotd` ne charge jamais une
+  politique à commande de **phase** comme skill, quel que soit son nom. Ils restent dans le slot `ground_pick`. Piste :
+  tâche à commande **constante** (comme les tirs) → publiable.
+- **Sursaut (`Mjlab-Startle-Flat-Backlash-MicroDuck`, fork, commit `6b63907a`) VALIDÉ dans `duck-sim`** comme VRAI skill
+  (`robot.setSkill {name, path, duration}` puis `robot.do`) : cabrage 14,5-16,3°, retour +0,2°, déplacement 1,6-2,2 cm, 0 chute
+  (3 essais). Commande constante, épisode 1,2 s = `duration_s`, profil temporel (pas de phase). Pilote v2 de 400 it.
+  (`logs/rsl_rl/microduck_startle/2026-10-24_13-16-36_microduck_startle`, ONNX dedans, copie dans
+  `~/.cache/duck-sim/policies/startle/startle.onnx`). v1 : dérive/pieds en l'air → pénalité de déplacement cumulé + poids pieds 6.
+  **Reste** : publier sur le Hub (`uv run publish --onnx … --kind episodic --duration-s 1.2`, **repo non créé**, à confirmer).
+- **Pièges** : le banc d'éval d'un épisode de durée exacte mesure la position APRÈS la remise à zéro (fausse « dérive » de
+  50 cm) → s'arrêter 2 pas avant la fin ; `robot.setSkill` écrit la config de robotd → toujours `robot.removeSkill` après un essai ;
+  un `python3 - <<EOF` passé par `bash -lc '…'` casse sur les apostrophes → utiliser l'outil d'édition sur le chemin `\wsl.localhost`.
+- Scripts WSL nouveaux : `~/startle_pilote.sh`, `~/lance_eval_startle.sh`, `~/startle_sim.py`, `scripts/eval_startle.py` (fork).
