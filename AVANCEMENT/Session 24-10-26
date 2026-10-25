@@ -93,3 +93,12 @@ SUITE (2026-10-25) — évaluation des pilotes v2 des gestes III (banc `eval_ges
   une récompense de levée de pied franche si le temps GPU le permet). Rien ne tourne, GPU libre.
 - Prochain gros chantier (objectif n° 1) : politique de balle qui voit (réf. laya-vision-microduck-kick), ou brancher les
   gestes publiés dans le cerveau.
+
+SUITE (2026-10-25, après-midi) — gestes RL branchés dans le cerveau
+- `microduck-brain/skills_rl.py` (opt-in `[cerveau] skills_rl = true`) : les gestes `surpris`/`ebouriffe`/`curieux` jouent les
+  skills RL `startle`/`frisson`/`curieux` si installés, sinon geste scripté. 456 tests (commits 464ceaf + suivant).
+- Validé dans `duck-sim` (arène, `~/skills_rl_sim.py <skill>`, `~/skill_trace.py <skill>`) : les 3 skills se jouent, 0 chute, et
+  le repli fonctionne. **Pièges** : duck-sim ne garde qu'UN skill ajouté à la fois (`robot.setSkill` répond accepted mais
+  `robot.do` répond `accepted: false`, SANS erreur JSON-RPC → traité comme refus) ; format de `robot.skills` =
+  `{built_in: [...], skills: [{name,…}]}`.
+- Reste : sur le vrai robot, `robotctl policy add` (jamais essayé) ; autres gestes (trépigner, tape, pirouette, pas de côté) sans déclencheur.
