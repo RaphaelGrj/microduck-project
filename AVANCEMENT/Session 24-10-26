@@ -102,3 +102,6 @@ SUITE (2026-10-25, après-midi) — gestes RL branchés dans le cerveau
   `robot.do` répond `accepted: false`, SANS erreur JSON-RPC → traité comme refus) ; format de `robot.skills` =
   `{built_in: [...], skills: [{name,…}]}`.
 - Reste : sur le vrai robot, `robotctl policy add` (jamais essayé) ; autres gestes (trépigner, tape, pirouette, pas de côté) sans déclencheur.
+- Suite : `SKILLS_ETATS` (par état, prioritaire) : `celebre` (impression terminée) → pirouette (3,1 s avec freinage), `alerte`
+  (impression ratée) → trépigner. Validés dans `duck-sim` (0 chute). Pas de côté volontairement NON branché (déplace de 12-30 cm
+  sur le côté, ToF frontal seulement : un vide à gauche passerait inaperçu). Tape du pied : sans déclencheur.
