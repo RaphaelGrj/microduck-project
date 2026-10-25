@@ -105,3 +105,19 @@ SUITE (2026-10-25, après-midi) — gestes RL branchés dans le cerveau
 - Suite : `SKILLS_ETATS` (par état, prioritaire) : `celebre` (impression terminée) → pirouette (3,1 s avec freinage), `alerte`
   (impression ratée) → trépigner. Validés dans `duck-sim` (0 chute). Pas de côté volontairement NON branché (déplace de 12-30 cm
   sur le côté, ToF frontal seulement : un vide à gauche passerait inaperçu). Tape du pied : sans déclencheur.
+
+SUITE (2026-10-25, soir) — JEU AVEC UN JOUEUR (priorité décidée : personnalité/activités avant l'interface HA)
+- Remesuré (`jeu_eval.py 8`, arène chat) : 3/8 reproduit, mais les 5 échecs étaient TOUS « chat introuvable » (jamais le tir).
+  Cause : tête tournée + baissée de 0,15 → horizon de la caméra incliné d'environ 15° → score YOLO divisé par 2 à 3 (person 0,16
+  au lieu de dog 0,45 à -37°). Correctif : `ROULIS_COMP = 0.4` (head_roll = 0,4 × lacet) dans `jeu.Partie.tenir`
+  (`diag_roll.py`). Résultat : chat trouvé 8/8, **6/8** passes dans ±25° (tir officiel).
+- Passe douce en jeu complet : 1/8 d'abord. Le profil `passe` d'`approach.py` tirait à x = 11,5-14 cm (ancienne fenêtre du
+  tolérant) alors que le balayage `kick_sweep` (nominal x 9 cm, y 4,2 cm) ne réussit que pour x 7-11 cm et dy -0,8..+2,5 cm.
+  Recalé : cible_x 0,09, tol_av 0,02, tol_ar 0,018, `tol_y` (0,008 ; 0,02) → 4/8 puis 6/8 (deux séries, même code : l'aléa
+  est fort). Fenêtre de succès étroite = aussi plus d'ajustements.
+- Variance restante, mesurée (`jeu_eval.py` affiche maintenant le cap au tir) : cap du canard au tir ±15° autour de la visée
+  (rotation du corps morte < 1 rad/s, pas de correction fine possible) + direction du coup ±15° selon la position de la balle
+  (≈ +7° + 6,5°/cm de décalage latéral − 3,5°/cm de décalage avant, pied gauche, passe it. 3499). Un modèle de compensation est
+  possible mais pas fait.
+- Doute : `charge_politique officielle` a répondu « already running » pour kick_left à la fin du banc : à vérifier que la
+  3e série tournait bien avec les passes (distances 0,8-4 m, plausible).
