@@ -139,3 +139,4 @@ PASSE DIRECTE — pied gauche terminé et évalué (2026-10-25, soir)
   => AUCUN gain à gauche (plus dispersé et moins fiable). La passe gauche 3499 reste la référence.
 - Pied droit : gain réel (écart-type 14,4° -> 8,5°). Pas encore adopté par défaut (asymétrie des pieds ; à revalider dans le jeu complet avant de remplacer la passe droite).
 - Politiques officielles remises, duck-sim arrêté, GPU libre.
+- Jeu complet (arena_chat, 8 parties, passe directe DROITE chargée à la place de kick_right, script `~/jeu_directe.sh`) : 7/8 passes dans ±25° (écarts +14, +14, +7, +25, +9, +17, +62, -2) contre 6/8 avec la passe actuelle. Gain cohérent avec l'écart-type 14,4° -> 8,5°, mais 8 parties = signal faible. Pas publiée sur Hugging Face ni adoptée par défaut ; l'ONNX reste dans `~/.cache/duck-sim/policies/passe/kick_directe_right_1199.onnx`. Officielles remises, sim arrêtée.
