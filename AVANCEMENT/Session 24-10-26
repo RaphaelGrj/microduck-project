@@ -132,3 +132,10 @@ SUITE (2026-10-25, nuit) — PASSE DIRECTE (RL, GPU)
   duck-sim, kick_sweep (27 essais chacun, 0 chute) : direction de départ **écart-type 14,4° → 8,5°** (plage -35/+26 → -5/+19),
   tout réussi dans les deux cas. Reste un biais moyen de +4,5° (visée : BIAIS_G).
 - Pied gauche : entraînement lancé (1200 it., ~1 h), à évaluer de la même façon.
+
+PASSE DIRECTE — pied gauche terminé et évalué (2026-10-25, soir)
+- Run gauche 1200 it. (model_1199, reward 72,1, avance 11,2/12, pénalité latérale -1,23). ONNX `kick_directe_left_1199.onnx`.
+- duck-sim (27 essais chacun, 0 chute) : directe 23/27 OK, départ moyen -1,4°, écart-type 13,3° ; passe actuelle 27/27 OK, +3,0°, écart-type 11,3°.
+  => AUCUN gain à gauche (plus dispersé et moins fiable). La passe gauche 3499 reste la référence.
+- Pied droit : gain réel (écart-type 14,4° -> 8,5°). Pas encore adopté par défaut (asymétrie des pieds ; à revalider dans le jeu complet avant de remplacer la passe droite).
+- Politiques officielles remises, duck-sim arrêté, GPU libre.
