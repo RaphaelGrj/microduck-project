@@ -121,3 +121,14 @@ SUITE (2026-10-25, soir) — JEU AVEC UN JOUEUR (priorité décidée : personnal
   possible mais pas fait.
 - Doute : `charge_politique officielle` a répondu « already running » pour kick_left à la fin du banc : à vérifier que la
   3e série tournait bien avec les passes (distances 0,8-4 m, plausible).
+
+SUITE (2026-10-25, nuit) — PASSE DIRECTE (RL, GPU)
+- Idée : la passe douce part à ±15° de sa ligne selon la position de la balle ; la récompense ne pénalisait pas le mouvement
+  latéral (0, sans coût). Fork `microduck_rl` (commit `1583b22f`) : `ball_lateral_speed_penalty` (mdp.py), paramètre
+  `lateral_weight` (0 = inchangé), tâches `Mjlab-BallKickPasseDirecte-Flat-Backlash-MicroDuck-Right/Left` (poids -24 = celui de
+  l'avance), reprise à chaud (`MICRODUCK_WARM_START=1`, checkpoints copiés dans `logs/rsl_rl/ball_kick_directe_*/init_*`),
+  1200 it., `~/directe_run.sh right|left`, banc `~/directe_eval.sh right|left <it directe> <it passe>`.
+- Pied droit (`model_1199.pt`, `ball_kick_directe_right`) : pénalité latérale -1,95 → -1,12, avance conservée (11,1/12).
+  duck-sim, kick_sweep (27 essais chacun, 0 chute) : direction de départ **écart-type 14,4° → 8,5°** (plage -35/+26 → -5/+19),
+  tout réussi dans les deux cas. Reste un biais moyen de +4,5° (visée : BIAIS_G).
+- Pied gauche : entraînement lancé (1200 it., ~1 h), à évaluer de la même façon.
