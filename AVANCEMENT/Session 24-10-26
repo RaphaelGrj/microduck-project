@@ -82,3 +82,14 @@ Deux priorités du CLAUDE.md : (1) jeu de balle avec caméra = Phase 2 ci-dessus
 À la livraison : `bench_cerveau.py`, confirmer le bec (index 9), `valider-tout.sh`, essayer `robotctl policy add` et les gestes
 Risques / dette : rien validé sur matériel réel ; Hop/Bow/Shake non publiables comme skills ; sécurité = `robotd` sans anti-chute
 (vide détecté par ToF) ; dépôts privés à ouvrir quand vous voulez partager.
+
+==================================================================================================
+SUITE (2026-10-25) — évaluation des pilotes v2 des gestes III (banc `eval_gestes3.py`, 16 envs, model_399)
+==================================================================================================
+- LegStretch v2 (`2026-10-24_22-50-30`) : STABLE (inclinaison max 6°, lacet -5°, déplacement 1 cm) mais geste quasi
+  absent : tronc à 11,3-11,8 cm, un seul pied sollicité (monopode 16 pas sur 98, pied1 1,7 pas levé). Pas un vrai étirement.
+- StopTheatre v2 (`2026-10-24_23-07-25`) : ÉCHEC, le canard finit au sol (tronc 4,3 cm, inclinaison max 39°, avance de 36 cm).
+- Décision : geste cosmétique, ne pas insister. StopTheatre abandonné ; LegStretch non publié (à reprendre seulement avec
+  une récompense de levée de pied franche si le temps GPU le permet). Rien ne tourne, GPU libre.
+- Prochain gros chantier (objectif n° 1) : politique de balle qui voit (réf. laya-vision-microduck-kick), ou brancher les
+  gestes publiés dans le cerveau.
