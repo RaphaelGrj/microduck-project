@@ -1,0 +1,14 @@
+# Session 31-10-26 — Sprint
+
+- Évaluation `duck-sim` (arena, `robot.setSkill` + `unwind`, `~/sprint_sim.py`) du Sprint du 25/10 : 0 chute mais 31-53 cm en 1,5 s
+  (0,2-0,36 m/s) et tronc à 4 cm : le banc d'entraînement (0,60 m/s) ne se transférait pas.
+- v2 (pilote 400 it.) : `sprint_height` std 0,04 poids 4 + `sprint_height_ramp` (rampe linéaire, poids 4 ; la gaussienne std 2 cm
+  était plate à 7 cm d'écart). Hauteur OK (8,5-9,1 cm) mais vitesse tombée à 0,14-0,18 m/s.
+- v3 : `sprint_speed` poids 6 -> 10, reprise 1 500 it. depuis le pilote (`2026-10-31_14-07-31_microduck_sprint`, `model_1898.pt` + ONNX),
+  reward 29,2. **Validé dans `duck-sim`** (4 essais) : 73-93 cm, 0,49-0,62 m/s en moyenne (pic 0,9-1,18), tronc min 6,2-8,3 cm, 0 chute.
+- **Publié** : Hugging Face `RaphaelGrj/microduck-sprint` (privé, tag `v1`, `perpetual`, `--unwind-s 1.0 --idle 1 0 0`, vidéo),
+  copie `policies/sprint/` (md5 vérifié). Installation : `robotctl policy add sprint RaphaelGrj/microduck-sprint --hold 1.5`
+  (jamais essayé sur un vrai robot).
+- Pièges : `bash -c '…$HOME…'` depuis Git Bash casse (apostrophe) -> écrire un script ; Git Bash réécrit les chemins `/home/...`
+  -> lancer `wsl -e bash /home/...` depuis PowerShell. Script : `~/publier_sprint.sh`.
+- Fin : rien ne tourne, `duck-sim` arrêté, GPU libre.

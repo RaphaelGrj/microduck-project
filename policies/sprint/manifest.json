@@ -1,0 +1,36 @@
+{
+  "schema_version": 2,
+  "model_api": 1,
+  "obs_len": 61,
+  "action_len": 14,
+  "robot": {
+    "model": "microduck",
+    "hw_rev": 1,
+    "servos": "xl330",
+    "control_hz": 50
+  },
+  "name": "sprint",
+  "kind": "perpetual",
+  "entry_pose": "standing",
+  "description": "Sprint : course en ligne droite a environ 0,6 m/s pendant 1,5 s (marche officielle ~0,4), puis freinage. Installer avec --hold 1.5 ; le twist idle [1,0,0] pendant unwind_s (1,0 s) est le signal d'arret. Valide dans duck-sim (4 essais, 73 a 93 cm, sans chute), simulation uniquement.",
+  "command": {
+    "encoding": "constant",
+    "idle": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "twist": "unused (zeros)",
+    "head": "unused (zeros)",
+    "body": "unused (zeros)"
+  },
+  "duration_s": null,
+  "unwind_s": 1.0,
+  "training": {
+    "repo": "pollen-robotics/microduck_rl",
+    "commit": "7fd621ce1",
+    "branch": "develop",
+    "dirty": true,
+    "source_file": "sprint.onnx"
+  }
+}
